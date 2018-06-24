@@ -15,6 +15,7 @@ struct Card: Hashable{
     let cardColor: Color
     var identifier = 0
     
+    
     var hashValue: Int {
         return identifier
     }
@@ -44,10 +45,9 @@ struct Card: Hashable{
         static let allValues = [red, green, purple]
     }
     
+    //append all card variations
     static func fillDeck() -> [Card]{
         var deck = [Card]()
-        
-        //append all card variations
         for number in Number.allValues{
             for symbol in Symbol.allValues {
                 for shading in Shading.allValues {
