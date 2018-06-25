@@ -9,74 +9,94 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var selected = false
     private lazy var game = setGame()
     
     @IBOutlet var buttons: [UIButton]!{
         didSet{
-            game.playingCards=game.dealCards(numberOfCards: 12)
+            game.dealCards(numberOfCards: 12)
+            assignTagToButton(game.playingCards)
             updateViewFromModel()
         }
     }
     
+    //append three cards //or as much as there is space for
     @IBAction func dealCards() {
-        //needed validation ......
-        if (game.allCards.count > 0) && (game.playingCards.count < buttons.count) {
-            //needed validation for selected cards being matched
-            _ = game.dealCards(numberOfCards: 3)
+        var counter = 3
+        let numberOfZeroTags = buttons.filter({$0.tag == 0}).count
+        
+        //if cards are matched, replace them with new cards
+        while game.allCards.count > 0 && 0 < numberOfZeroTags && counter > 0{
+            game.dealCards(numberOfCards: 1)
+            assignTagToButton(game.playingCards)
             updateViewFromModel()
+            counter -= 1
         }
     }
     
-    //tag of matching has to be 0
     @IBAction func button(_ sender: UIButton) {
-        if sender.tag != 0  {
-            let card = game.getCardById(id: sender.tag)
-            if game.selectedCards.count <= 2 {
-                game.selectCard(card: card)
-            }
-            else if game.selectedCards.count == 3 {
-                
-            }
-            updateViewFromModel()
-        }
         
+        if sender.tag != 0  {
+            if let card = game.getCardById(id: sender.tag){
+                game.selectCard(card: card)
+                if game.matchingCards.contains(card){
+                    if let button = getButtonByTag(buttons, card.identifier){
+                        button.tag = 0
+                    }
+                }
+                updateViewFromModel()
+            }
+        }
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
     
     @IBAction func restartGame() {
+        for button in buttons {
+            button.tag = 0
+        }
         game.restartGame()
+        assignTagToButton(game.playingCards)
         updateViewFromModel()
     }
     
     private func updateViewFromModel() {
         scoreLabel?.text = "Score: \(game.score)"
-        for index in 0..<game.playingCards.count
-        {
-            let card = game.playingCards[index]
-            if buttons[index].tag == 0{
-                buttons[index].setTitle("", for: UIControlState.normal)
-                buttons[index].setAttributedTitle(NSMutableAttributedString(string:""), for: UIControlState.normal)
-                buttons[index].backgroundColor = UIColor.black
-            } else if buttons[index].tag == card.hashValue{
-                buttons[index].setTitle(card.cardNumber.rawValue + card.cardSymbol.rawValue, for: UIControlState.normal)
-                buttons[index].backgroundColor = UIColor(cgColor: card.cardColor as! CGColor)
+        
+        for button in buttons {
+            if button.tag == 0 {
+                button.setTitle("", for: UIControlState.normal)
+                button.setAttributedTitle(NSMutableAttributedString(string:""), for: UIControlState.normal)
+                button.backgroundColor = UIColor.black
             }
             
-            //needs selected UI STUFF
-            if card == game.selectedCards[index]{
-                buttons[index].setAttributedTitle(NSMutableAttributedString(string:"selected"), for: UIControlState.normal)
-            }
-            
-            if card == game.matchingCards[index]{
-                buttons[index].tag = 0
-                buttons[index].setTitle("", for: UIControlState.normal)
-                buttons[index].setAttributedTitle(NSMutableAttributedString(string:""), for: UIControlState.normal)
-                buttons[index].backgroundColor = UIColor.black
+            if let card = game.playingCards.first(where: {$0.identifier == button.tag}) {
+                button.setTitle((card.cardNumber.rawValue) + (card.cardSymbol.rawValue), for: UIControlState.normal)
+               // button.backgroundColor = UIColor(cgColor: card.cardColor.rawValue as! CGColor)
+                
+                if game.selectedCards.contains(card){
+                    button.setTitleColor(UIColor.purple, for: UIControlState.normal)
+                }
             }
         }
-        
+    }
+    
+    func assignTagToButton(_ cards: [Card]){
+        var newCards = cards
+        while  newCards.count > 0 {
+            if let button = buttons.first(where: {$0.tag == 0}){
+                button.tag = newCards.removeLast().identifier
+            }
+        }
+    }
+    
+    func getButtonByTag(_ buttons: [UIButton],_ id: Int) -> UIButton? {
+        var newButton = UIButton()
+        for button in buttons{
+            if button.tag == id
+            {newButton = button}
+        }
+        return newButton
     }
     
 }
+

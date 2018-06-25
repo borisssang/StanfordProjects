@@ -21,27 +21,27 @@ struct Card: Hashable{
     }
     
     enum Number: String{
-        case one = "one"
-        case two = "two"
-        case three = "three"
+        case one
+        case two
+        case three
         static let allValues = [one,two,three]
     }
     enum Symbol: String {
-        case diamond = "diamond"
-        case squiggle = "squiggle"
-        case oval = "oval"
+        case diamond
+        case squiggle
+        case oval
         static let allValues = [diamond, squiggle, oval]
     }
     enum Shading: String{
-        case solid = "solid"
-        case striped = "striped"
-        case open = "open"
+        case solid
+        case striped
+        case open
         static let allValues = [solid, striped, open]
     }
     enum Color : String{
-        case red = "red"
-        case green = "green"
-        case purple = "purple"
+        case red
+        case green
+        case purple
         static let allValues = [red, green, purple]
     }
     
@@ -70,7 +70,7 @@ struct Card: Hashable{
     }
     
     private static var identifierFactory = 0
-
+    
     private static func getUniqueIdentifier() -> Int {
         identifierFactory += 1
         return identifierFactory
