@@ -51,6 +51,7 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
+    //test
     @IBOutlet weak var scoreLabel: UILabel!
     
     private let colorFeatureToColor: [Card.Color : UIColor] = [
