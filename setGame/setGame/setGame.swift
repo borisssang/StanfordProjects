@@ -24,11 +24,11 @@ struct setGame{
                 if !matchingCards.contains(card){
                     selectedCards.append(card)
                     switch selectedCards.count{
-                    case 3: if areMatching(card1: selectedCards[1], card2: selectedCards[2], card3: selectedCards[3]){
-                        for i in 0..<3
-                        {
-                            matchingCards.append(selectedCards.remove(at: i))
+                    case 3: if areMatching(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2]){
+                        for i in 0..<selectedCards.count{
+                            matchingCards.append(selectedCards[i])
                         }
+                        selectedCards = [Card]()
                         score = score + 1
                         }
                     case 4: selectedCards.removeAll()
@@ -40,26 +40,21 @@ struct setGame{
             }
                 //disselection if there are less than 3 cards selected
             else if selectedCards.contains(card) && selectedCards.count < 3 {
-              for i in 0..<selectedCards.count{
-                    if selectedCards[i] == card {
-                        selectedCards.remove(at: i)}
+                    if let indexOfMatchingCard = selectedCards.index(of: card){
+                        selectedCards.remove(at: indexOfMatchingCard)
                     }
             }
         }
     }
-    
     //returns number of cards requested // or all the cards left in the deck
     mutating func dealCards(numberOfCards: Int){
-        var newCards = [Card]()
         if allCards.count >= numberOfCards{
-            for i in 0..<numberOfCards{
-                newCards.append(allCards.remove(at: i))
-                playingCards.append(newCards[i])
+            for _ in 0..<numberOfCards{
+                playingCards.append(allCards.removeLast())
             }}
         else {
-            for i in 0..<allCards.count{
-                newCards.append(allCards.remove(at: i))
-                playingCards.append(newCards[i])
+            for _ in 0..<allCards.count{
+                playingCards.append(allCards.removeLast())
             }
         }
     }
@@ -71,7 +66,7 @@ struct setGame{
     mutating func restartGame(){
         allCards=Card.fillDeck()
         playingCards = [Card]()
-       dealCards(numberOfCards: 12)
+        dealCards(numberOfCards: 12)
         selectedCards = [Card]()
         matchingCards = [Card]()
         score = 0
