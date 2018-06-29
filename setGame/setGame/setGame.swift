@@ -18,6 +18,7 @@ struct setGame{
     public var score = 0
     
     //validate if the selected card is already matched and if it's currently in playingCards
+    //deselection is supported only if there are one or two cards selected!
     mutating func selectCard(card: Card){
         if playingCards.contains(card){
             if !selectedCards.contains(card) {
@@ -71,8 +72,7 @@ struct setGame{
         matchingCards = [Card]()
         score = 0
     }
-    
-    //Done right with closer
+
     func getCardById(id: Int) -> Card?{
         return playingCards.first(where: {$0.identifier == id})
     }

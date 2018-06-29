@@ -34,10 +34,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func button(_ sender: UIButton) {
-        
         if sender.tag != 0  {
             if let card = game.getCardById(id: sender.tag){
-                game.selectCard(card: card)
+                game.selectCard(  card: card)
                 if game.matchingCards.contains(card){
                     while  game.matchingCards.count > 0 {
                         if let button = buttons.first(where: {$0.tag == game.matchingCards.first?.identifier}){
@@ -51,7 +50,6 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    //test
     @IBOutlet weak var scoreLabel: UILabel!
     
     private let colorFeatureToColor: [Card.Color : UIColor] = [
@@ -96,6 +94,36 @@ class ViewController: UIViewController {
         }
     }
     
+    private func getAttributedText(forCard card: Card) -> NSAttributedString? {
+        
+        guard card.cardNumber != .none else { return nil }
+        guard card.cardSymbol != .none else { return nil }
+        guard card.cardColor != .none else { return nil }
+        guard card.cardShading != .none else { return nil }
+        
+        let number = card.cardNumber
+        let symbol = card.cardSymbol
+        let color = card.cardColor
+        let shading = card.cardShading
+        
+        let cardText = String(repeating: symbol.rawValue, count: number.rawValue)
+        var attributes = [NSAttributedStringKey : Any]()
+        let cardColor = colorFeatureToColor[color]!
+        
+        switch shading {
+        case .open:
+            attributes[NSAttributedStringKey.strokeWidth] = 10
+            fallthrough
+        case .solid:
+            attributes[NSAttributedStringKey.foregroundColor] = cardColor
+        case .striped:
+            attributes[NSAttributedStringKey.foregroundColor] = cardColor.withAlphaComponent(0.3)
+        }
+        
+        let attributedText = NSAttributedString(string: cardText,
+                                                attributes: attributes)
+        return attributedText
+    }
     func assignTagToButton(_ cards: [Card]){
         var newCards = cards
         while  newCards.count > 0 {
@@ -113,45 +141,4 @@ class ViewController: UIViewController {
         }
         return newButton
     }
-
-private func getAttributedText(forCard card: Card) -> NSAttributedString? {
-    
-    guard card.cardNumber != .none else { return nil }
-    guard card.cardSymbol != .none else { return nil }
-    guard card.cardColor != .none else { return nil }
-    guard card.cardShading != .none else { return nil }
-    
-    let number = card.cardNumber
-    let symbol = card.cardSymbol
-    let color = card.cardColor
-    let shading = card.cardShading
-    
-        let cardText = String(repeating: symbol.rawValue, count: number.rawValue)
-        var attributes = [NSAttributedStringKey : Any]()
-        let cardColor = colorFeatureToColor[color]!
-    
-        switch shading {
-        case .open:
-            attributes[NSAttributedStringKey.strokeWidth] = 10
-            fallthrough
-        case .solid:
-            attributes[NSAttributedStringKey.foregroundColor] = cardColor
-        case .striped:
-            attributes[NSAttributedStringKey.foregroundColor] = cardColor.withAlphaComponent(0.3)
-    }
-        
-        let attributedText = NSAttributedString(string: cardText,
-                                                attributes: attributes)
-        return attributedText
 }
-}
-
-
-
-
-//                    for button in buttons {
-//                        if button.tag == game.matchingCards[but].identifier{
-//                            button.tag = 0
-//                        }
-//                    }
-

@@ -26,7 +26,7 @@ struct Card: Hashable{
         case three = 3
         static let allValues = [one,two,three]
     }
-    enum Symbol: String {
+    enum Symbol: String  {
         case diamond = "▲"
         case squere = "■"
         case oval = "º"
