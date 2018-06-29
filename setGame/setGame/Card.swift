@@ -8,17 +8,12 @@
 
 import Foundation
 
-struct Card: Hashable{
+struct Card{
     let cardNumber: Number
     let cardSymbol: Symbol
     let cardShading: Shading
     let cardColor: Color
     var identifier = 0
-    
-    
-    var hashValue: Int {
-        return identifier
-    }
     
     enum Number: Int{
         case one 
@@ -77,3 +72,15 @@ struct Card: Hashable{
         return identifierFactory
     }
 }
+
+extension Card: Hashable {
+    
+    var hashValue: Int {
+        return identifier
+    }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+}
+
