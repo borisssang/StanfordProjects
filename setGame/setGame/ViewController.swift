@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     private lazy var game = setGame()
-    
+
     @IBOutlet var buttons: [UIButton]!{
         didSet{
             game.dealCards(numberOfCards: 12)
@@ -25,11 +25,23 @@ class ViewController: UIViewController {
         let numberOfZeroTags = buttons.filter({$0.tag == 0}).count
         
         //if cards are matched, replace them with new cards
-        while game.allCards.count > 0 && 0 < numberOfZeroTags && counter > 0{
-            game.dealCards(numberOfCards: 1)
-            assignTagToButton([game.playingCards.last!])
+        if !game.matchingCards.isEmpty && game.selectedCards.count == 3 {
+            while game.allCards.count > 0 && !game.matchingCards.isEmpty{
+                let lastCard = game.matchingCards.removeLast()
+                if let button = buttons.first(where: {$0.tag == lastCard.identifier}){
+                    button.tag = 0
+                    game.dealCards(numberOfCards: 1)
+                    assignTagToButton([game.playingCards.last!])
+                }
+            }
             updateViewFromModel()
-            counter -= 1
+        } else if game.matchingCards.isEmpty {
+            while game.allCards.count > 0 && 0 < numberOfZeroTags && counter > 0{
+                game.dealCards(numberOfCards: 1)
+                assignTagToButton([game.playingCards.last!])
+                updateViewFromModel()
+                counter -= 1
+            }
         }
     }
     
@@ -37,11 +49,14 @@ class ViewController: UIViewController {
         if sender.tag != 0  {
             if let card = game.getCardById(id: sender.tag){
                 game.selectCard(  card: card)
-                if game.matchingCards.contains(card){
+                if !game.matchingCards.isEmpty && game.selectedCards.count > 3 {
                     while  game.matchingCards.count > 0 {
                         if let button = buttons.first(where: {$0.tag == game.matchingCards.first?.identifier}){
                             button.tag = 0
                             game.matchingCards.remove(at: 0)
+                            if game.matchingCards.count == 1 {
+                                game.selectedCards = [game.selectedCards.removeLast()]
+                            }
                         }
                     }
                 }
@@ -56,6 +71,18 @@ class ViewController: UIViewController {
         .red : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1),
         .green : #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1),
         .purple : #colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1)
+    ]
+    
+    private let symbolToText: [Card.Symbol : String] = [
+        .squere : "■",
+        .diamond : "▲",
+        .oval : "●"
+    ]
+    
+    private let numberToInt: [Card.Number : Int] = [
+        .one: 1,
+        .two: 2,
+        .three: 3
     ]
     
     @IBAction func restartGame() {
@@ -106,7 +133,9 @@ class ViewController: UIViewController {
         let color = card.cardColor
         let shading = card.cardShading
         
-        let cardText = String(repeating: symbol.rawValue, count: number.rawValue)
+        if let displayedSymbol = symbolToText[symbol]{
+            if let numberOfSymbols = numberToInt[number]{
+        let cardText = String(repeating: displayedSymbol, count: numberOfSymbols)
         var attributes = [NSAttributedStringKey : Any]()
         let cardColor = colorFeatureToColor[color]!
         
@@ -123,6 +152,9 @@ class ViewController: UIViewController {
         let attributedText = NSAttributedString(string: cardText,
                                                 attributes: attributes)
         return attributedText
+    }
+        else {return nil}
+        } else {return nil}
     }
    private func assignTagToButton(_ cards: [Card]){
         var newCards = cards

@@ -21,15 +21,15 @@ struct Card: Hashable{
     }
     
     enum Number: Int{
-        case one = 1
-        case two = 2
-        case three = 3
+        case one 
+        case two
+        case three
         static let allValues = [one,two,three]
     }
     enum Symbol: String  {
-        case diamond = "▲"
-        case squere = "■"
-        case oval = "º"
+        case diamond
+        case squere
+        case oval
         static let allValues = [diamond, squere, oval]
     }
     enum Shading: String{

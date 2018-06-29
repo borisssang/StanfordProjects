@@ -29,13 +29,17 @@ struct setGame{
                         for i in 0..<selectedCards.count{
                             matchingCards.append(selectedCards[i])
                         }
-                        selectedCards = [Card]()
                         score = score + 1
                         }
-                    case 4: selectedCards.removeAll()
-                    selectedCards.append(card)
-                    score-=1
-                    default: break
+                    case 4:
+                        if matchingCards.isEmpty {
+                            selectedCards.removeAll()
+                            selectedCards.append(card)
+                            score-=1
+                        }
+                        else {
+                            score+=1}
+                            default: break
                     }
                 }
             }
