@@ -124,7 +124,7 @@ class ViewController: UIViewController {
                                                 attributes: attributes)
         return attributedText
     }
-    func assignTagToButton(_ cards: [Card]){
+   private func assignTagToButton(_ cards: [Card]){
         var newCards = cards
         while  newCards.count > 0 {
             if let button = buttons.first(where: {$0.tag == 0}){
@@ -133,7 +133,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func getButtonByTag(_ buttons: [UIButton],_ id: Int) -> UIButton? {
+    private func getButtonByTag(_ buttons: [UIButton],_ id: Int) -> UIButton? {
         var newButton = UIButton()
         for button in buttons{
             if button.tag == id

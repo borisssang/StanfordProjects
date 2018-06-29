@@ -60,7 +60,7 @@ struct setGame{
         }
     }
     
-    func areMatching(card1: Card, card2: Card, card3: Card) -> Bool{
+    private func areMatching(card1: Card, card2: Card, card3: Card) -> Bool{
         return isConditioned1(card1, card2, card3) && isConditioned2(card1, card2, card3) && isConditioned3(card1, card2, card3) && isConditioned4(card1, card2, card3)
     }
     
@@ -73,11 +73,11 @@ struct setGame{
         score = 0
     }
 
-    func getCardById(id: Int) -> Card?{
+func getCardById(id: Int) -> Card?{
         return playingCards.first(where: {$0.identifier == id})
     }
     
-    func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+   private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardNumber.rawValue == card2.cardNumber.rawValue && card3.cardNumber.rawValue == card2.cardNumber.rawValue {
             return true
         }
@@ -87,7 +87,7 @@ struct setGame{
         else { return false }
     }
     
-    func isConditioned2(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+   private func isConditioned2(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardColor.rawValue == card2.cardColor.rawValue && card3.cardColor.rawValue == card2.cardColor.rawValue {
             return true
         }
@@ -96,7 +96,7 @@ struct setGame{
         }
         else { return false }    }
     
-    func isConditioned3(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+   private func isConditioned3(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardSymbol.rawValue == card2.cardSymbol.rawValue && card3.cardSymbol.rawValue == card2.cardSymbol.rawValue {
             return true
         }
@@ -106,7 +106,7 @@ struct setGame{
         else { return false }
     }
     
-    func isConditioned4(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+   private func isConditioned4(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardShading.rawValue == card2.cardShading.rawValue && card3.cardShading.rawValue == card2.cardShading.rawValue {
             return true
         }
