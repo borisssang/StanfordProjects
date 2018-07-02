@@ -63,6 +63,7 @@ class ViewController: UIViewController {
             }
         }
         updateViewFromModel()
+        if game.selectedCards.count == 1 {dealCards()}
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
