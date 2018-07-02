@@ -75,6 +75,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="containerView" destination="G9A-tr-FJF" id="G9Y-e5-z15"/>
                         <outlet property="scoreLabel" destination="m0M-Fx-xGd" id="cbQ-eW-xgH"/>
                     </connections>
                 </viewController>

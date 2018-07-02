@@ -11,9 +11,9 @@ import UIKit
 class ViewContainer: UIView {
     
     var cards = [CardViewButton]()
-    
     var grid = Grid(layout: Grid.Layout.aspectRatio(5/8))
     
+    //sets the position of the grid
     var centeredRect: CGRect {
         get {
             return CGRect(x: bounds.size.width * 0.025,
@@ -25,9 +25,9 @@ class ViewContainer: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         grid.frame = centeredRect
         
+        //the number of cells in the grid will be dependent on the cards
         for (i, card) in cards.enumerated() {
             if let frame = grid[i] {
                 card.frame = frame
@@ -38,7 +38,19 @@ class ViewContainer: UIView {
         }
     }
     
-    //To BE ADDED : methods for adding and removing cards
+    func addCards(numberOfCards index: Int){
+        
+    }
     
-    
+    func resetContainer(){
+        func clearCardContainer() {
+            cards = []
+            grid.cellCount = 0
+            for subview in subviews {
+                subview.removeFromSuperview()
+            }
+        }
+            setNeedsLayout()
+        }
+    }
 }

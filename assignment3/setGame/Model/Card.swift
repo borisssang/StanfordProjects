@@ -16,7 +16,7 @@ struct Card{
     var identifier = 0
     
     enum Number: Int{
-        case one 
+        case one
         case two
         case three
         static let allValues = [one,two,three]

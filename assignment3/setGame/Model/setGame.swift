@@ -17,42 +17,48 @@ struct setGame{
     
     public var score = 0
     
-    //validate if the selected card is already matched and if it's currently in playingCards
-    //deselection is supported only if there are one or two cards selected!
-    mutating func selectCard(card: Card){
-        if playingCards.contains(card){
+    mutating func selectCard(at index: Int){
+        let card = playingCards[index]
+    
+        // replacing matched cards if there are any
+        if matchingCards.count > 0 {
+            guard matchingCards.count == 3 else { return }
+            dealCards(numberOfCards: 3)
+            matchingCards = []
+        }
+        
+        //selecting a new card, deselection of the last three
+        if selectedCards.count == 3 {
             if !selectedCards.contains(card) {
-                if !matchingCards.contains(card){
-                    selectedCards.append(card)
-                    switch selectedCards.count{
-                    case 3: if areMatching(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2]){
-                        for i in 0..<selectedCards.count{
-                            matchingCards.append(selectedCards[i])
-                        }
-                        score = score + 1
-                        }
-                    case 4:
-                        if matchingCards.isEmpty {
-                            selectedCards.removeAll()
-                            selectedCards.append(card)
-                            score-=1
-                        }
-                        else {
-                            score+=1}
-                            default: break
-                    }
-                }
-            }
-                //disselection if there are less than 3 cards selected
-            else if selectedCards.contains(card) && selectedCards.count < 3 {
-                    if let indexOfMatchingCard = selectedCards.index(of: card){
-                        selectedCards.remove(at: indexOfMatchingCard)
-                    }
+            score -= 1
+            selectedCards = []
             }
         }
+        
+        //select or deselect
+        if let index = selectedCards.index(of: card) {
+            selectedCards.remove(at: index)
+        } else {
+            selectedCards.append(card)
+        }
+        
+        //matching happens
+        if selectedCards.count == 3, areMatching(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2]){
+            matchingCards = selectedCards
+            selectedCards = []
+            score += 1
+        }
     }
+    
     //returns number of cards requested // or all the cards left in the deck
     mutating func dealCards(numberOfCards: Int){
+        
+        if matchingCards.count > 0 {
+            guard matchingCards.count == 3 else { return }
+            dealCards(numberOfCards: 3)
+            matchingCards = []
+        }
+        
         if allCards.count >= numberOfCards{
             for _ in 0..<numberOfCards{
                 playingCards.append(allCards.removeLast())
@@ -75,10 +81,6 @@ struct setGame{
         selectedCards = [Card]()
         matchingCards = [Card]()
         score = 0
-    }
-
-func getCardById(id: Int) -> Card?{
-        return playingCards.first(where: {$0.identifier == id})
     }
     
    private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
