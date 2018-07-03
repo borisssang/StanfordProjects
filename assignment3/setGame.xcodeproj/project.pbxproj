@@ -69,7 +69,6 @@
 			children = (
 				059B5EE120EA230800E8A8DA /* ViewController.swift */,
 				059B5EDB20E6628F00E8A8DA /* Model */,
-				059B5EDC20E662AC00E8A8DA /* View */,
 				0550047B20DBE2A9009747A2 /* Main.storyboard */,
 				0550048920DBE2D4009747A2 /* Supporting Files */,
 				0550048320DBE2AB009747A2 /* Info.plist */,
@@ -92,6 +91,7 @@
 			children = (
 				0550048A20DBE2FF009747A2 /* Card.swift */,
 				0550048C20DBE6D1009747A2 /* setGame.swift */,
+				059B5EDC20E662AC00E8A8DA /* View */,
 			);
 			path = Model;
 			sourceTree = "<group>";

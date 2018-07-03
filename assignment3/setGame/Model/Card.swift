@@ -11,7 +11,7 @@ import Foundation
 struct Card{
     let cardNumber: Number
     let cardSymbol: Symbol
-    let cardShading: Shading
+    let cardStriping: Striping
     let cardColor: Color
     var identifier = 0
     
@@ -23,15 +23,15 @@ struct Card{
     }
     enum Symbol: String  {
         case diamond
-        case squere
+        case squiggle
         case oval
-        static let allValues = [diamond, squere, oval]
+        static let allValues = [diamond, squiggle, oval]
     }
-    enum Shading: String{
+    enum Striping: String{
         case solid
         case striped
-        case open
-        static let allValues = [solid, striped, open]
+        case unfilled
+        static let allValues = [solid, striped, unfilled]
     }
     enum Color : String{
 
@@ -46,10 +46,10 @@ struct Card{
         var deck = [Card]()
         for number in Number.allValues{
             for symbol in Symbol.allValues {
-                for shading in Shading.allValues {
+                for shading in Striping.allValues {
                     for color in Color.allValues{
                         let newIdentifier = Card.getUniqueIdentifier()
-                        let newCard = Card(cardNumber: number, cardSymbol: symbol, cardShading: shading, cardColor: color, identifier: newIdentifier)
+                        let newCard = Card(cardNumber: number, cardSymbol: symbol, cardStriping: shading, cardColor: color, identifier: newIdentifier)
                         deck.append(newCard)
                     }
                 }

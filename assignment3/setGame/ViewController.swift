@@ -10,7 +10,13 @@ import UIKit
 class ViewController: UIViewController {
     
     private lazy var game = setGame()
-    @IBOutlet weak var containerView: ViewContainer!
+    private var isDealingEnabled = true
+    @IBOutlet weak var containerView: ViewContainer!{
+        didSet{
+            let didSwipe = UISwipeGestureRecognizer(target: self, action: #selector(dealCards))
+            containerView.addGestureRecognizer(didSwipe)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,47 +34,81 @@ class ViewController: UIViewController {
     
     @objc func didTapCard(_ sender: UIButton) {
         let indexOfCard = containerView.cards.index(of: sender as! CardViewButton)!
-            game.selectCard(at: indexOfCard)
-            updateViewFromModel()
+        game.selectCard(at: indexOfCard)
+        //if there are no more cards to deal, removes matched pairs
+                if !game.matchedTrioLimit{
+                    containerView.removeCards(times: 3)
+                }
+        updateViewFromModel()
     }
     
     //     append three cards //or as much as there is space for
     @IBAction func dealCards() {
+        if game.isDealingEnabled {
         game.dealCards(numberOfCards: 3)
         containerView.addCards(numberOfCards: 3)
         enableButtonAction()
         updateViewFromModel()
+        }
     }
     
     @IBAction func restartGame() {
         game.restartGame()
         containerView.resetContainer()
         containerView.addCards(numberOfCards: 12)
+        enableButtonAction()
         updateViewFromModel()
     }
     
-        @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
-        private let colorFeatureToColor: [Card.Color : UIColor] = [
-            .red : #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1),
-            .green : #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1),
-            .purple : #colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1)
-        ]
-    
-        private let symbolToText: [Card.Symbol : String] = [
-            .squere : "■",
-            .diamond : "▲",
-            .oval : "●"
-        ]
-    
-        private let numberToInt: [Card.Number : Int] = [
-            .one: 1,
-            .two: 2,
-            .three: 3
-        ]
-    
-    //needs implementation
-        private func updateViewFromModel() {
-            scoreLabel?.text = "Score: \(game.score)"
+    @IBAction func userDidRotate(_ sender: UIRotationGestureRecognizer) {
+        game.shufflePlayingCards()
+        updateViewFromModel()
+    }
+
+    //iterate through the cards
+    //get the current card and switch on its states
+    //put the states of the buttons accordingly
+    private func updateViewFromModel() {
+        scoreLabel?.text = "Score: \(game.score)"
+        for (index, card) in game.playingCards.enumerated()  {
+            let currentCardButton = containerView.cards[index]
+
+            currentCardButton.numberOfSymbols = card.cardNumber.rawValue
+            
+            switch card.cardColor {
+            case .red:
+                currentCardButton.color = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+            case .green:
+                currentCardButton.color = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            case .purple:
+                currentCardButton.color = #colorLiteral(red: 0.3647058904, green: 0.06666667014, blue: 0.9686274529, alpha: 1)
+            }
+            
+            switch card.cardSymbol{
+            case .diamond:
+                currentCardButton.symbol = "diamond"
+            case .squiggle:
+                currentCardButton.symbol = "squiggle"
+            case .oval:
+                currentCardButton.symbol = "oval"
+            }
+            
+            switch card.cardStriping{
+            case .solid:
+                currentCardButton.striping = "solid"
+            case .striped:
+                currentCardButton.striping = "striped"
+            case .unfilled:
+                currentCardButton.striping = "unfilled"
+            }
+            
+            if game.selectedCards.contains(card) || game.matchingCards.contains(card){
+                currentCardButton.layer.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            } else {
+                currentCardButton.layer.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            }
         }
+    }
 }

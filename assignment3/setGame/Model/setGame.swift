@@ -14,30 +14,38 @@ struct setGame{
     var playingCards = [Card]()
     var selectedCards = [Card]()
     var matchingCards = [Card]()
+    var matchedTrioLimit = true
+    
+    var isDealingEnabled = true
     
     public var score = 0
     
     mutating func selectCard(at index: Int){
         let card = playingCards[index]
-    
+        
+        matchedTrioLimit = true
+        
         // replacing matched cards if there are any
         if matchingCards.count > 0 {
             guard matchingCards.count == 3 else { return }
             dealCards(numberOfCards: 3)
             matchingCards = []
+            if allCards.count == 0 {
+                matchedTrioLimit = false
+            }
         }
         
         //selecting a new card, deselection of the last three
         if selectedCards.count == 3 {
             if !selectedCards.contains(card) {
-            score -= 1
-            selectedCards = []
+                score -= 1
+                selectedCards = []
             }
         }
         
         //select or deselect
         if let index = selectedCards.index(of: card) {
-            selectedCards.remove(at: index)
+            if selectedCards.count < 3 {selectedCards.remove(at: index) }
         } else {
             selectedCards.append(card)
         }
@@ -52,7 +60,6 @@ struct setGame{
     
     //returns number of cards requested // or all the cards left in the deck
     mutating func dealCards(numberOfCards: Int){
-        
         if matchingCards.count > 0 {
             guard matchingCards.count == 3 else { return }
             dealCards(numberOfCards: 3)
@@ -67,6 +74,7 @@ struct setGame{
             for _ in 0..<allCards.count{
                 playingCards.append(allCards.removeLast())
             }
+            isDealingEnabled = false
         }
     }
     
@@ -81,9 +89,10 @@ struct setGame{
         selectedCards = [Card]()
         matchingCards = [Card]()
         score = 0
+        isDealingEnabled = true
     }
     
-   private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+    private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardNumber.rawValue == card2.cardNumber.rawValue && card3.cardNumber.rawValue == card2.cardNumber.rawValue {
             return true
         }
@@ -93,7 +102,7 @@ struct setGame{
         else { return false }
     }
     
-   private func isConditioned2(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+    private func isConditioned2(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardColor.rawValue == card2.cardColor.rawValue && card3.cardColor.rawValue == card2.cardColor.rawValue {
             return true
         }
@@ -102,7 +111,7 @@ struct setGame{
         }
         else { return false }    }
     
-   private func isConditioned3(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+    private func isConditioned3(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardSymbol.rawValue == card2.cardSymbol.rawValue && card3.cardSymbol.rawValue == card2.cardSymbol.rawValue {
             return true
         }
@@ -112,13 +121,23 @@ struct setGame{
         else { return false }
     }
     
-   private func isConditioned4(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
-        if card1.cardShading.rawValue == card2.cardShading.rawValue && card3.cardShading.rawValue == card2.cardShading.rawValue {
+    private func isConditioned4(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+        if card1.cardStriping.rawValue == card2.cardStriping.rawValue && card3.cardStriping.rawValue == card2.cardStriping.rawValue {
             return true
         }
-        else if card3.cardShading.rawValue != card2.cardShading.rawValue && card1.cardShading.rawValue != card2.cardShading.rawValue && card3.cardShading.rawValue != card1.cardShading.rawValue {
+        else if card3.cardStriping.rawValue != card2.cardStriping.rawValue && card1.cardStriping.rawValue != card2.cardStriping.rawValue && card3.cardStriping.rawValue != card1.cardStriping.rawValue {
             return true
         }
         else { return false }
     }
+    
+    mutating func shufflePlayingCards(){
+        for i in 0 ..< playingCards.count {
+            let j = Int(arc4random_uniform(UInt32(playingCards.count)))
+            let temp = playingCards[i]
+            playingCards[i] = playingCards[j]
+            playingCards[j] = temp
+        }
+    }
 }
+
