@@ -60,21 +60,35 @@ struct setGame{
     
     //returns number of cards requested // or all the cards left in the deck
     mutating func dealCards(numberOfCards: Int){
+        
         if matchingCards.count > 0 {
-            guard matchingCards.count == 3 else { return }
-            dealCards(numberOfCards: 3)
+        guard allCards.count >= numberOfCards else {
+            for card in matchingCards {
+                let index = playingCards.index(of: card)!
+                playingCards.remove(at: index)
+            }
+            matchingCards = []
+            return
+        }
+            
+            for (index, card) in playingCards.enumerated() {
+                if matchingCards.contains(card){
+                    playingCards[index] = allCards.removeFirst()
+                }
+            }
             matchingCards = []
         }
-        
-        if allCards.count >= numberOfCards{
-            for _ in 0..<numberOfCards{
-                playingCards.append(allCards.removeLast())
-            }}
-        else {
-            for _ in 0..<allCards.count{
-                playingCards.append(allCards.removeLast())
+        else if matchingCards.count == 0 {
+            if allCards.count >= numberOfCards{
+                for _ in 0..<numberOfCards{
+                    playingCards.append(allCards.removeLast())
+                }}
+            else {
+                for _ in 0..<allCards.count{
+                    playingCards.append(allCards.removeLast())
+                }
+                isDealingEnabled = false
             }
-            isDealingEnabled = false
         }
     }
     

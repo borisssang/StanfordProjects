@@ -37,6 +37,7 @@ class ViewController: UIViewController {
         game.selectCard(at: indexOfCard)
         //if there are no more cards to deal, removes matched pairs
                 if !game.matchedTrioLimit{
+                    updateViewFromModel()
                     containerView.removeCards(times: 3)
                 }
         updateViewFromModel()
@@ -46,8 +47,9 @@ class ViewController: UIViewController {
     @IBAction func dealCards() {
         if game.isDealingEnabled {
         game.dealCards(numberOfCards: 3)
-        containerView.addCards(numberOfCards: 3)
+            if game.allCards.count > 0 {containerView.addCards(numberOfCards: 3)
         enableButtonAction()
+            }
         updateViewFromModel()
         }
     }
@@ -71,11 +73,14 @@ class ViewController: UIViewController {
     //get the current card and switch on its states
     //put the states of the buttons accordingly
     private func updateViewFromModel() {
+        if containerView.cards.count > game.playingCards.count {
+            containerView.removeCards(times: containerView.cards.count - game.playingCards.count)
+        }
         scoreLabel?.text = "Score: \(game.score)"
-        for (index, card) in game.playingCards.enumerated()  {
-            let currentCardButton = containerView.cards[index]
+        for (index, currentCardButton) in containerView.cards.enumerated()  {
+            let card = game.playingCards[index]
 
-            currentCardButton.numberOfSymbols = card.cardNumber.rawValue
+            currentCardButton.numberOfSymbols = card.cardNumber.rawValue + 1
             
             switch card.cardColor {
             case .red:

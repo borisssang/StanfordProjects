@@ -13,6 +13,40 @@ class ViewContainer: UIView {
     var cards = [CardViewButton]()
     var grid = Grid(layout: Grid.Layout.aspectRatio(3/2))
     
+    func addCards(numberOfCards: Int){
+        guard cards.count < 81 else {return}
+        
+        for _ in 0..<numberOfCards{
+            cards.append(CardViewButton())
+        }
+    
+        for card in cards {
+         addSubview(card)
+        }
+
+        grid.cellCount = cards.count
+        setNeedsLayout()
+    }
+    
+    func removeCards(times numberOfCardsRemoved: Int){
+        for i in 0..<numberOfCardsRemoved {
+            let card = cards[i]
+            card.removeFromSuperview()
+        }
+        cards.removeSubrange(0..<numberOfCardsRemoved)
+        grid.cellCount = cards.count
+        setNeedsLayout()
+    }
+    
+    func resetContainer(){
+            cards = []
+            grid.cellCount = 0
+            for subview in subviews {
+                subview.removeFromSuperview()
+            }
+        setNeedsLayout()
+        }
+    
     //sets the position of the grid
     var centeredRect: CGRect {
         get {
@@ -38,35 +72,4 @@ class ViewContainer: UIView {
         }
     }
     
-    func addCards(numberOfCards: Int){
-        for _ in 0..<numberOfCards{
-            cards.append(CardViewButton())
-        }
-        
-        for card in cards {
-         addSubview(card)
-        }
-        
-        grid.cellCount = cards.count
-        setNeedsLayout()
-    }
-    
-    func removeCards(times numberOfCardsRemoved: Int){
-        for i in 0..<numberOfCardsRemoved {
-            let card = cards[i]
-            card.removeFromSuperview()
-            cards.remove(at: i)
-        }
-        grid.cellCount = cards.count
-        setNeedsLayout()
-    }
-    
-    func resetContainer(){
-            cards = []
-            grid.cellCount = 0
-            for subview in subviews {
-                subview.removeFromSuperview()
-            }
-        setNeedsLayout()
-        }
 }
