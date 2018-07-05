@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     @IBAction func dealCards() {
         if game.isDealingEnabled {
         game.dealCards(numberOfCards: 3)
-            if game.allCards.count > 0 {containerView.addCards(numberOfCards: 3)
+            if game.playingCards.count <= 81 {containerView.addCards(numberOfCards: 3)
         enableButtonAction()
             }
         updateViewFromModel()
