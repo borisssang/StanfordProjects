@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var containerView: ViewContainer!{
         didSet{
             let didSwipe = UISwipeGestureRecognizer(target: self, action: #selector(dealCards))
+            didSwipe.direction = UISwipeGestureRecognizerDirection.down
             containerView.addGestureRecognizer(didSwipe)
         }
     }
