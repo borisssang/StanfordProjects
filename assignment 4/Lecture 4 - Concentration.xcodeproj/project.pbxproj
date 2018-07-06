@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C4C2C720EF8F350049233D /* ThemeViewController.swift */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
-		EA5F130A1FB861A0009590B6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* ViewController.swift */; };
+		EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */; };
 		EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130B1FB861A0009590B6 /* Main.storyboard */; };
 		EA5F130F1FB861A0009590B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130E1FB861A0009590B6 /* Assets.xcassets */; };
 		EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */; };
@@ -17,9 +18,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		EA5F13041FB861A0009590B6 /* Lecture 2 - Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lecture 2 - Concentration.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C4C2C720EF8F350049233D /* ThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeViewController.swift; sourceTree = "<group>"; };
+		EA5F13041FB861A0009590B6 /* Lecture 4 - Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lecture 4 - Concentration.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EA5F13091FB861A0009590B6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationViewController.swift; sourceTree = "<group>"; };
 		EA5F130C1FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EA5F130E1FB861A0009590B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA5F13111FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		EA5F13051FB861A0009590B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EA5F13041FB861A0009590B6 /* Lecture 2 - Concentration.app */,
+				EA5F13041FB861A0009590B6 /* Lecture 4 - Concentration.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -59,7 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
-				EA5F13091FB861A0009590B6 /* ViewController.swift */,
+				EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */,
+				05C4C2C720EF8F350049233D /* ThemeViewController.swift */,
 				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */,
 				EAB24F441FB8622400FD5E4D /* Supporting Files */,
@@ -81,9 +84,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EA5F13031FB861A0009590B6 /* Lecture 2 - Concentration */ = {
+		EA5F13031FB861A0009590B6 /* Lecture 4 - Concentration */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Lecture 2 - Concentration" */;
+			buildConfigurationList = EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Lecture 4 - Concentration" */;
 			buildPhases = (
 				EA5F13001FB861A0009590B6 /* Sources */,
 				EA5F13011FB861A0009590B6 /* Frameworks */,
@@ -93,9 +96,9 @@
 			);
 			dependencies = (
 			);
-			name = "Lecture 2 - Concentration";
+			name = "Lecture 4 - Concentration";
 			productName = Concentration;
-			productReference = EA5F13041FB861A0009590B6 /* Lecture 2 - Concentration.app */;
+			productReference = EA5F13041FB861A0009590B6 /* Lecture 4 - Concentration.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +108,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Michel Deiman";
 				TargetAttributes = {
 					EA5F13031FB861A0009590B6 = {
@@ -114,7 +117,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Lecture 2 - Concentration" */;
+			buildConfigurationList = EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Lecture 4 - Concentration" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -127,7 +130,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EA5F13031FB861A0009590B6 /* Lecture 2 - Concentration */,
+				EA5F13031FB861A0009590B6 /* Lecture 4 - Concentration */,
 			);
 		};
 /* End PBXProject section */
@@ -150,7 +153,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA5F130A1FB861A0009590B6 /* ViewController.swift in Sources */,
+				05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */,
+				EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* Concentration.swift in Sources */,
 				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
@@ -193,6 +197,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -200,6 +205,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -250,6 +256,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -257,6 +264,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -294,7 +302,7 @@
 				DEVELOPMENT_TEAM = 663TR68DHM;
 				INFOPLIST_FILE = Concentration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-2---Concentration";
+				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-4-Concentration";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -309,7 +317,7 @@
 				DEVELOPMENT_TEAM = 663TR68DHM;
 				INFOPLIST_FILE = Concentration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-2---Concentration";
+				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-4-Concentration";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -319,7 +327,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Lecture 2 - Concentration" */ = {
+		EA5F12FF1FB861A0009590B6 /* Build configuration list for PBXProject "Lecture 4 - Concentration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EA5F13141FB861A0009590B6 /* Debug */,
@@ -328,7 +336,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Lecture 2 - Concentration" */ = {
+		EA5F13161FB861A0009590B6 /* Build configuration list for PBXNativeTarget "Lecture 4 - Concentration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EA5F13171FB861A0009590B6 /* Debug */,
