@@ -62,14 +62,14 @@ struct setGame{
     mutating func dealCards(numberOfCards: Int){
         
         if matchingCards.count > 0 {
-        guard allCards.count >= numberOfCards else {
-            for card in matchingCards {
-                let index = playingCards.index(of: card)!
-                playingCards.remove(at: index)
+            guard allCards.count >= numberOfCards else {
+                for card in matchingCards {
+                    let index = playingCards.index(of: card)!
+                    playingCards.remove(at: index)
+                }
+                matchingCards = []
+                return
             }
-            matchingCards = []
-            return
-        }
             
             for (index, card) in playingCards.enumerated() {
                 if matchingCards.contains(card){
@@ -154,4 +154,5 @@ struct setGame{
         }
     }
 }
+
 

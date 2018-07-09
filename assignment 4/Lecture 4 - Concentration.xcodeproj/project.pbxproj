@@ -7,17 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0570C7DC20EFC001005FD492 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7DB20EFC001005FD492 /* Grid.swift */; };
+		0570C7DE20EFC02F005FD492 /* ViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7DD20EFC02F005FD492 /* ViewContainer.swift */; };
+		0570C7E020EFC04A005FD492 /* CardViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7DF20EFC04A005FD492 /* CardViewButton.swift */; };
+		0570C7E320EFC07A005FD492 /* setGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E220EFC07A005FD492 /* setGame.swift */; };
+		0570C7E720EFC0EC005FD492 /* SetGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E620EFC0EC005FD492 /* SetGameController.swift */; };
+		0570C7E920EFC176005FD492 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E820EFC176005FD492 /* Card.swift */; };
+		0570C7EB20F32EC3005FD492 /* ConcentrationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */; };
 		05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C4C2C720EF8F350049233D /* ThemeViewController.swift */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
 		EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */; };
 		EA5F130D1FB861A0009590B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130B1FB861A0009590B6 /* Main.storyboard */; };
 		EA5F130F1FB861A0009590B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA5F130E1FB861A0009590B6 /* Assets.xcassets */; };
 		EA5F13121FB861A0009590B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA5F13101FB861A0009590B6 /* LaunchScreen.storyboard */; };
-		EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE61FB9AB1000EF2C53 /* Card.swift */; };
 		EAFC4CE91FB9AC8600EF2C53 /* Concentration.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0570C7DB20EFC001005FD492 /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
+		0570C7DD20EFC02F005FD492 /* ViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewContainer.swift; sourceTree = "<group>"; };
+		0570C7DF20EFC04A005FD492 /* CardViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewButton.swift; sourceTree = "<group>"; };
+		0570C7E220EFC07A005FD492 /* setGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = setGame.swift; sourceTree = "<group>"; };
+		0570C7E620EFC0EC005FD492 /* SetGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameController.swift; sourceTree = "<group>"; };
+		0570C7E820EFC176005FD492 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConcentrationCard.swift; path = ../../../.Trash/ConcentrationCard.swift; sourceTree = "<group>"; };
 		05C4C2C720EF8F350049233D /* ThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeViewController.swift; sourceTree = "<group>"; };
 		EA5F13041FB861A0009590B6 /* Lecture 4 - Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lecture 4 - Concentration.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -26,7 +39,6 @@
 		EA5F130E1FB861A0009590B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EA5F13111FB861A0009590B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EA5F13131FB861A0009590B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EAFC4CE61FB9AB1000EF2C53 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,6 +53,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0570C7DA20EFBFDF005FD492 /* SetView */ = {
+			isa = PBXGroup;
+			children = (
+				0570C7DB20EFC001005FD492 /* Grid.swift */,
+				0570C7DD20EFC02F005FD492 /* ViewContainer.swift */,
+				0570C7DF20EFC04A005FD492 /* CardViewButton.swift */,
+			);
+			path = SetView;
+			sourceTree = "<group>";
+		};
+		0570C7E120EFC062005FD492 /* SetModel */ = {
+			isa = PBXGroup;
+			children = (
+				0570C7E220EFC07A005FD492 /* setGame.swift */,
+				0570C7E820EFC176005FD492 /* Card.swift */,
+			);
+			path = SetModel;
+			sourceTree = "<group>";
+		};
 		EA5F12FB1FB861A0009590B6 = {
 			isa = PBXGroup;
 			children = (
@@ -62,9 +93,12 @@
 			children = (
 				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
 				EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */,
-				05C4C2C720EF8F350049233D /* ThemeViewController.swift */,
-				EAFC4CE61FB9AB1000EF2C53 /* Card.swift */,
 				EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */,
+				0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */,
+				05C4C2C720EF8F350049233D /* ThemeViewController.swift */,
+				0570C7E620EFC0EC005FD492 /* SetGameController.swift */,
+				0570C7E120EFC062005FD492 /* SetModel */,
+				0570C7DA20EFBFDF005FD492 /* SetView */,
 				EAB24F441FB8622400FD5E4D /* Supporting Files */,
 				EA5F13131FB861A0009590B6 /* Info.plist */,
 			);
@@ -156,8 +190,14 @@
 				05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* Concentration.swift in Sources */,
-				EAFC4CE71FB9AB1000EF2C53 /* Card.swift in Sources */,
+				0570C7E720EFC0EC005FD492 /* SetGameController.swift in Sources */,
+				0570C7E320EFC07A005FD492 /* setGame.swift in Sources */,
+				0570C7DE20EFC02F005FD492 /* ViewContainer.swift in Sources */,
+				0570C7E920EFC176005FD492 /* Card.swift in Sources */,
+				0570C7E020EFC04A005FD492 /* CardViewButton.swift in Sources */,
+				0570C7DC20EFC001005FD492 /* Grid.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
+				0570C7EB20F32EC3005FD492 /* ConcentrationCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +339,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 663TR68DHM;
+				DEVELOPMENT_TEAM = DVMRYPRM28;
 				INFOPLIST_FILE = Concentration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-4-Concentration";
@@ -314,7 +354,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 663TR68DHM;
+				DEVELOPMENT_TEAM = DVMRYPRM28;
 				INFOPLIST_FILE = Concentration/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "deiman.Lecture-4-Concentration";

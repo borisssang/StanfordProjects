@@ -1,9 +1,9 @@
 //
-//  File.swift
-//  setGame
+//  Grid.swift
+//  Lecture 4 - Concentration
 //
-//  Created by Boris Angelov on 29.06.18.
-//  Copyright © 2018 Boris Angelov. All rights reserved.
+//  Created by Boris Angelov on 6.07.18.
+//  Copyright © 2018 Michel Deiman. All rights reserved.
 //
 
 import UIKit

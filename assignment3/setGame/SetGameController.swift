@@ -7,7 +7,7 @@
 //
 import UIKit
 
-class ViewController: UIViewController {
+class SetGameController: UIViewController {
     
     private lazy var game = setGame()
     private var isDealingEnabled = true

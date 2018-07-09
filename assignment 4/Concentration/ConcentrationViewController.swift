@@ -9,44 +9,45 @@ import UIKit
 
 class ConcentrationViewController: UIViewController {
 	
-    override func viewDidLoad() {
-        updateViewFromModel()
-    }
+//    override func viewDidLoad() {
+//        updateViewFromModel()
+//    }
     
-	private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
+	private lazy var ConcentrationGame = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
 	
 	var numberOfPairsOfCards: Int {
 		return (cardButtons.count + 1) / 2
 	}
     
     @IBAction func newGame() {
-        emojiChoices = game.restartGame()
+        emojiChoices = ConcentrationGame.restartGame()
         updateViewFromModel()
         emoji = [:]
     }
     
 	@IBOutlet private weak var flipCountLabel: UILabel! {
 		didSet {
-			game.flipCount = 0
+			ConcentrationGame.flipCount = 0
 		}
 	}
 	
     @IBOutlet private weak var scoreLabel: UILabel!
     {
         didSet{
-            game.score = 0
+            ConcentrationGame.score = 0
         }
     }
     @IBOutlet private var cardButtons: [UIButton]!{
         didSet{
-            emojiChoices = game.randomTheme()
+            if theme == ""{
+                emojiChoices = ConcentrationGame.randomTheme()}
         }
     }
 	
 	
 	@IBAction private func touchCard(_ sender: UIButton) {
 		if let cardNumber = cardButtons.index(of: sender) {
-			game.chooseCard(at: cardNumber)
+			ConcentrationGame.chooseCard(at: cardNumber)
 			updateViewFromModel()
 		} else {
 			print("choosen card was not in cardButtons")
@@ -55,11 +56,11 @@ class ConcentrationViewController: UIViewController {
 	
 	private func updateViewFromModel() {
         if cardButtons != nil {
-        flipCountLabel.text = "Flips: \(game.flipCount)"
-        scoreLabel.text = "Score: \(game.score)"
+        flipCountLabel.text = "Flips: \(ConcentrationGame.flipCount)"
+        scoreLabel.text = "Score: \(ConcentrationGame.score)"
 		for index in cardButtons.indices {
 			let button = cardButtons[index]
-			let card = game.cards[index]
+			let card = ConcentrationGame.cards[index]
 			if card.isFaceUp {
 				button.setTitle(emoji(for: card), for: UIControlState.normal)
 				button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -81,9 +82,9 @@ class ConcentrationViewController: UIViewController {
     
     private var emojiChoices = "🦇😱🙀😈🎃👻🍭🍬🍎"
     
-	private var emoji = [Card: String]()
+	private var emoji = [ConcentrationCard: String]()
 	
-	private func emoji(for card: Card) -> String {
+	private func emoji(for card: ConcentrationCard) -> String {
 		if emoji[card] == nil, emojiChoices.count > 0 {
 			let stringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4Random)
 			emoji[card] = String(emojiChoices.remove(at: stringIndex))

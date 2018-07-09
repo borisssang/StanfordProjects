@@ -1,14 +1,6 @@
-//
-//  File.swift
-//  setGame
-//
-//  Created by Boris Angelov on 21.06.18.
-//  Copyright © 2018 Boris Angelov. All rights reserved.
-//
-
 import Foundation
 
-struct Card{
+struct Card {
     let cardNumber: Number
     let cardSymbol: Symbol
     let cardStriping: Striping
@@ -34,7 +26,7 @@ struct Card{
         static let allValues = [solid, striped, unfilled]
     }
     enum Color : String{
-
+        
         case red
         case green
         case purple

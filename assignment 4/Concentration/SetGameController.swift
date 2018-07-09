@@ -7,8 +7,8 @@
 //
 import UIKit
 
-class ViewController: UIViewController {
-    
+class SetGameController: UIViewController {
+
     private lazy var game = setGame()
     private var isDealingEnabled = true
     @IBOutlet weak var containerView: ViewContainer!{
@@ -37,21 +37,21 @@ class ViewController: UIViewController {
         let indexOfCard = containerView.cards.index(of: sender as! CardViewButton)!
         game.selectCard(at: indexOfCard)
         //if there are no more cards to deal, removes matched pairs
-                if !game.matchedTrioLimit{
-                    updateViewFromModel()
-                    containerView.removeCards(times: 3)
-                }
+        if !game.matchedTrioLimit{
+            updateViewFromModel()
+            containerView.removeCards(times: 3)
+        }
         updateViewFromModel()
     }
     
     //     append three cards //or as much as there is space for
     @IBAction func dealCards() {
         if game.isDealingEnabled {
-        game.dealCards(numberOfCards: 3)
+            game.dealCards(numberOfCards: 3)
             if game.playingCards.count <= 81 {containerView.addCards(numberOfCards: 3)
-        enableButtonAction()
+                enableButtonAction()
             }
-        updateViewFromModel()
+            updateViewFromModel()
         }
     }
     
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         game.shufflePlayingCards()
         updateViewFromModel()
     }
-
+    
     //iterate through the cards
     //get the current card and switch on its states
     //put the states of the buttons accordingly
@@ -80,7 +80,7 @@ class ViewController: UIViewController {
         scoreLabel?.text = "Score: \(game.score)"
         for (index, currentCardButton) in containerView.cards.enumerated()  {
             let card = game.playingCards[index]
-
+            
             currentCardButton.numberOfSymbols = card.cardNumber.rawValue + 1
             
             switch card.cardColor {

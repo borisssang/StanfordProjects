@@ -17,7 +17,7 @@
 		059B5EDA20E6604A00E8A8DA /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B5ED920E6604A00E8A8DA /* Grid.swift */; };
 		059B5EDE20E6631F00E8A8DA /* ViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B5EDD20E6631F00E8A8DA /* ViewContainer.swift */; };
 		059B5EE020E6639700E8A8DA /* CardViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B5EDF20E6639700E8A8DA /* CardViewButton.swift */; };
-		059B5EE220EA230800E8A8DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B5EE120EA230800E8A8DA /* ViewController.swift */; };
+		059B5EE220EA230800E8A8DA /* SetGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B5EE120EA230800E8A8DA /* SetGameController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +33,7 @@
 		059B5ED920E6604A00E8A8DA /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		059B5EDD20E6631F00E8A8DA /* ViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewContainer.swift; sourceTree = "<group>"; };
 		059B5EDF20E6639700E8A8DA /* CardViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewButton.swift; sourceTree = "<group>"; };
-		059B5EE120EA230800E8A8DA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		059B5EE120EA230800E8A8DA /* SetGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +67,9 @@
 		0550047620DBE2A9009747A2 /* setGame */ = {
 			isa = PBXGroup;
 			children = (
-				059B5EE120EA230800E8A8DA /* ViewController.swift */,
+				059B5EE120EA230800E8A8DA /* SetGameController.swift */,
 				057369B620EBC4C70057048A /* Main.storyboard */,
+				059B5EDC20E662AC00E8A8DA /* View */,
 				059B5EDB20E6628F00E8A8DA /* Model */,
 				0550048920DBE2D4009747A2 /* Supporting Files */,
 				0550048320DBE2AB009747A2 /* Info.plist */,
@@ -91,7 +92,6 @@
 			children = (
 				0550048A20DBE2FF009747A2 /* Card.swift */,
 				0550048C20DBE6D1009747A2 /* setGame.swift */,
-				059B5EDC20E662AC00E8A8DA /* View */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -182,7 +182,7 @@
 				059B5EDE20E6631F00E8A8DA /* ViewContainer.swift in Sources */,
 				059B5EDA20E6604A00E8A8DA /* Grid.swift in Sources */,
 				0550048B20DBE2FF009747A2 /* Card.swift in Sources */,
-				059B5EE220EA230800E8A8DA /* ViewController.swift in Sources */,
+				059B5EE220EA230800E8A8DA /* SetGameController.swift in Sources */,
 				0550048D20DBE6D1009747A2 /* setGame.swift in Sources */,
 				0550047820DBE2A9009747A2 /* AppDelegate.swift in Sources */,
 			);

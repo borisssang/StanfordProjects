@@ -1,11 +1,3 @@
-//
-//  CardView.swift
-//  setGame
-//
-//  Created by Boris Angelov on 29.06.18.
-//  Copyright © 2018 Boris Angelov. All rights reserved.
-//
-
 import UIKit
 
 @IBDesignable
@@ -108,36 +100,36 @@ class CardViewButton: UIButton {
         
         switch striping {
         case "solid":
-        color.setFill()
-        path!.fill()
+            color.setFill()
+            path!.fill()
             
         case "unfilled":
-        color.setStroke()
-        path!.lineWidth = 1
-        path!.stroke()
+            color.setStroke()
+            path!.lineWidth = 1
+            path!.stroke()
             
         case "striped":
             path!.lineWidth = 0.01 * frame.size.width
             color.setStroke()
             path!.stroke()
             path!.addClip()
-        
-        var currentX: CGFloat = 0
-        
-        let stripedPath = UIBezierPath()
-        stripedPath.lineWidth = 0.005 * frame.size.width
-        
-        while currentX < frame.size.width {
-            stripedPath.move(to: CGPoint(x: currentX, y: 0))
-            stripedPath.addLine(to: CGPoint(x: currentX, y: frame.size.height))
-            currentX += 0.03 * frame.size.width
-        }
-        
-        color.setStroke()
-        stripedPath.stroke()
-        break
+            
+            var currentX: CGFloat = 0
+            
+            let stripedPath = UIBezierPath()
+            stripedPath.lineWidth = 0.005 * frame.size.width
+            
+            while currentX < frame.size.width {
+                stripedPath.move(to: CGPoint(x: currentX, y: 0))
+                stripedPath.addLine(to: CGPoint(x: currentX, y: frame.size.height))
+                currentX += 0.03 * frame.size.width
+            }
+            
+            color.setStroke()
+            stripedPath.stroke()
+            break
         default: break
-    }
+        }
     }
     
     private var shapeHorizontalMargin: CGFloat {
@@ -161,3 +153,4 @@ class CardViewButton: UIButton {
     }
     
 }
+

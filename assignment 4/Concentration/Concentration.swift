@@ -10,7 +10,7 @@ import Foundation
 
 class Concentration {
     
-    private(set) var cards = [Card]()
+    private(set) var cards = [ConcentrationCard]()
     var flipCount = 0
     var score = 0
     public var themes = [
@@ -36,7 +36,7 @@ class Concentration {
 		assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)) : Choosen index out of range")
 		if !cards[index].isMatched {
             flipCount+=1
-            cards[index].cardPenalty+=1
+            cards[index].carPenalty+=1
 			if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
 				// check if cards match
 				if cards[matchIndex] == cards[index] {
@@ -45,7 +45,7 @@ class Concentration {
                     score+=2
 				}
                 else {
-                    score-=cards[index].cardPenalty
+                    score-=cards[index].carPenalty
                 }
 				cards[index].isFaceUp = true
 			} else {
@@ -57,7 +57,7 @@ class Concentration {
 	init(numberOfPairsOfCards: Int) {
 		assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)) : You must have at least one pair of cards")
 		for _ in 1...numberOfPairsOfCards {
-			let card = Card()
+			let card = ConcentrationCard()
 			cards += [card, card]
 		}
 	shuffleCards()

@@ -1,9 +1,9 @@
 //
-//  viewContainer.swift
-//  setGame
+//  ViewContainer.swift
+//  Lecture 4 - Concentration
 //
-//  Created by Boris Angelov on 29.06.18.
-//  Copyright © 2018 Boris Angelov. All rights reserved.
+//  Created by Boris Angelov on 6.07.18.
+//  Copyright © 2018 Michel Deiman. All rights reserved.
 //
 
 import UIKit
@@ -19,11 +19,11 @@ class ViewContainer: UIView {
         for _ in 0..<numberOfCards{
             cards.append(CardViewButton())
         }
-    
+        
         for card in cards {
-         addSubview(card)
+            addSubview(card)
         }
-
+        
         grid.cellCount = cards.count
         setNeedsLayout()
     }
@@ -39,13 +39,13 @@ class ViewContainer: UIView {
     }
     
     func resetContainer(){
-            cards = []
-            grid.cellCount = 0
-            for subview in subviews {
-                subview.removeFromSuperview()
-            }
-        setNeedsLayout()
+        cards = []
+        grid.cellCount = 0
+        for subview in subviews {
+            subview.removeFromSuperview()
         }
+        setNeedsLayout()
+    }
     
     //sets the position of the grid
     var centeredRect: CGRect {
