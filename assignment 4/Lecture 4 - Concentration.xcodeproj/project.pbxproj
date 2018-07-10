@@ -13,7 +13,7 @@
 		0570C7E320EFC07A005FD492 /* setGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E220EFC07A005FD492 /* setGame.swift */; };
 		0570C7E720EFC0EC005FD492 /* SetGameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E620EFC0EC005FD492 /* SetGameController.swift */; };
 		0570C7E920EFC176005FD492 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7E820EFC176005FD492 /* Card.swift */; };
-		0570C7EB20F32EC3005FD492 /* ConcentrationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */; };
+		0570C7FA20F3835A005FD492 /* ConcentrationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0570C7F920F3835A005FD492 /* ConcentrationCard.swift */; };
 		05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C4C2C720EF8F350049233D /* ThemeViewController.swift */; };
 		EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13071FB861A0009590B6 /* AppDelegate.swift */; };
 		EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */; };
@@ -30,7 +30,7 @@
 		0570C7E220EFC07A005FD492 /* setGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = setGame.swift; sourceTree = "<group>"; };
 		0570C7E620EFC0EC005FD492 /* SetGameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameController.swift; sourceTree = "<group>"; };
 		0570C7E820EFC176005FD492 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConcentrationCard.swift; path = ../../../.Trash/ConcentrationCard.swift; sourceTree = "<group>"; };
+		0570C7F920F3835A005FD492 /* ConcentrationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConcentrationCard.swift; path = ../../../../.Trash/ConcentrationCard.swift; sourceTree = "<group>"; };
 		05C4C2C720EF8F350049233D /* ThemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeViewController.swift; sourceTree = "<group>"; };
 		EA5F13041FB861A0009590B6 /* Lecture 4 - Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lecture 4 - Concentration.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5F13071FB861A0009590B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +72,17 @@
 			path = SetModel;
 			sourceTree = "<group>";
 		};
+		0570C7EC20F382D3005FD492 /* Concentration */ = {
+			isa = PBXGroup;
+			children = (
+				0570C7F920F3835A005FD492 /* ConcentrationCard.swift */,
+				EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */,
+				05C4C2C720EF8F350049233D /* ThemeViewController.swift */,
+				EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */,
+			);
+			path = Concentration;
+			sourceTree = "<group>";
+		};
 		EA5F12FB1FB861A0009590B6 = {
 			isa = PBXGroup;
 			children = (
@@ -92,10 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				EA5F130B1FB861A0009590B6 /* Main.storyboard */,
-				EA5F13091FB861A0009590B6 /* ConcentrationViewController.swift */,
-				EAFC4CE81FB9AC8600EF2C53 /* Concentration.swift */,
-				0570C7EA20F32EC3005FD492 /* ConcentrationCard.swift */,
-				05C4C2C720EF8F350049233D /* ThemeViewController.swift */,
+				0570C7EC20F382D3005FD492 /* Concentration */,
 				0570C7E620EFC0EC005FD492 /* SetGameController.swift */,
 				0570C7E120EFC062005FD492 /* SetModel */,
 				0570C7DA20EFBFDF005FD492 /* SetView */,
@@ -190,6 +198,7 @@
 				05C4C2C820EF8F350049233D /* ThemeViewController.swift in Sources */,
 				EA5F130A1FB861A0009590B6 /* ConcentrationViewController.swift in Sources */,
 				EAFC4CE91FB9AC8600EF2C53 /* Concentration.swift in Sources */,
+				0570C7FA20F3835A005FD492 /* ConcentrationCard.swift in Sources */,
 				0570C7E720EFC0EC005FD492 /* SetGameController.swift in Sources */,
 				0570C7E320EFC07A005FD492 /* setGame.swift in Sources */,
 				0570C7DE20EFC02F005FD492 /* ViewContainer.swift in Sources */,
@@ -197,7 +206,6 @@
 				0570C7E020EFC04A005FD492 /* CardViewButton.swift in Sources */,
 				0570C7DC20EFC001005FD492 /* Grid.swift in Sources */,
 				EA5F13081FB861A0009590B6 /* AppDelegate.swift in Sources */,
-				0570C7EB20F32EC3005FD492 /* ConcentrationCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

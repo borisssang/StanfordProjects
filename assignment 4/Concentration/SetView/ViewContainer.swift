@@ -8,24 +8,55 @@
 
 import UIKit
 
-class ViewContainer: UIView {
+protocol CardsContainerViewDelegate {
     
+    func cardsRemovalDidFinish()
+    
+    func cardsDealDidFinish()
+    
+    func didFinishDealingCard(_ button: CardViewButton)
+}
+
+@IBDesignable
+class ViewContainer: UIView, UIDynamicAnimatorDelegate {
+    
+    var delegate: CardsContainerViewDelegate?
     var cards = [CardViewButton]()
     var grid = Grid(layout: Grid.Layout.aspectRatio(3/2))
+    lazy var animator = UIDynamicAnimator(referenceView: self)
+    var positioningAnimator: UIViewPropertyAnimator?
     
-    func addCards(numberOfCards: Int){
-        guard cards.count < 81 else {return}
+    var discardToFrame: CGRect!
+    var dealingFromFrame: CGRect!
+    var isPerformingDealAnimation = false
+    var scheduledDealAnimations: [Timer]?
+    
+    override func awakeFromNib() {
+        animator.delegate = self
+    }
+    
+    func makeButtons(byAmount numberOfButtons: Int) -> [CardViewButton] { return [] }
+    
+    func addCards(byAmount numberOfButtons: Int = 3, animated: Bool = false) {
+        guard isPerformingDealAnimation == false else { return }
         
-        for _ in 0..<numberOfCards{
-            cards.append(CardViewButton())
+        let cardButtons = makeButtons(byAmount: numberOfButtons)
+        
+        for button in cardButtons {
+            // Each button is hidden and face down by default.
+            button.isActive = false
+            button.isFaceUp = false
+            
+            addSubview(button)
+            cards.append(button)
         }
         
-        for card in cards {
-            addSubview(card)
-        }
+        grid.cellCount += cardButtons.count
+        grid.frame = centeredRect
         
-        grid.cellCount = cards.count
-        setNeedsLayout()
+        if animated {
+           // dealCardsWithAnimation()
+        }
     }
     
     func removeCards(times numberOfCardsRemoved: Int){
@@ -57,19 +88,87 @@ class ViewContainer: UIView {
         }
     }
     
+   
+    
     override func layoutSubviews() {
         super.layoutSubviews()
+        if grid.frame != centeredRect {
+            updateViewsFrames()
+        }
+    }
+//        //the number of cells in the grid will be dependent on the cards
+//        for (i, card) in cards.enumerated() {
+//            if let frame = grid[i] {
+//                card.frame = frame
+//                card.layer.cornerRadius = 10
+//                card.layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+//                card.layer.borderWidth = 0.5
+//            }
+//        }
+    
+    func updateViewsFrames(withAnimation animated: Bool = false,
+                           andCompletion completion: Optional<() -> ()> = nil) {
         grid.frame = centeredRect
         
-        //the number of cells in the grid will be dependent on the cards
-        for (i, card) in cards.enumerated() {
+        if animated {
+            if let propertyAnimator = positioningAnimator {
+                propertyAnimator.stopAnimation(true)
+                positioningAnimator = nil
+            }
+            
+            positioningAnimator = UIViewPropertyAnimator.runningPropertyAnimator(
+                withDuration: 0.2,
+                delay: 0,
+                options: .curveEaseInOut,
+                animations: {
+                    self.respositionViews()
+            }
+            ) { _ in
+                if let completion = completion {
+                    completion()
+                }
+            }
+            
+            print("Positioning animator: \(positioningAnimator!)")
+        } else {
+            respositionViews()
+        }
+    }
+    
+    func animateCardsOut(_ buttons: [CardViewButton]) {}
+    
+    func respositionViews() {
+        grid.frame = centeredRect
+        
+        for (i, button) in cards.enumerated() {
             if let frame = grid[i] {
-                card.frame = frame
-                card.layer.cornerRadius = 10
-                card.layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-                card.layer.borderWidth = 0.5
+                button.frame = frame
             }
         }
+        setNeedsLayout()
+    }
+    
+}
+
+extension UIView {
+    
+    /// Removes all subviews.
+    func removeAllSubviews() {
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+    }
+    
+}
+
+extension CGRect {
+    
+    /// Returns the center of this rect.
+    var center: CGPoint {
+        return CGPoint(
+            x: midX,
+            y: midY
+        )
     }
     
 }

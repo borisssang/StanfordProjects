@@ -7,8 +7,11 @@
 //
 import UIKit
 
-class SetGameController: UIViewController {
-
+class SetGameController: UIViewController, SetGameDelegate {
+    
+    @IBOutlet weak var matchedDeckPlaceholderCard: CardViewButton!
+    @IBOutlet weak var deckPlaceholderCard: CardViewButton!
+    
     private lazy var game = setGame()
     private var isDealingEnabled = true
     @IBOutlet weak var containerView: ViewContainer!{
@@ -21,10 +24,28 @@ class SetGameController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        game.delegate = self
         game.dealCards(numberOfCards: 12)
         containerView.addCards(numberOfCards: 12)
         enableButtonAction()
         updateViewFromModel()
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+//        let translatedDealOrigin = view.convert(deckPlaceholderCard.frame.origin,
+//                                                to: containerView)
+//        let translatedDealFrame = CGRect(origin: translatedDealOrigin,
+//                                         size: deckPlaceholderCard.frame.size)
+//        containerView.dealingFromFrame = translatedDealFrame
+        
+        let translatedDiscardOrigin = view.convert(matchedDeckPlaceholderCard.frame.origin,
+                                                   to: containerView)
+        let translatedDiscardFrame = CGRect(origin: translatedDiscardOrigin,
+                                            size: matchedDeckPlaceholderCard.frame.size)
+        containerView.discardToFrame = translatedDiscardFrame
     }
     
     private func enableButtonAction() {
@@ -41,6 +62,7 @@ class SetGameController: UIViewController {
             updateViewFromModel()
             containerView.removeCards(times: 3)
         }
+        
         updateViewFromModel()
     }
     
@@ -77,7 +99,7 @@ class SetGameController: UIViewController {
         if containerView.cards.count > game.playingCards.count {
             containerView.removeCards(times: containerView.cards.count - game.playingCards.count)
         }
-        scoreLabel?.text = "Score: \(game.score)"
+        scoreLabel?.text = "Sets: \(game.score)"
         for (index, currentCardButton) in containerView.cards.enumerated()  {
             let card = game.playingCards[index]
             
@@ -117,4 +139,21 @@ class SetGameController: UIViewController {
             }
         }
     }
+    
+    func selectedCardsDidMatch(_ cards: [Card]) {
+        scoreLabel.text = "Matches: \(game.score)"
+        
+        let matchedCardButtons = cards.map({ card -> CardViewButton in
+            let cardIndex = self.game.playingCards.index(of: card)!
+            return self.containerView.cards[cardIndex]
+        })
+        
+        // The replace will happen, if the deck is empty, cards will be
+        // removed and the buttons will be out of sync.
+        if game.allCards.isEmpty {
+            self.containerView.isUserInteractionEnabled = false
+        }
+        containerView.animateCardsOut(matchedCardButtons)
+    }
+    
 }

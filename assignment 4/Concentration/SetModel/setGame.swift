@@ -8,6 +8,13 @@
 
 import Foundation
 
+protocol SetGameDelegate {
+    
+    /// Method called when the current game's selection is a match.
+    func selectedCardsDidMatch(_ cards: [Card])
+    
+}
+
 struct setGame{
     
     var allCards = Card.fillDeck()
@@ -17,6 +24,8 @@ struct setGame{
     var matchedTrioLimit = true
     
     var isDealingEnabled = true
+    
+    public var delegate: SetGameDelegate?
     
     public var score = 0
     
@@ -38,7 +47,6 @@ struct setGame{
         //selecting a new card, deselection of the last three
         if selectedCards.count == 3 {
             if !selectedCards.contains(card) {
-                score -= 1
                 selectedCards = []
             }
         }
@@ -55,6 +63,7 @@ struct setGame{
             matchingCards = selectedCards
             selectedCards = []
             score += 1
+            delegate?.selectedCardsDidMatch(matchingCards)
         }
     }
     

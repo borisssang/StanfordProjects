@@ -8,6 +8,25 @@ class CardViewButton: UIButton {
     var striping: String? {didSet{setNeedsDisplay()}}
     var numberOfSymbols = 0 {didSet{setNeedsDisplay()}}
     
+    var isActive: Bool = true {
+        didSet {
+            if isActive {
+                alpha = 1
+            } else {
+                alpha = 0
+            }
+        }
+    }
+    
+    @IBInspectable var isFaceUp: Bool = false {
+        didSet{
+            if !isFaceUp {
+                layer.backgroundColor = UIColor.white.cgColor
+            }
+            setNeedsDisplay()
+        }
+    }
+    
     private func drawSquiggles(times numberOfTimes: Int)
     {
         let path = UIBezierPath()
