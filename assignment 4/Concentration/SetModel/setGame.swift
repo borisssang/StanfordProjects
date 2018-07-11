@@ -115,6 +115,12 @@ struct setGame{
         isDealingEnabled = true
     }
     
+    mutating func replaceMatchedCards() {
+        guard matchingCards.count == 3 else { return }
+        dealCards(numberOfCards: 3)
+        matchingCards = []
+    }
+    
     private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
         if card1.cardNumber.rawValue == card2.cardNumber.rawValue && card3.cardNumber.rawValue == card2.cardNumber.rawValue {
             return true

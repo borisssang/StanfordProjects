@@ -1,31 +1,21 @@
+//
+//  SetCardButton.swift
+//  Lecture 4 - Concentration
+//
+//  Created by Boris Angelov on 10.07.18.
+//  Copyright © 2018 Michel Deiman. All rights reserved.
+//
+
 import UIKit
 
-@IBDesignable
-class CardViewButton: UIButton {
+class SetCardButton: CardViewButton {
     
     var symbol: String?  {didSet{setNeedsDisplay()}}
     var color = UIColor() {didSet{setNeedsDisplay()}}
     var striping: String? {didSet{setNeedsDisplay()}}
     var numberOfSymbols = 0 {didSet{setNeedsDisplay()}}
-    
-    var isActive: Bool = true {
-        didSet {
-            if isActive {
-                alpha = 1
-            } else {
-                alpha = 0
-            }
-        }
-    }
-    
-    @IBInspectable var isFaceUp: Bool = false {
-        didSet{
-            if !isFaceUp {
-                layer.backgroundColor = UIColor.white.cgColor
-            }
-            setNeedsDisplay()
-        }
-    }
+    private var cleanFrontColor = UIColor.white.cgColor
+
     
     private func drawSquiggles(times numberOfTimes: Int)
     {
@@ -103,7 +93,7 @@ class CardViewButton: UIButton {
     
     var path: UIBezierPath?
     
-    override func draw(_ rect: CGRect) {
+    override func drawFront() {
         
         switch symbol {
         case "diamond":
@@ -150,6 +140,23 @@ class CardViewButton: UIButton {
         default: break
         }
     }
+
+    override func drawBack() {
+        layer.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).cgColor
+    }
+    
+    func flipCard(withCompletion completion: Optional<(SetCardButton) -> ()> = nil) {
+        UIView.transition(with: self,
+                          duration: 0.3,
+                          options: .transitionFlipFromLeft,
+                          animations: {
+                            self.isFaceUp = !self.isFaceUp
+        }) { completed in
+            if let completion = completion {
+                completion(self)
+            }
+        }
+    }
     
     private var shapeHorizontalMargin: CGFloat {
         return cardRect.width * 0.05
@@ -170,6 +177,4 @@ class CardViewButton: UIButton {
     private var drawableCenter: CGPoint {
         return CGPoint(x: bounds.width / 2, y: bounds.height / 2)
     }
-    
 }
-

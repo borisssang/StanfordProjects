@@ -9,16 +9,17 @@ import UIKit
 
 class SetGameController: UIViewController, SetGameDelegate {
     
-    @IBOutlet weak var matchedDeckPlaceholderCard: CardViewButton!
-    @IBOutlet weak var deckPlaceholderCard: CardViewButton!
+    @IBOutlet weak var matchedDeckPlaceholderCard: SetCardButton!
+    @IBOutlet weak var deckPlaceholderCard: SetCardButton!
     
     private lazy var game = setGame()
     private var isDealingEnabled = true
-    @IBOutlet weak var containerView: ViewContainer!{
+    @IBOutlet weak var containerView: SetViewContainer!{
         didSet{
             let didSwipe = UISwipeGestureRecognizer(target: self, action: #selector(dealCards))
             didSwipe.direction = UISwipeGestureRecognizerDirection.down
             containerView.addGestureRecognizer(didSwipe)
+            containerView.delegate = self as? CardsContainerViewDelegate
         }
     }
     
@@ -26,26 +27,44 @@ class SetGameController: UIViewController, SetGameDelegate {
         super.viewDidLoad()
         game.delegate = self
         game.dealCards(numberOfCards: 12)
-        containerView.addCards(numberOfCards: 12)
-        enableButtonAction()
+        if !game.playingCards.isEmpty, containerView.cards.isEmpty {
+            containerView.addCards(byAmount: 12, animated: true)
+            enableButtonAction()
+        }
         updateViewFromModel()
-        
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-//        let translatedDealOrigin = view.convert(deckPlaceholderCard.frame.origin,
-//                                                to: containerView)
-//        let translatedDealFrame = CGRect(origin: translatedDealOrigin,
-//                                         size: deckPlaceholderCard.frame.size)
-//        containerView.dealingFromFrame = translatedDealFrame
+        let translatedDealOrigin = view.convert(deckPlaceholderCard.frame.origin,
+                                                to: containerView)
+        let translatedDealFrame = CGRect(origin: translatedDealOrigin,
+                                         size: deckPlaceholderCard.frame.size)
+        containerView.dealingFromFrame = translatedDealFrame
         
         let translatedDiscardOrigin = view.convert(matchedDeckPlaceholderCard.frame.origin,
                                                    to: containerView)
         let translatedDiscardFrame = CGRect(origin: translatedDiscardOrigin,
                                             size: matchedDeckPlaceholderCard.frame.size)
         containerView.discardToFrame = translatedDiscardFrame
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+ 
+        guard containerView != nil else { return }
+        
+        coordinator.animate(alongsideTransition: { _ in
+            self.containerView.prepareForRotation()
+        }) { _ in
+            self.containerView.updateViewsFrames(withAnimation: true) {
+                for button in self.containerView.cards {
+                    if !button.isFaceUp {
+                        button.turnFaceUp(animated: true)
+                    }
+                }
+            }
+        }
     }
     
     private func enableButtonAction() {
@@ -55,12 +74,11 @@ class SetGameController: UIViewController, SetGameDelegate {
     }
     
     @objc func didTapCard(_ sender: UIButton) {
-        let indexOfCard = containerView.cards.index(of: sender as! CardViewButton)!
+        let indexOfCard = containerView.cards.index(of: sender as! SetCardButton)!
         game.selectCard(at: indexOfCard)
         //if there are no more cards to deal, removes matched pairs
         if !game.matchedTrioLimit{
             updateViewFromModel()
-            containerView.removeCards(times: 3)
         }
         
         updateViewFromModel()
@@ -68,21 +86,27 @@ class SetGameController: UIViewController, SetGameDelegate {
     
     //     append three cards //or as much as there is space for
     @IBAction func dealCards() {
-        if game.isDealingEnabled {
-            game.dealCards(numberOfCards: 3)
-            if game.playingCards.count <= 81 {containerView.addCards(numberOfCards: 3)
-                enableButtonAction()
-            }
-            updateViewFromModel()
+        guard !game.allCards.isEmpty else { return }
+        guard !containerView.isPerformingDealAnimation else { return }
+        
+        if game.matchingCards.count > 0 {
+            game.replaceMatchedCards()
         }
+        
+        game.dealCards(numberOfCards: 3)
+        containerView.addCards(animated: true)
+        enableButtonAction()
+        
+        updateViewFromModel()
+        updateDeckAppearance()
     }
     
     @IBAction func restartGame() {
+        guard !containerView.isPerformingDealAnimation else { return }
         game.restartGame()
         containerView.resetContainer()
-        containerView.addCards(numberOfCards: 12)
-        enableButtonAction()
-        updateViewFromModel()
+        containerView.addCards(byAmount: 12)
+        containerView.clearCardContainer(withAnimation: true)
     }
     
     @IBOutlet weak var scoreLabel: UILabel!
@@ -92,15 +116,34 @@ class SetGameController: UIViewController, SetGameDelegate {
         updateViewFromModel()
     }
     
+    private func updateDeckAppearance() {
+        UIViewPropertyAnimator.runningPropertyAnimator(
+            withDuration: 0.1,
+            delay: 0.3,
+            options: .curveEaseIn,
+            animations: {
+                self.matchedDeckPlaceholderCard.alpha = self.game.matchingCards.isEmpty ? 0 : 1
+                self.deckPlaceholderCard.alpha = self.game.allCards.isEmpty ? 0 : 1
+        }
+        )
+    }
+    
     //iterate through the cards
     //get the current card and switch on its states
     //put the states of the buttons accordingly
     private func updateViewFromModel() {
-        if containerView.cards.count > game.playingCards.count {
-            containerView.removeCards(times: containerView.cards.count - game.playingCards.count)
+        
+        var buttons: [SetCardButton]!
+        
+        if containerView.cards.count > game.playingCards.count,
+            game.allCards.isEmpty {
+            buttons = containerView.cards.filter { $0.alpha == 1 }
+        } else {
+            buttons = containerView.cards
         }
+        
         scoreLabel?.text = "Sets: \(game.score)"
-        for (index, currentCardButton) in containerView.cards.enumerated()  {
+        for (index, currentCardButton) in buttons.enumerated()  {
             let card = game.playingCards[index]
             
             currentCardButton.numberOfSymbols = card.cardNumber.rawValue + 1
@@ -139,11 +182,12 @@ class SetGameController: UIViewController, SetGameDelegate {
             }
         }
     }
+
     
     func selectedCardsDidMatch(_ cards: [Card]) {
         scoreLabel.text = "Matches: \(game.score)"
         
-        let matchedCardButtons = cards.map({ card -> CardViewButton in
+        let matchedCardButtons = cards.map({ card -> SetCardButton in
             let cardIndex = self.game.playingCards.index(of: card)!
             return self.containerView.cards[cardIndex]
         })
@@ -156,4 +200,30 @@ class SetGameController: UIViewController, SetGameDelegate {
         containerView.animateCardsOut(matchedCardButtons)
     }
     
+    func cardsRemovalDidFinish() {
+        updateDeckAppearance()
+        
+        guard !containerView.cards.isEmpty else {
+            containerView.addCards(byAmount: 12, animated: true)
+            enableButtonAction()
+            updateViewFromModel()
+            scoreLabel.text = "Matches: 0"
+            return
+        }
+        
+        guard containerView.cards.count == game.playingCards.count else {
+            containerView.removeInactiveCardButtons() {
+                self.updateViewFromModel()
+                self.containerView.isUserInteractionEnabled = true
+            }
+            return
+        }
+        
+        containerView.dealCardsWithAnimation()
+    }
+    func cardsDealDidFinish() {}
+    
+    func didFinishDealingCard(_ button: SetCardButton) {
+        button.turnFaceUp(animated: true)
+    }
 }
