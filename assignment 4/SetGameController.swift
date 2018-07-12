@@ -7,10 +7,10 @@
 //
 import UIKit
 
-class SetGameController: UIViewController, SetGameDelegate {
+class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDelegate {
     
-    @IBOutlet weak var matchedDeckPlaceholderCard: SetCardButton!
-    @IBOutlet weak var deckPlaceholderCard: SetCardButton!
+    @IBInspectable @IBOutlet weak var matchedDeckPlaceholderCard: SetCardButton!
+    @IBInspectable @IBOutlet weak var deckPlaceholderCard: SetCardButton!
     
     private lazy var game = setGame()
     private var isDealingEnabled = true
@@ -19,19 +19,33 @@ class SetGameController: UIViewController, SetGameDelegate {
             let didSwipe = UISwipeGestureRecognizer(target: self, action: #selector(dealCards))
             didSwipe.direction = UISwipeGestureRecognizerDirection.down
             containerView.addGestureRecognizer(didSwipe)
-            containerView.delegate = self as? CardsContainerViewDelegate
+            containerView.delegate = self
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         game.delegate = self
         game.dealCards(numberOfCards: 12)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         if !game.playingCards.isEmpty, containerView.cards.isEmpty {
             containerView.addCards(byAmount: 12, animated: true)
             enableButtonAction()
         }
+        deckPlaceholderCard.layer.cornerRadius = 10
+        deckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+        deckPlaceholderCard.layer.borderWidth = 0.5
+      //  matchedDeckPlaceholderCard.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+        matchedDeckPlaceholderCard.layer.cornerRadius = 10
+        matchedDeckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+        matchedDeckPlaceholderCard.layer.borderWidth = 0.5
         updateViewFromModel()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -76,11 +90,7 @@ class SetGameController: UIViewController, SetGameDelegate {
     @objc func didTapCard(_ sender: UIButton) {
         let indexOfCard = containerView.cards.index(of: sender as! SetCardButton)!
         game.selectCard(at: indexOfCard)
-        //if there are no more cards to deal, removes matched pairs
-        if !game.matchedTrioLimit{
-            updateViewFromModel()
-        }
-        
+
         updateViewFromModel()
     }
     
@@ -104,8 +114,7 @@ class SetGameController: UIViewController, SetGameDelegate {
     @IBAction func restartGame() {
         guard !containerView.isPerformingDealAnimation else { return }
         game.restartGame()
-        containerView.resetContainer()
-        containerView.addCards(byAmount: 12)
+        game.dealCards(numberOfCards: 12)
         containerView.clearCardContainer(withAnimation: true)
     }
     
@@ -122,7 +131,7 @@ class SetGameController: UIViewController, SetGameDelegate {
             delay: 0.3,
             options: .curveEaseIn,
             animations: {
-                self.matchedDeckPlaceholderCard.alpha = self.game.matchingCards.isEmpty ? 0 : 1
+                self.matchedDeckPlaceholderCard.alpha = self.game.matched ? 1 : 0
                 self.deckPlaceholderCard.alpha = self.game.allCards.isEmpty ? 0 : 1
         }
         )
@@ -137,9 +146,9 @@ class SetGameController: UIViewController, SetGameDelegate {
         
         if containerView.cards.count > game.playingCards.count,
             game.allCards.isEmpty {
-            buttons = containerView.cards.filter { $0.alpha == 1 }
+            buttons = containerView.cards.filter { $0.alpha == 1 } as! [SetCardButton]
         } else {
-            buttons = containerView.cards
+            buttons = containerView.cards as! [SetCardButton]
         }
         
         scoreLabel?.text = "Sets: \(game.score)"
@@ -185,11 +194,11 @@ class SetGameController: UIViewController, SetGameDelegate {
 
     
     func selectedCardsDidMatch(_ cards: [Card]) {
-        scoreLabel.text = "Matches: \(game.score)"
+        scoreLabel.text = "Sets: \(game.score)"
         
-        let matchedCardButtons = cards.map({ card -> SetCardButton in
-            let cardIndex = self.game.playingCards.index(of: card)!
-            return self.containerView.cards[cardIndex]
+        let matchedCardButtons = cards.map({card -> SetCardButton in
+            let cardIndex = game.playingCards.index(of: card)!
+            return self.containerView.cards[cardIndex] as! SetCardButton
         })
         
         // The replace will happen, if the deck is empty, cards will be
@@ -223,7 +232,7 @@ class SetGameController: UIViewController, SetGameDelegate {
     }
     func cardsDealDidFinish() {}
     
-    func didFinishDealingCard(_ button: SetCardButton) {
-        button.turnFaceUp(animated: true)
-    }
+    func didFinishDealingCard(_ button: CardViewButton) {
+button.turnFaceUp(animated: true)    }
+    
 }

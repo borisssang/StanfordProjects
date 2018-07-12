@@ -22,13 +22,19 @@ struct setGame{
     var selectedCards = [Card]()
     var matchingCards = [Card]()
     var matchedTrioLimit = true
+    var matched = false
     
     var isDealingEnabled = true
     
     public var delegate: SetGameDelegate?
     
-    public var score = 0
-    
+    private(set) var score = 0 {
+        didSet{
+            if score < 0 {
+                score = 0
+            }
+        }
+    }
     mutating func selectCard(at index: Int){
         let card = playingCards[index]
         
@@ -63,7 +69,9 @@ struct setGame{
             matchingCards = selectedCards
             selectedCards = []
             score += 1
+            matched = true
             delegate?.selectedCardsDidMatch(matchingCards)
+            replaceMatchedCards()
         }
     }
     
@@ -107,11 +115,11 @@ struct setGame{
     
     mutating func restartGame(){
         allCards=Card.fillDeck()
-        playingCards = [Card]()
-        dealCards(numberOfCards: 12)
-        selectedCards = [Card]()
-        matchingCards = [Card]()
+        playingCards = []
+        selectedCards = []
+        matchingCards = []
         score = 0
+        matched = false 
         isDealingEnabled = true
     }
     

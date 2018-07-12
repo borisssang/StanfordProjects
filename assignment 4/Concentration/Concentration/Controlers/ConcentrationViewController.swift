@@ -7,22 +7,33 @@
 
 import UIKit
 
-class ConcentrationViewController: UIViewController {
-	
-//    override func viewDidLoad() {
-//        updateViewFromModel()
-//    }
+class ConcentrationViewController: UIViewController, ConcentrationDelegate, CardsContainerViewDelegate {
     
-	private lazy var ConcentrationGame = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
-	
-	var numberOfPairsOfCards: Int {
-		return (cardButtons.count + 1) / 2
-	}
+    @IBOutlet weak var containerView: ConcentrationViewContainer!{
+        didSet{
+            containerView.delegate = self
+        }
+    }
+    
+    private lazy var ConcentrationGame = Concentration(nuoverride mberOfPairsOfCards: 8)
+    
+    override func viewDidLoad() {
+        concentration.delegate = self
+        
+        containerView.addButtons(byAmount: 16,
+                                 animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+            containerView.addCards(byAmount: 12, animated: true)
+            enableButtonAction()
+    }
     
     @IBAction func newGame() {
         emojiChoices = ConcentrationGame.restartGame()
         updateViewFromModel()
         emoji = [:]
+        
     }
     
 	@IBOutlet private weak var flipCountLabel: UILabel! {
@@ -74,6 +85,7 @@ class ConcentrationViewController: UIViewController {
     
     var theme: String? {
         didSet {
+            
             emojiChoices = theme ?? ""
             emoji = [:]
             updateViewFromModel()

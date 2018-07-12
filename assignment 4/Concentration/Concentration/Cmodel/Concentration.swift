@@ -8,17 +8,19 @@
 
 import Foundation
 
+protocol ConcentrationDelegate{
+    func didMatchCards(withIndices: [Int])
+}
+
 class Concentration {
     
+    var delegate: ConcentrationDelegate?
     private(set) var cards = [ConcentrationCard]()
     var flipCount = 0
     var score = 0
-    public var themes = [
-        "Happy":"😊😂🤣😘😍😜😆😇🙂😁😎🤪😹😻",
-        "Sad":"🙃😞😔😟😕😖😭😤😠🙁😨😪🤧😒",
-        "Scary":"😈👹👻💩👽👾🤖🧟‍♂️🎅👳‍♂️🧠👁👣👺"
-    ]
+    
     var emojiTheme: String = ""
+    var themes = ["Happy", "Sad", "Scary"]
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
@@ -43,6 +45,7 @@ class Concentration {
 					cards[matchIndex].isMatched = true
 					cards[index].isMatched = true
                     score+=2
+              //     delegate?.didMatchCards(withIndices:)
 				}
                 else {
                     score-=cards[index].carPenalty
@@ -88,8 +91,7 @@ class Concentration {
     //generates a random theme
     func randomTheme() -> String{
         let random = themes.count.arc4Random
-        let randomTheme = Array(themes.keys)[random]
-        return themes[randomTheme]!
+            return themes[random]
     }
     
 }

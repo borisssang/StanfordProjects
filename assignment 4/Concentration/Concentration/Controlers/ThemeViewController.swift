@@ -13,24 +13,18 @@ class ThemeViewController: UIViewController, UISplitViewControllerDelegate {
     
     private var lastSeguedToViewController: ConcentrationViewController?
     
-    public var themes = [
-        "Happy":"😊😂🤣😘😍😜😆😇🙂😁😎🤪😹😻",
-        "Sad":"🙃😞😔😟😕😖😭😤😠🙁😨😪🤧😒",
-        "Scary":"😈👹👻💩👽👾🤖🧟♂️🎅👳♂️🧠👁👣👺"
-    ]
-    
     private var splitViewDetailConcentrationViewController: ConcentrationViewController?{
         return splitViewController?.viewControllers.last as? ConcentrationViewController
     }
     
     @IBAction func changeTheme(_ sender: UIButton) {
         if let cvc = splitViewDetailConcentrationViewController {
-            if let themeName = sender.currentTitle, let theme = themes[themeName] {
-                cvc.theme = theme
+            if let themeName = sender.currentTitle{
+                cvc.theme = themeName
             }
         } else if let cvc = lastSeguedToViewController {
-            if let themeName = sender.currentTitle, let theme = themes[themeName] {
-                cvc.theme = theme
+            if let themeName = sender.currentTitle{
+                cvc.theme = themeName
             }
            navigationController?.pushViewController(cvc, animated: true)
         } else {
@@ -40,8 +34,8 @@ class ThemeViewController: UIViewController, UISplitViewControllerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier, identifier == "Choose Theme", let cvc = segue.destination as? ConcentrationViewController {
-            if let themeName = (sender as? UIButton)?.currentTitle, let theme = themes[themeName] {
-                cvc.theme = theme
+            if let themeName = (sender as? UIButton)?.currentTitle{
+                cvc.theme = themeName
                 lastSeguedToViewController = cvc
             }
         }

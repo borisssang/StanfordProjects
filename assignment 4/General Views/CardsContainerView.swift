@@ -7,6 +7,7 @@
 //
 import UIKit
 
+//delegate listening for cards action and then reporting to the controller or view
 protocol CardsContainerViewDelegate {
     
     func cardsRemovalDidFinish()
@@ -26,13 +27,21 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
     lazy var animator = UIDynamicAnimator(referenceView: self)
     var positioningAnimator: UIViewPropertyAnimator?
     
+    //the frame to which cards are being removed
     var discardToFrame: CGRect!
+    //the frame from which all cards are being dealt
     var dealingFromFrame: CGRect!
     var isPerformingDealAnimation = false
     var scheduledDealAnimations: [Timer]?
     
     var buttonsToPosition: [CardViewButton] {
         return cards
+    }
+    
+    func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
+        animator.removeAllBehaviors()
+        isPerformingDealAnimation = false
+        scheduledDealAnimations = nil
     }
     
     //sets the position of the grid
@@ -45,12 +54,33 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         }
     }
     
+    func respositionViews() {
+        grid.frame = centeredRect
+        
+        for (i, button) in cards.enumerated() {
+            if let frame = grid[i] {
+                button.frame = frame
+            }
+        }
+        setNeedsLayout()
+    }
+    
     override func awakeFromNib() {
         animator.delegate = self
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if grid.frame != centeredRect {
+            updateViewsFrames()
+        }
+    }
+
+    //to be overriden by children classes
     func makeButtons(byAmount numberOfButtons: Int) -> [CardViewButton] {return [] }
     
+    //adding cards if there is no deal animation
+    //calling dealCardsWithAnimation
     func addCards(byAmount numberOfButtons: Int = 3, animated: Bool = false) {
         guard isPerformingDealAnimation == false else { return }
         
@@ -71,42 +101,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         if animated {
             dealCardsWithAnimation()
         }
-    }
-    
-    func resetContainer(){
-        cards = []
-        grid.cellCount = 0
-        for subview in subviews {
-            subview.removeFromSuperview()
-        }
-        setNeedsLayout()
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if grid.frame != centeredRect {
-            updateViewsFrames()
-        }
-    }
-    
-    func prepareForRotation() {
-        animator.removeAllBehaviors()
-        
-        // Invalidates all scheduled deal animations.
-        scheduledDealAnimations?.forEach { timer in
-            if timer.isValid {
-                timer.invalidate()
-            }
-        }
-        
-        positioningAnimator?.stopAnimation(true)
-        
-        for button in cards {
-            button.transform = .identity
-            button.setNeedsDisplay()
-        }
-        
-        isPerformingDealAnimation = false
     }
     
     func dealCardsWithAnimation() {
@@ -197,17 +191,34 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         }
     }
     
-    func animateCardsOut(_ buttons: [CardViewButton]) {}
-    
-    func respositionViews() {
-        grid.frame = centeredRect
-        
-        for (i, button) in cards.enumerated() {
-            if let frame = grid[i] {
-                button.frame = frame
-            }
+    func resetContainer(){
+        cards = []
+        grid.cellCount = 0
+        for subview in subviews {
+            subview.removeFromSuperview()
         }
         setNeedsLayout()
+    }
+    
+    //stops all current animations while being rotated
+    func prepareForRotation() {
+        animator.removeAllBehaviors()
+        
+        // Invalidates all scheduled deal animations.
+        scheduledDealAnimations?.forEach { timer in
+            if timer.isValid {
+                timer.invalidate()
+            }
+        }
+        
+        positioningAnimator?.stopAnimation(true)
+        
+        for button in cards {
+            button.transform = .identity
+            button.setNeedsDisplay()
+        }
+        
+        isPerformingDealAnimation = false
     }
     
     func removeInactiveCardButtons(withCompletion completion: Optional<() -> ()> = nil) {
@@ -224,12 +235,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         updateViewsFrames(withAnimation: true, andCompletion: completion)
     }
     
-    func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
-        animator.removeAllBehaviors()
-        isPerformingDealAnimation = false
-        scheduledDealAnimations = nil
-    }
-    
     func clearCardContainer(withAnimation animated: Bool = false, completion: Optional<() -> ()> = nil) {
         if animated {
             animateCardsOut(cards)
@@ -244,6 +249,9 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         setNeedsLayout()
     }
     
+    //to be overriden by the SetGameView
+    func animateCardsOut(_ buttons: [CardViewButton]) {}
+    
 }
 
 extension UIView {
@@ -252,6 +260,23 @@ extension UIView {
     func removeAllSubviews() {
         for subview in subviews {
             subview.removeFromSuperview()
+        }
+    }
+    
+    func flipView(animated: Bool = false, completion: Optional<(UIView) -> ()> = nil) {
+        if animated {
+            UIView.transition(with: self,
+                              duration: 0.3,
+                              options: .transitionFlipFromLeft,
+                              animations: {
+                                self.layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
+            }) { completed in
+                if let completion = completion {
+                    completion(self)
+                }
+            }
+        } else {
+            self.layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
         }
     }
 }

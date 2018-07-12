@@ -23,17 +23,6 @@ class SetViewContainer: ViewContainer {
                 button.alpha = 1
                 button.isFaceUp = true
                 
-                //IN NEEEEED OF FUNC IMPLEMENTATIONS
-                
-//                button.symbol = SetCardButton.CardSymbolShape.randomized()
-//                button.color = SetCardButton.CardColor.randomized()
-//                button.striping = SetCardButton.CardSymbolShading.randomized()
-//                button.numberOfSymbols = 4.arc4random
-//
-                if (button.numberOfSymbols == 0 || button.numberOfSymbols > 3) {
-                    button.numberOfSymbols = 1
-                }
-                
                 button.setNeedsDisplay()
             }
         }
@@ -42,7 +31,6 @@ class SetViewContainer: ViewContainer {
     override func awakeFromNib() {
         animator.delegate = self
     }
-    
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -54,28 +42,49 @@ class SetViewContainer: ViewContainer {
     override func makeButtons(byAmount numberOfButtons: Int) -> [CardViewButton] {
         return (0..<numberOfButtons).map { _ in SetCardButton() }
     }
+    
+    func removeCards(times numberOfCardsRemoved: Int){
+        for i in 0..<numberOfCardsRemoved {
+            let card = cards[i]
+            card.removeFromSuperview()
+        }
+        cards.removeSubrange(0..<numberOfCardsRemoved)
+        grid.cellCount = cards.count
+        setNeedsLayout()
+    }
 
     override func animateCardsOut(_ buttons: [CardViewButton]) {
         guard discardToFrame != nil else { return }
         guard let buttons = buttons as? [SetCardButton] else { return }
         
-        var buttonsCopies = [SetCardButton]()
+        var buttonsCopies = [UIView]()
         
-        //COPYING IMPLEMENTATION 
+        func buttonToView(fromButton button: UIButton) -> UIView{
+            let buttonView = UIView()
+            buttonView.backgroundColor = button.backgroundColor
+            buttonView.center = button.center
+            buttonView.bounds.size = button.bounds.size
+            buttonView.contentMode = button.contentMode
+            buttonView.frame.size.width = button.frame.size.width
+            buttonView.frame.size.height = button.frame.size.height
+            buttonView.layer.cornerRadius = button.layer.cornerRadius
+            buttonView.layer.borderColor = button.layer.borderColor
+            buttonView.layer.borderWidth = button.layer.borderWidth
+            return buttonView
+        }
+
+        for button in buttons {
+            let buttonView = buttonToView(fromButton: button)
+            buttonsCopies.append(buttonView)
+            addSubview(buttonView)
+            
+            // Hides the original button.
+            button.isActive = false
+        }
         
-//        for button in buttons {
-//            // Creates the button copy used to be animated.
-//            let buttonCopy = button.copy(nil) as! SetCardButton
-//            buttonsCopies.append(buttonCopy)
-//            addSubview(buttonCopy)
-//
-//            // Hides the original button.
-//            button.isActive = false
-//        }
-        
-        // Starts animating by scaling each button.
+        // Starts animating by scaling each view.
         UIViewPropertyAnimator.runningPropertyAnimator(
-            withDuration: 0.1,
+            withDuration: 0.8,
             delay: 0,
             options: .curveEaseIn,
             animations: {
@@ -91,7 +100,7 @@ class SetViewContainer: ViewContainer {
             
             // Animates each card to the center of the container view.
             UIViewPropertyAnimator.runningPropertyAnimator(
-                withDuration: 0.2,
+                withDuration: 0.8,
                 delay: 0,
                 options: .curveEaseIn,
                 animations: {
@@ -100,7 +109,7 @@ class SetViewContainer: ViewContainer {
                     
             }, completion: { position in
                 // Flips each card down
-                buttonsCopies.forEach { $0.flipCard() }
+                buttonsCopies.forEach { $0.flipView() }
                 
                 // Animates each card to the matched deck.
                 

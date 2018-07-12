@@ -1,8 +1,8 @@
 import UIKit
 
 @IBDesignable
-class CardViewButton: UIButton {
-    
+class CardViewButton: UIButton{
+
     var isActive: Bool = true {
         didSet {
             if isActive {
@@ -16,7 +16,7 @@ class CardViewButton: UIButton {
     @IBInspectable override var isSelected: Bool  {
         didSet {
             if isSelected {
-                layer.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1).cgColor
+                layer.backgroundColor = #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1).cgColor
             } else {
                 layer.backgroundColor = UIColor.white.cgColor
             }
@@ -25,9 +25,9 @@ class CardViewButton: UIButton {
     
     @IBInspectable var isFaceUp: Bool = true {
         didSet{
-            if !isFaceUp {
+            if isFaceUp {
                 layer.backgroundColor = UIColor.white.cgColor
-            }
+                            }
             setNeedsDisplay()
         }
     }
@@ -47,7 +47,7 @@ class CardViewButton: UIButton {
     
     override func draw(_ rect: CGRect) {
         layer.cornerRadius = 10
-        layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
         layer.borderWidth = 0.5
         
         if isFaceUp {
@@ -57,8 +57,9 @@ class CardViewButton: UIButton {
         }
     }
     
+    //to be implemented by child classes
     func drawFront() {}
-    
+    //to be implemented depending on the card game
     func drawBack() {}
     
     func flipCard(animated: Bool = false, completion: Optional<(CardViewButton) -> ()> = nil) {
@@ -78,4 +79,3 @@ class CardViewButton: UIButton {
         }
     }
 }
-

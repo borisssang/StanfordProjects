@@ -142,7 +142,7 @@ class SetCardButton: CardViewButton {
     }
 
     override func drawBack() {
-        layer.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).cgColor
+        layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
     }
     
     func flipCard(withCompletion completion: Optional<(SetCardButton) -> ()> = nil) {
@@ -156,6 +156,26 @@ class SetCardButton: CardViewButton {
                 completion(self)
             }
         }
+    }
+    
+    func duplicate(forControlEvents controlEvents: [UIControlEvents]) -> UIButton? {
+        
+        // Attempt to duplicate button by archiving and unarchiving the original UIButton
+        let archivedButton = NSKeyedArchiver.archivedData(withRootObject: self)
+        guard let buttonDuplicate = NSKeyedUnarchiver.unarchiveObject(with: archivedButton) as? UIButton else { return nil }
+        
+        // Copy targets and associated actions
+        self.allTargets.forEach { target in
+            
+            controlEvents.forEach { controlEvent in
+                
+                self.actions(forTarget: target, forControlEvent: controlEvent)?.forEach { action in
+                    buttonDuplicate.addTarget(target, action: Selector(action), for: controlEvent)
+                }
+            }
+        }
+        
+        return buttonDuplicate
     }
     
     private var shapeHorizontalMargin: CGFloat {
