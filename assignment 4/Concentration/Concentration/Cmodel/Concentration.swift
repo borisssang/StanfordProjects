@@ -18,45 +18,21 @@ class Concentration {
     private(set) var cards = [ConcentrationCard]()
     var flipCount = 0
     var score = 0
+    var currentPairOfIndices: [Int]?
     
     var emojiTheme: String = ""
     var themes = ["Happy", "Sad", "Scary"]
     
+    private var oneAndOnlyIndex: Int?
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
         }
 		set {
-			for index in cards.indices {
-				cards[index].isFaceUp = (index == newValue)
+                setCurrentPairToFaceDown()
 			}
 		}
-				
-	}
-	
-	func chooseCard(at index: Int) {
-		assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)) : Choosen index out of range")
-		if !cards[index].isMatched {
-            flipCount+=1
-            cards[index].carPenalty+=1
-			if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
-				// check if cards match
-				if cards[matchIndex] == cards[index] {
-					cards[matchIndex].isMatched = true
-					cards[index].isMatched = true
-                    score+=2
-              //     delegate?.didMatchCards(withIndices:)
-				}
-                else {
-                    score-=cards[index].carPenalty
-                }
-				cards[index].isFaceUp = true
-			} else {
-				indexOfOneAndOnlyFaceUpCard = index
-			}
-		}
-	}
-	
+    
 	init(numberOfPairsOfCards: Int) {
 		assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)) : You must have at least one pair of cards")
 		for _ in 1...numberOfPairsOfCards {
@@ -93,7 +69,80 @@ class Concentration {
         let random = themes.count.arc4Random
             return themes[random]
     }
+
+    private func removeMatchedPair() {
+        let matchedCards = cards.filter { $0.isMatched }
+        
+        guard !matchedCards.isEmpty else { return }
+        
+        for card in matchedCards {
+            if let index = cards.index(of: card) {
+                cards.remove(at: index)
+            }
+        }
+    }
     
+    func flipCard(at index: Int) {
+        var selectedCard = cards[index]
+        // If the card was matched, ignore the flip request.
+        guard !selectedCard.isMatched else { return }
+        
+        // If we have matched cards, the delegate is called
+        // and the matched cards are removed.
+        if let currentPairIndices = currentPairOfIndices {
+            delegate?.didMatchCards(withIndices: currentPairIndices)
+            self.currentPairOfIndices = nil
+        }
+        
+        // If we already have one previously flipped card,
+        // it means that we now have two faced up cards.
+        // Thus we need to check for a match.
+        selectedCard.isFaceUp = !selectedCard.isFaceUp
+        if let firstCardIndex = indexOfOneAndOnlyFaceUpCard, firstCardIndex != index {
+            
+            var firstCard = cards[firstCardIndex]
+            
+            // Do we have a match?
+            if firstCard == selectedCard {
+                firstCard.isMatched = true
+                selectedCard.isMatched = true
+                score+=1
+                currentPairOfIndices = [firstCardIndex, index]
+            }
+            
+            cards[firstCardIndex] = firstCard
+        } else {
+            indexOfOneAndOnlyFaceUpCard = index
+        }
+        cards[index] = selectedCard
+    }
+    
+    private func setCurrentPairToFaceDown() {
+        /// Indicates if the penalty was already applied.
+        var didPenalize = false
+        
+        // Loops through all cards to face them down,
+        // and it also checks for missmatches penalty.
+        for cardIndex in cards.indices {
+            var currentCard = cards[cardIndex]
+            
+            if currentCard.isFaceUp {
+                
+                // We check if we should penalize the player,
+                // in the case of an already seen card.
+                if currentCard.hasBeenFlipped && !currentCard.isMatched && !didPenalize {
+                    score -= 1
+                    // The penalization should be applied only once.
+                    didPenalize = true
+                }
+                
+                // The flipped state is applied after the check for penalty is made.
+                currentCard.hasBeenFlipped = true
+                currentCard.isFaceUp = false
+            }
+            cards[cardIndex] = currentCard
+        }
+    }
 }
 
 extension Collection {

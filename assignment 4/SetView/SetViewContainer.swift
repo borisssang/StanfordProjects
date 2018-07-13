@@ -61,7 +61,7 @@ class SetViewContainer: ViewContainer {
         
         func buttonToView(fromButton button: UIButton) -> UIView{
             let buttonView = UIView()
-            buttonView.backgroundColor = button.backgroundColor
+            buttonView.backgroundColor = #colorLiteral(red: 0.8470588235, green: 0.262745098, blue: 0.4784313725, alpha: 1)
             buttonView.center = button.center
             buttonView.bounds.size = button.bounds.size
             buttonView.contentMode = button.contentMode
@@ -74,22 +74,26 @@ class SetViewContainer: ViewContainer {
         }
 
         for button in buttons {
+            button.flipCard()
+        }
+        for button in buttons{
             let buttonView = buttonToView(fromButton: button)
             buttonsCopies.append(buttonView)
-            addSubview(buttonView)
-            
-            // Hides the original button.
-            button.isActive = false
-        }
+            self.addSubview(buttonView)
+            buttonView.alpha = 0
+            }
         
         // Starts animating by scaling each view.
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.8,
-            delay: 0,
+            delay: 1,
             options: .curveEaseIn,
             animations: {
-                
+                for button in buttons {
+                    button.isActive = false
+                }
                 buttonsCopies.forEach {
+                    $0.alpha = 1
                     $0.bounds.size = CGSize(
                         width: $0.frame.size.width * 1.1,
                         height: $0.frame.size.height * 1.1

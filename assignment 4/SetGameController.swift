@@ -113,9 +113,9 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
     
     @IBAction func restartGame() {
         guard !containerView.isPerformingDealAnimation else { return }
+        containerView.clearCardContainer(withAnimation: true)
         game.restartGame()
         game.dealCards(numberOfCards: 12)
-        containerView.clearCardContainer(withAnimation: true)
     }
     
     @IBOutlet weak var scoreLabel: UILabel!

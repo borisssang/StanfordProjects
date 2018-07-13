@@ -279,6 +279,19 @@ extension UIView {
             self.layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
         }
     }
+    func buttonToView(fromButton button: UIButton) -> UIView{
+        let buttonView = UIView()
+        buttonView.backgroundColor = button.backgroundColor
+        buttonView.center = button.center
+        buttonView.bounds.size = button.bounds.size
+        buttonView.contentMode = button.contentMode
+        buttonView.frame.size.width = button.frame.size.width
+        buttonView.frame.size.height = button.frame.size.height
+        buttonView.layer.cornerRadius = button.layer.cornerRadius
+        buttonView.layer.borderColor = button.layer.borderColor
+        buttonView.layer.borderWidth = button.layer.borderWidth
+        return buttonView
+    }
 }
 extension CGRect {
     

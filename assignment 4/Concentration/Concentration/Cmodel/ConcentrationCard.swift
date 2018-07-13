@@ -10,6 +10,7 @@ import Foundation
 
 struct ConcentrationCard: Hashable {
     
+    var hasBeenFlipped = false 
     var hashValue: Int {
         return identifier
     }

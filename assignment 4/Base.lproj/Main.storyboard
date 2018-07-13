@@ -52,7 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T1p-pv-0Cc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="191.19999999999999" y="131.52709359605913"/>
+            <point key="canvasLocation" x="190.5" y="131"/>
         </scene>
         <!--Concentration View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -91,7 +91,7 @@
                                 <color key="textColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JW7-0y-o0n">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JW7-0y-o0n" customClass="ConcentrationViewContainer" customModule="Lecture_4___Concentration" customModuleProvider="target">
                                 <rect key="frame" x="16" y="118" width="343" height="504"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -119,14 +119,14 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="containerView" destination="JW7-0y-o0n" id="xEl-UO-vwR"/>
+                        <outlet property="containerView" destination="JW7-0y-o0n" id="cye-uZ-vJd"/>
                         <outlet property="flipCountLabel" destination="Qt9-WQ-DTf" id="dXy-TV-PGk"/>
                         <outlet property="scoreLabel" destination="Pz2-iU-NWG" id="4kL-hC-4uq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-258" y="1029"/>
+            <point key="canvasLocation" x="-364" y="987"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wj9-DV-5sX">
@@ -274,6 +274,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="rlw-jD-AGD"/>
+        <segue reference="mQA-du-Hw6"/>
     </inferredMetricsTieBreakers>
 </document>

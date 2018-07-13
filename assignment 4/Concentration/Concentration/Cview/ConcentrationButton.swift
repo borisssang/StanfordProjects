@@ -11,21 +11,8 @@ import UIKit
 class ConcentrationButton: CardViewButton {
 
     typealias Emoji = String
-    var buttonText: Emoji?
-    
-    public var themes = [
-        "Happy":"😊😂🤣😘😍😜😆😇🙂😁😎🤪😹😻",
-        "Sad":"🙃😞😔😟😕😖😭😤😠🙁😨😪🤧😒",
-        "Scary":"😈👹👻💩👽👾🤖🧟‍♂️🎅👳‍♂️🧠👁👣👺"
-    ]
-    
-    private var theme = ""{
+    var buttonText: Emoji?{
         didSet{
-            if isFaceUp{
-                drawFront()
-            } else {
-                drawBack()
-            }
             setNeedsDisplay()
         }
     }
@@ -33,7 +20,6 @@ class ConcentrationButton: CardViewButton {
     override func drawFront() {
         layer.backgroundColor = UIColor.white.cgColor
         titleLabel?.font = UIFont.systemFont(ofSize: 50)
-            buttonText = themes[theme]!
             setTitle(buttonText, for: .normal)
     }
     
