@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ConcentrationButton: CardViewButton {
-
+class ConcentrationButton: CardViewButton{
+    
     typealias Emoji = String
     var buttonText: Emoji?{
         didSet{

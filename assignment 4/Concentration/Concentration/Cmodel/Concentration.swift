@@ -8,14 +8,15 @@
 
 import Foundation
 
-protocol ConcentrationDelegate{
+@objc protocol ConcentrationDelegate{
     func didMatchCards(withIndices: [Int])
+    @objc optional func didResetGame(withTheme: String) -> String
 }
 
 class Concentration {
     
     var delegate: ConcentrationDelegate?
-    private(set) var cards = [ConcentrationCard]()
+    var cards = [ConcentrationCard]()
     var flipCount = 0
     var score = 0
     var currentPairOfIndices: [Int]?
@@ -23,7 +24,6 @@ class Concentration {
     var emojiTheme: String = ""
     var themes = ["Happy", "Sad", "Scary"]
     
-    private var oneAndOnlyIndex: Int?
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
@@ -51,16 +51,20 @@ class Concentration {
         }
     }
     
-    func restartGame() -> String {
+    func restartGame() -> String{
         self.flipCount=0
         self.score = 0
         self.indexOfOneAndOnlyFaceUpCard = nil
-        for i in 0..<cards.count{
-            cards[i].isFaceUp=false
-            cards[i].isMatched=false
+       ConcentrationCard.resetIdentifiersCount()
+        let pairsCount = cards.count/2
+        cards = []
+        currentPairOfIndices = nil
+        for _ in 0..<pairsCount {
+            let currentCard = ConcentrationCard()
+            
+            cards.append(currentCard)
+            cards.append(currentCard)
         }
-        self.shuffleCards()
-        
         return randomTheme()
     }
     
@@ -70,17 +74,17 @@ class Concentration {
             return themes[random]
     }
 
-    private func removeMatchedPair() {
-        let matchedCards = cards.filter { $0.isMatched }
-        
-        guard !matchedCards.isEmpty else { return }
-        
-        for card in matchedCards {
-            if let index = cards.index(of: card) {
-                cards.remove(at: index)
-            }
-        }
-    }
+//    private func removeMatchedPair() {
+//        let matchedCards = cards.filter { $0.isMatched }
+//
+//        guard !matchedCards.isEmpty else { return }
+//
+//        for card in matchedCards {
+//            if let index = cards.index(of: card) {
+//                cards.remove(at: index)
+//            }
+//        }
+//    }
     
     func flipCard(at index: Int) {
         var selectedCard = cards[index]
@@ -97,7 +101,6 @@ class Concentration {
         // If we already have one previously flipped card,
         // it means that we now have two faced up cards.
         // Thus we need to check for a match.
-        selectedCard.isFaceUp = !selectedCard.isFaceUp
         if let firstCardIndex = indexOfOneAndOnlyFaceUpCard, firstCardIndex != index {
             
             var firstCard = cards[firstCardIndex]
@@ -111,10 +114,14 @@ class Concentration {
             }
             
             cards[firstCardIndex] = firstCard
+            
         } else {
             indexOfOneAndOnlyFaceUpCard = index
         }
+        
+       selectedCard.isFaceUp = !selectedCard.isFaceUp
         cards[index] = selectedCard
+        flipCount+=1
     }
     
     private func setCurrentPairToFaceDown() {

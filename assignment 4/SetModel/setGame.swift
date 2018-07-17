@@ -110,8 +110,7 @@ struct setGame{
     }
     
     private func areMatching(card1: Card, card2: Card, card3: Card) -> Bool{
-//        return isConditioned1(card1, card2, card3) && isConditioned2(card1, card2, card3) && isConditioned3(card1, card2, card3) && isConditioned4(card1, card2, card3)
-        return true
+        return isConditioned1(card1, card2, card3) && isConditioned2(card1, card2, card3) && isConditioned3(card1, card2, card3) && isConditioned4(card1, card2, card3)
     }
     
     mutating func restartGame(){

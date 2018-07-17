@@ -9,12 +9,21 @@ import UIKit
 
 class ConcentrationViewController: UIViewController, ConcentrationDelegate, CardsContainerViewDelegate {
     
-    func didMatchCards(withIndices: [Int]) {
-        let matchedCardButtons: [CardViewButton] = withIndices.map {
+    public var themes = [
+        "Happy":"😊😂🤣😘😍😜😆😇🙂😁😎🤪😹😻",
+        "Sad":"🙃😞😔😟😕😖😭😤😠🙁😨😪🤧😒",
+        "Scary":"😈👹👻💩👽👾🤖🧟‍♂️🎅👳‍♂️🧠👁👣👺"
+    ]
+    
+    func didMatchCards(withIndices indices: [Int]) {
+        let matchedCardButtons: [CardViewButton] = indices.map {
             return self.containerView.cards[$0]
         }
         
-        self.containerView.animateCardsOut(matchedCardButtons)
+        for button in matchedCardButtons {
+            button.isActive = false
+        }
+        cardsRemovalDidFinish()
         self.containerView.isUserInteractionEnabled = false
     }
     
@@ -23,8 +32,7 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
             containerView.clearCardContainer()
             containerView.addCards(byAmount: 16, animated: true)
             assignTargets()
-         updateViewFromModel()
-    //      displayLabels()
+            updateViewFromModel()
         } else {
             containerView.removeInactiveCardButtons {
                 self.containerView.isUserInteractionEnabled = true
@@ -32,8 +40,10 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
         }
     }
     
-    func cardsDealDidFinish(){}
-    func didFinishDealingCard(_ button: CardViewButton) {}
+    func cardsDealDidFinish(){
+        containerView.isPerformingDealAnimation = false
+    }
+    func didFinishDealingCard(_ button: CardViewButton) {    }
     
     
     @IBOutlet weak var containerView: ConcentrationViewContainer!{
@@ -60,12 +70,15 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
     }
     
     @IBAction func newGame() {
-        if !containerView.isPerformingDealAnimation {
-            containerView.animateCardsOut(containerView.cards)
-            emojiChoices = ConcentrationGame.restartGame()
-            updateViewFromModel()
+        if containerView.isPerformingDealAnimation == false {
+        for button in containerView.cards {
+            button.isActive = false
         }
-        
+        theme = ConcentrationGame.restartGame()
+        cardsRemovalDidFinish()
+        ConcentrationGame.score = 0
+        updateViewFromModel()
+        }
     }
     
 	@IBOutlet private weak var flipCountLabel: UILabel! {
@@ -91,6 +104,7 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
                 guard ConcentrationGame.cards.indices.contains(index) else { continue }
                 
                 let card = ConcentrationGame.cards[index]
+                
                 if let button = cardButton as? ConcentrationButton {
                     button.buttonText = emoji(for: card)
                 if !card.isFaceUp && button.isFaceUp && !card.isMatched {
@@ -102,7 +116,7 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
     }
     var theme: String? {
         didSet {
-            emojiChoices = theme ?? ""
+            emojiChoices = themes[theme!] ?? ""
             emoji = [:]
             updateViewFromModel()
         }
@@ -124,10 +138,10 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
         guard let index = containerView.cards.index(of: sender) else { return }
         
         ConcentrationGame.flipCard(at: index)
+        guard  containerView.isPerformingDealAnimation == false else { return }
         sender.flipCard(animated: true)
         
         updateViewFromModel()
-        //        displayLabels()
     }
 
     private var cardsAndEmojisMap = [Card : String]()

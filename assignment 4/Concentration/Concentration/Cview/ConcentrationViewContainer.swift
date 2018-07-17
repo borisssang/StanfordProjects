@@ -22,7 +22,7 @@ class ConcentrationViewContainer: ViewContainer{
             
             respositionViews()
             
-            for button: ConcentrationButton in cards as! [ConcentrationButton] {
+            for button in cards{
                 button.isActive = true
                 button.isFaceUp = false
                 
@@ -32,6 +32,8 @@ class ConcentrationViewContainer: ViewContainer{
     }
     
     override func awakeFromNib() {
+            animator.delegate = self
+
         let discardToOrigin = convert(CGPoint(x: UIScreen.main.bounds.width,
                                               y: UIScreen.main.bounds.height / 2),
                                       to: self)
@@ -130,11 +132,23 @@ class ConcentrationViewContainer: ViewContainer{
         })
     }
     override func removeInactiveCardButtons(withCompletion completion: Optional<() -> ()>) {
+
         let inactiveButtons = cards.filter { !$0.isActive }
         guard inactiveButtons.count > 0 else { return }
-
+        
         grid.cellCount = cards.filter({ $0.isActive }).count
         updateViewsFrames(withAnimation: true, andCompletion: completion)
+    }
+    
+    override func clearCardContainer(withAnimation animated: Bool = false, completion: Optional<() -> ()> = nil) {
+        
+        cards.forEach {
+            $0.removeFromSuperview()
+        }
+        cards = []
+        grid.cellCount = 0
+        
+        setNeedsLayout()
     }
 
 

@@ -57,7 +57,7 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
     func respositionViews() {
         grid.frame = centeredRect
         
-        for (i, button) in cards.enumerated() {
+        for (i, button) in buttonsToPosition.enumerated() {
             if let frame = grid[i] {
                 button.frame = frame
             }
@@ -156,10 +156,10 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
                 }
                 
                 self.scheduledDealAnimations!.append(animationTimer)
-                
                 dealAnimationDelay += 0.2
             }
         }
+     //   self.delegate?.cardsDealDidFinish()
     }
     
     func updateViewsFrames(withAnimation animated: Bool = false,
@@ -220,6 +220,7 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         
         isPerformingDealAnimation = false
     }
+    
     
     func removeInactiveCardButtons(withCompletion completion: Optional<() -> ()> = nil) {
         let inactiveButtons = cards.filter { !$0.isActive }

@@ -5,8 +5,8 @@
 //  Created by Boris Angelov on 6.07.18.
 import UIKit
 
-class ThemeViewController: UIViewController, UISplitViewControllerDelegate {
-    
+class ThemeViewController: UIViewController, UISplitViewControllerDelegate{
+
     override func awakeFromNib() {
         splitViewController?.delegate = self
     }
@@ -17,20 +17,14 @@ class ThemeViewController: UIViewController, UISplitViewControllerDelegate {
         return splitViewController?.viewControllers.last as? ConcentrationViewController
     }
     
-    public var themes = [
-        "Happy":"😊😂🤣😘😍😜😆😇🙂😁😎🤪😹😻",
-        "Sad":"🙃😞😔😟😕😖😭😤😠🙁😨😪🤧😒",
-        "Scary":"😈👹👻💩👽👾🤖🧟‍♂️🎅👳‍♂️🧠👁👣👺"
-    ]
-    
     @IBAction func changeTheme(_ sender: UIButton) {
         if let cvc = splitViewDetailConcentrationViewController {
-            if let themeName = sender.currentTitle, let emojiTheme = themes[themeName]{
-                cvc.theme = emojiTheme
+            if let themeName = sender.currentTitle{
+                cvc.theme = themeName
             }
         } else if let cvc = lastSeguedToViewController {
-            if let themeName = sender.currentTitle, let emojiTheme = themes[themeName]{
-                cvc.theme = emojiTheme
+            if let themeName = sender.currentTitle{
+                cvc.theme = themeName
             }
            navigationController?.pushViewController(cvc, animated: true)
         } else {
@@ -40,8 +34,8 @@ class ThemeViewController: UIViewController, UISplitViewControllerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier, identifier == "Choose Theme", let cvc = segue.destination as? ConcentrationViewController {
-            if let themeName = (sender as? UIButton)?.currentTitle, let emojiTheme = themes[themeName]{
-                cvc.theme = emojiTheme
+            if let themeName = (sender as? UIButton)?.currentTitle{
+                cvc.theme = themeName
                 lastSeguedToViewController = cvc
             }
         }

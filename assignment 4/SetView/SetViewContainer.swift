@@ -80,7 +80,6 @@ class SetViewContainer: ViewContainer {
             let buttonView = buttonToView(fromButton: button)
             buttonsCopies.append(buttonView)
             self.addSubview(buttonView)
-            buttonView.alpha = 0
             }
         
         // Starts animating by scaling each view.

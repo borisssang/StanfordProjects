@@ -8,9 +8,36 @@
 
 import Foundation
 
-struct ConcentrationCard: Hashable {
+struct ConcentrationCard{
     
-    var hasBeenFlipped = false 
+    var hasBeenFlipped = false
+    var carPenalty = 0
+    var isFaceUp = false
+    var isMatched = false
+    var ConcentrationCardPenalty = -1
+    
+    private var identifier: Int
+    
+    init() {
+        self.identifier = ConcentrationCard.makeIdentifier()
+    }
+    
+    private static var identifiersCount = -1
+    
+    /// Resets the current identifier count.
+    static func resetIdentifiersCount() {
+        identifiersCount = -1
+    }
+    
+    /// Returns a new identifier for model usage.
+    static func makeIdentifier() -> Int {
+        identifiersCount += 1
+        return identifiersCount
+    }
+}
+
+extension ConcentrationCard: Hashable {
+    
     var hashValue: Int {
         return identifier
     }
@@ -18,22 +45,4 @@ struct ConcentrationCard: Hashable {
     static func ==(lhs: ConcentrationCard, rhs: ConcentrationCard) -> Bool {
         return lhs.identifier == rhs.identifier
     }
-    
-    var carPenalty = 0
-    var isFaceUp = false
-    var isMatched = false
-    var ConcentrationCardPenalty = -1
-    private var identifier: Int
-    
-    private static var identifierFactory = 0
-    
-    private static func getUniqueIdentifier() -> Int {
-        identifierFactory += 1
-        return identifierFactory
-    }
-    
-    init() {
-        self.identifier = ConcentrationCard.getUniqueIdentifier()
-    }
-    
 }
