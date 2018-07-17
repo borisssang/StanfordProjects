@@ -9,7 +9,7 @@
 import UIKit
 
 class ConcentrationViewContainer: ViewContainer{
-
+    
     override var buttonsToPosition: [CardViewButton] {
         return cards.filter({ $0.isActive })
     }
@@ -32,8 +32,8 @@ class ConcentrationViewContainer: ViewContainer{
     }
     
     override func awakeFromNib() {
-            animator.delegate = self
-
+        animator.delegate = self
+        
         let discardToOrigin = convert(CGPoint(x: UIScreen.main.bounds.width,
                                               y: UIScreen.main.bounds.height / 2),
                                       to: self)
@@ -62,11 +62,11 @@ class ConcentrationViewContainer: ViewContainer{
         grid.cellCount = cards.count
         setNeedsLayout()
     }
-
+    
     override func animateCardsOut(_ buttons: [CardViewButton]) {
         guard discardToFrame != nil else { return }
         guard let buttons = buttons as? [ConcentrationButton] else { return }
-
+        
         var buttonsCopies = [UIView]()
         
         for button in buttons {
@@ -77,40 +77,40 @@ class ConcentrationViewContainer: ViewContainer{
             // Hides the original button.
             button.isActive = false
         }
-
+        
         // Animates each card to the center of the container.
         UIViewPropertyAnimator.runningPropertyAnimator(
             withDuration: 0.2,
             delay: 0.2,
             options: .curveEaseInOut,
             animations: {
-
+                
                 buttonsCopies.forEach {
                     $0.center = self.center
                 }
-
+                
         }, completion: { position in
-
+            
             // Starts animating by scaling each button.
             UIViewPropertyAnimator.runningPropertyAnimator(
                 withDuration: 0.3,
                 delay: 0,
                 options: .curveEaseInOut,
                 animations: {
-
+                    
                     buttonsCopies.forEach {
                         $0.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
                     }
-
+                    
             }, completion: { position in
-
+                
                 // Animates each card to the matched deck.
                 Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
                     buttonsCopies.forEach { button in
                         let snapOutBehavior = UISnapBehavior(item: button, snapTo: self.discardToFrame.center)
                         snapOutBehavior.damping = 1
                         self.animator.addBehavior(snapOutBehavior)
-
+                        
                         UIViewPropertyAnimator.runningPropertyAnimator(
                             withDuration: 0.2,
                             delay: 0,
@@ -120,11 +120,11 @@ class ConcentrationViewContainer: ViewContainer{
                         }
                         )
                     }
- 
+                    
                     Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { _ in
                         buttonsCopies.forEach { $0.alpha = 0 }
                         buttonsCopies.forEach { $0.removeFromSuperview() }
-
+                        
                         self.delegate?.cardsRemovalDidFinish()
                     }
                 }
@@ -132,7 +132,7 @@ class ConcentrationViewContainer: ViewContainer{
         })
     }
     override func removeInactiveCardButtons(withCompletion completion: Optional<() -> ()>) {
-
+        
         let inactiveButtons = cards.filter { !$0.isActive }
         guard inactiveButtons.count > 0 else { return }
         
@@ -141,7 +141,6 @@ class ConcentrationViewContainer: ViewContainer{
     }
     
     override func clearCardContainer(withAnimation animated: Bool = false, completion: Optional<() -> ()> = nil) {
-        
         cards.forEach {
             $0.removeFromSuperview()
         }
@@ -150,6 +149,5 @@ class ConcentrationViewContainer: ViewContainer{
         
         setNeedsLayout()
     }
-
 
 }

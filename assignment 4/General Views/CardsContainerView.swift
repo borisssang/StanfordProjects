@@ -75,7 +75,7 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
             updateViewsFrames()
         }
     }
-
+    
     //to be overriden by children classes
     func makeButtons(byAmount numberOfButtons: Int) -> [CardViewButton] {return [] }
     
@@ -159,7 +159,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
                 dealAnimationDelay += 0.2
             }
         }
-     //   self.delegate?.cardsDealDidFinish()
     }
     
     func updateViewsFrames(withAnimation animated: Bool = false,
@@ -191,15 +190,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         }
     }
     
-    func resetContainer(){
-        cards = []
-        grid.cellCount = 0
-        for subview in subviews {
-            subview.removeFromSuperview()
-        }
-        setNeedsLayout()
-    }
-    
     //stops all current animations while being rotated
     func prepareForRotation() {
         animator.removeAllBehaviors()
@@ -220,7 +210,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
         
         isPerformingDealAnimation = false
     }
-    
     
     func removeInactiveCardButtons(withCompletion completion: Optional<() -> ()> = nil) {
         let inactiveButtons = cards.filter { !$0.isActive }
@@ -257,29 +246,6 @@ class ViewContainer: UIView, UIDynamicAnimatorDelegate {
 
 extension UIView {
     
-    /// Removes all subviews.
-    func removeAllSubviews() {
-        for subview in subviews {
-            subview.removeFromSuperview()
-        }
-    }
-    
-    func flipView(animated: Bool = false, completion: Optional<(UIView) -> ()> = nil) {
-        if animated {
-            UIView.transition(with: self,
-                              duration: 0.3,
-                              options: .transitionFlipFromLeft,
-                              animations: {
-                                self.layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
-            }) { completed in
-                if let completion = completion {
-                    completion(self)
-                }
-            }
-        } else {
-            self.layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
-        }
-    }
     func buttonToView(fromButton button: UIButton) -> UIView{
         let buttonView = UIView()
         buttonView.backgroundColor = button.backgroundColor

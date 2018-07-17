@@ -2,7 +2,7 @@ import UIKit
 
 @IBDesignable
 class CardViewButton: UIButton{
-
+    
     var isActive: Bool = true {
         didSet {
             if isActive {
@@ -27,7 +27,7 @@ class CardViewButton: UIButton{
         didSet{
             if isFaceUp {
                 layer.backgroundColor = UIColor.white.cgColor
-                            }
+            }
             setNeedsDisplay()
         }
     }

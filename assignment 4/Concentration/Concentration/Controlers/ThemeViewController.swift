@@ -6,7 +6,7 @@
 import UIKit
 
 class ThemeViewController: UIViewController, UISplitViewControllerDelegate{
-
+    
     override func awakeFromNib() {
         splitViewController?.delegate = self
     }
@@ -26,7 +26,7 @@ class ThemeViewController: UIViewController, UISplitViewControllerDelegate{
             if let themeName = sender.currentTitle{
                 cvc.theme = themeName
             }
-           navigationController?.pushViewController(cvc, animated: true)
+            navigationController?.pushViewController(cvc, animated: true)
         } else {
             performSegue(withIdentifier: "Choose Theme", sender: sender)
         }

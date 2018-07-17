@@ -30,6 +30,16 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
         game.dealCards(numberOfCards: 12)
     }
     
+    private func setDeckAppearance(){
+        deckPlaceholderCard.layer.cornerRadius = 10
+        deckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+        deckPlaceholderCard.layer.borderWidth = 0.5
+        matchedDeckPlaceholderCard.layer.cornerRadius = 10
+        matchedDeckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+        matchedDeckPlaceholderCard.layer.borderWidth = 0.5
+        updateViewFromModel()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -37,15 +47,7 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
             containerView.addCards(byAmount: 12, animated: true)
             enableButtonAction()
         }
-        deckPlaceholderCard.layer.cornerRadius = 10
-        deckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
-        deckPlaceholderCard.layer.borderWidth = 0.5
-      //  matchedDeckPlaceholderCard.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
-        matchedDeckPlaceholderCard.layer.cornerRadius = 10
-        matchedDeckPlaceholderCard.layer.borderColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
-        matchedDeckPlaceholderCard.layer.borderWidth = 0.5
-        updateViewFromModel()
-        
+        setDeckAppearance()
     }
     
     override func viewDidLayoutSubviews() {
@@ -65,7 +67,7 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
- 
+        
         guard containerView != nil else { return }
         
         coordinator.animate(alongsideTransition: { _ in
@@ -90,7 +92,6 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
     @objc func didTapCard(_ sender: UIButton) {
         let indexOfCard = containerView.cards.index(of: sender as! SetCardButton)!
         game.selectCard(at: indexOfCard)
-
         updateViewFromModel()
     }
     
@@ -106,7 +107,6 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
         game.dealCards(numberOfCards: 3)
         containerView.addCards(animated: true)
         enableButtonAction()
-        
         updateViewFromModel()
         updateDeckAppearance()
     }
@@ -137,9 +137,6 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
         )
     }
     
-    //iterate through the cards
-    //get the current card and switch on its states
-    //put the states of the buttons accordingly
     private func updateViewFromModel() {
         
         var buttons: [SetCardButton]!
@@ -191,7 +188,7 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
             }
         }
     }
-
+    
     
     func selectedCardsDidMatch(_ cards: [Card]) {
         scoreLabel.text = "Sets: \(game.score)"
@@ -233,6 +230,5 @@ class SetGameController: UIViewController, SetGameDelegate, CardsContainerViewDe
     func cardsDealDidFinish() {}
     
     func didFinishDealingCard(_ button: CardViewButton) {
-button.turnFaceUp(animated: true)    }
-    
+        button.turnFaceUp(animated: true)    }
 }

@@ -20,7 +20,7 @@ class ConcentrationButton: CardViewButton{
     override func drawFront() {
         layer.backgroundColor = UIColor.white.cgColor
         titleLabel?.font = UIFont.systemFont(ofSize: 50)
-            setTitle(buttonText, for: .normal)
+        setTitle(buttonText, for: .normal)
     }
     
     override func drawBack() {

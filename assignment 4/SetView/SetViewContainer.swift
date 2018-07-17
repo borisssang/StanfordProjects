@@ -52,7 +52,7 @@ class SetViewContainer: ViewContainer {
         grid.cellCount = cards.count
         setNeedsLayout()
     }
-
+    
     override func animateCardsOut(_ buttons: [CardViewButton]) {
         guard discardToFrame != nil else { return }
         guard let buttons = buttons as? [SetCardButton] else { return }
@@ -72,7 +72,7 @@ class SetViewContainer: ViewContainer {
             buttonView.layer.borderWidth = button.layer.borderWidth
             return buttonView
         }
-
+        
         for button in buttons {
             button.flipCard()
         }
@@ -80,7 +80,7 @@ class SetViewContainer: ViewContainer {
             let buttonView = buttonToView(fromButton: button)
             buttonsCopies.append(buttonView)
             self.addSubview(buttonView)
-            }
+        }
         
         // Starts animating by scaling each view.
         UIViewPropertyAnimator.runningPropertyAnimator(
@@ -111,8 +111,6 @@ class SetViewContainer: ViewContainer {
                     buttonsCopies.forEach { $0.center = self.center }
                     
             }, completion: { position in
-                // Flips each card down
-                buttonsCopies.forEach { $0.flipView() }
                 
                 // Animates each card to the matched deck.
                 

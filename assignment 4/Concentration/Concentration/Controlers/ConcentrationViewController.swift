@@ -45,7 +45,6 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
     }
     func didFinishDealingCard(_ button: CardViewButton) {    }
     
-    
     @IBOutlet weak var containerView: ConcentrationViewContainer!{
         didSet{
             containerView.delegate = self
@@ -71,28 +70,22 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
     
     @IBAction func newGame() {
         if containerView.isPerformingDealAnimation == false {
-        for button in containerView.cards {
-            button.isActive = false
-        }
-        theme = ConcentrationGame.restartGame()
-        cardsRemovalDidFinish()
-        ConcentrationGame.score = 0
-        updateViewFromModel()
+            for button in containerView.cards {
+                button.isActive = false
+            }
+            theme = ConcentrationGame.restartGame()
+            cardsRemovalDidFinish()
+            updateViewFromModel()
         }
     }
     
-	@IBOutlet private weak var flipCountLabel: UILabel! {
-		didSet {
-			ConcentrationGame.flipCount = 0
-		}
-	}
-	
-    @IBOutlet private weak var scoreLabel: UILabel!
-    {
-        didSet{
-            ConcentrationGame.score = 0
+    @IBOutlet private weak var flipCountLabel: UILabel! {
+        didSet {
+            ConcentrationGame.flipCount = 0
         }
     }
+    
+    @IBOutlet private weak var scoreLabel: UILabel!
     
     private func updateViewFromModel() {
         if containerView != nil {
@@ -107,12 +100,12 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
                 
                 if let button = cardButton as? ConcentrationButton {
                     button.buttonText = emoji(for: card)
-                if !card.isFaceUp && button.isFaceUp && !card.isMatched {
-                    button.flipCard(animated: true)
+                    if !card.isFaceUp && button.isFaceUp && !card.isMatched {
+                        button.flipCard(animated: true)
                     }
+                }
             }
         }
-    }
     }
     var theme: String? {
         didSet {
@@ -143,8 +136,6 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
         
         updateViewFromModel()
     }
-
-    private var cardsAndEmojisMap = [Card : String]()
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         // In case the controller is still being presented and the
@@ -157,20 +148,19 @@ class ConcentrationViewController: UIViewController, ConcentrationDelegate, Card
             self.containerView.updateViewsFrames(withAnimation: true)
         }
     }
-    
 }
 
 extension Int {
-	var arc4Random: Int {
-		switch self {
-		case 1...Int.max:
-			return Int(arc4random_uniform(UInt32(self)))
-		case -Int.max..<0:
-			return Int(arc4random_uniform(UInt32(self)))
-		default:
-			return 0
-		}
-	}
+    var arc4Random: Int {
+        switch self {
+        case 1...Int.max:
+            return Int(arc4random_uniform(UInt32(self)))
+        case -Int.max..<0:
+            return Int(arc4random_uniform(UInt32(self)))
+        default:
+            return 0
+        }
+    }
 }
 
 

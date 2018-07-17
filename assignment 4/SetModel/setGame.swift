@@ -9,10 +9,8 @@
 import Foundation
 
 protocol SetGameDelegate {
-    
     /// Method called when the current game's selection is a match.
     func selectedCardsDidMatch(_ cards: [Card])
-    
 }
 
 struct setGame{
@@ -21,7 +19,6 @@ struct setGame{
     var playingCards = [Card]()
     var selectedCards = [Card]()
     var matchingCards = [Card]()
-    var matchedTrioLimit = true
     var matched = false
     
     var isDealingEnabled = true
@@ -38,16 +35,11 @@ struct setGame{
     mutating func selectCard(at index: Int){
         let card = playingCards[index]
         
-        matchedTrioLimit = true
-        
         // replacing matched cards if there are any
         if matchingCards.count > 0 {
             guard matchingCards.count == 3 else { return }
             dealCards(numberOfCards: 3)
             matchingCards = []
-            if allCards.count == 0 {
-                matchedTrioLimit = false
-            }
         }
         
         //selecting a new card, deselection of the last three

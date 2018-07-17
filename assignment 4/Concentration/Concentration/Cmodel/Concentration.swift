@@ -18,7 +18,13 @@ class Concentration {
     var delegate: ConcentrationDelegate?
     var cards = [ConcentrationCard]()
     var flipCount = 0
-    var score = 0
+    private(set) var score = 0 {
+        didSet{
+            if score < 0 {
+                score = 0
+            }
+        }
+    }
     var currentPairOfIndices: [Int]?
     
     var emojiTheme: String = ""
@@ -28,19 +34,19 @@ class Concentration {
         get {
             return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
         }
-		set {
-                setCurrentPairToFaceDown()
-			}
-		}
+        set {
+            setCurrentPairToFaceDown()
+        }
+    }
     
-	init(numberOfPairsOfCards: Int) {
-		assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)) : You must have at least one pair of cards")
-		for _ in 1...numberOfPairsOfCards {
-			let card = ConcentrationCard()
-			cards += [card, card]
-		}
-	shuffleCards()
-	}
+    init(numberOfPairsOfCards: Int) {
+        assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)) : You must have at least one pair of cards")
+        for _ in 1...numberOfPairsOfCards {
+            let card = ConcentrationCard()
+            cards += [card, card]
+        }
+        shuffleCards()
+    }
     
     func shuffleCards() {
         for i in 0 ..< cards.count {
@@ -55,7 +61,7 @@ class Concentration {
         self.flipCount=0
         self.score = 0
         self.indexOfOneAndOnlyFaceUpCard = nil
-       ConcentrationCard.resetIdentifiersCount()
+        ConcentrationCard.resetIdentifiersCount()
         let pairsCount = cards.count/2
         cards = []
         currentPairOfIndices = nil
@@ -71,20 +77,8 @@ class Concentration {
     //generates a random theme
     func randomTheme() -> String{
         let random = themes.count.arc4Random
-            return themes[random]
+        return themes[random]
     }
-
-//    private func removeMatchedPair() {
-//        let matchedCards = cards.filter { $0.isMatched }
-//
-//        guard !matchedCards.isEmpty else { return }
-//
-//        for card in matchedCards {
-//            if let index = cards.index(of: card) {
-//                cards.remove(at: index)
-//            }
-//        }
-//    }
     
     func flipCard(at index: Int) {
         var selectedCard = cards[index]
@@ -119,7 +113,7 @@ class Concentration {
             indexOfOneAndOnlyFaceUpCard = index
         }
         
-       selectedCard.isFaceUp = !selectedCard.isFaceUp
+        selectedCard.isFaceUp = !selectedCard.isFaceUp
         cards[index] = selectedCard
         flipCount+=1
     }
@@ -128,15 +122,11 @@ class Concentration {
         /// Indicates if the penalty was already applied.
         var didPenalize = false
         
-        // Loops through all cards to face them down,
-        // and it also checks for missmatches penalty.
         for cardIndex in cards.indices {
             var currentCard = cards[cardIndex]
             
             if currentCard.isFaceUp {
                 
-                // We check if we should penalize the player,
-                // in the case of an already seen card.
                 if currentCard.hasBeenFlipped && !currentCard.isMatched && !didPenalize {
                     score -= 1
                     // The penalization should be applied only once.
@@ -153,9 +143,9 @@ class Concentration {
 }
 
 extension Collection {
-	var oneAndOnly: Element? {
-		return count == 1 ? first : nil
-	}
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
+    }
 }
 
 

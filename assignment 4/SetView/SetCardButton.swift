@@ -15,7 +15,7 @@ class SetCardButton: CardViewButton {
     var striping: String? {didSet{setNeedsDisplay()}}
     var numberOfSymbols = 0 {didSet{setNeedsDisplay()}}
     private var cleanFrontColor = UIColor.white.cgColor
-
+    
     
     private func drawSquiggles(times numberOfTimes: Int)
     {
@@ -140,7 +140,7 @@ class SetCardButton: CardViewButton {
         default: break
         }
     }
-
+    
     override func drawBack() {
         layer.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1).cgColor
     }
