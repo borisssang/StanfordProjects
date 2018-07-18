@@ -57,7 +57,7 @@ struct setGame{
         }
         
         //matching happens
-        if selectedCards.count == 3, areMatching(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2]){
+        if selectedCards.count == 3, areCardsFormingSet(selectedCards[0], selectedCards[1], selectedCards[2]){
             matchingCards = selectedCards
             selectedCards = []
             score += 1
@@ -101,10 +101,6 @@ struct setGame{
         }
     }
     
-    private func areMatching(card1: Card, card2: Card, card3: Card) -> Bool{
-        return isConditioned1(card1, card2, card3) && isConditioned2(card1, card2, card3) && isConditioned3(card1, card2, card3) && isConditioned4(card1, card2, card3)
-    }
-    
     mutating func restartGame(){
         allCards=Card.fillDeck()
         playingCards = []
@@ -121,43 +117,30 @@ struct setGame{
         matchingCards = []
     }
     
-    private func isConditioned1(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
-        if card1.cardNumber.rawValue == card2.cardNumber.rawValue && card3.cardNumber.rawValue == card2.cardNumber.rawValue {
+    private func areCardsFormingSet(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
+        var areNumbersSet, areColorsSet, areSymbolsSet, areStripingsSet: Bool
+        
+        let cardNumbers: Set = [card1.cardNumber.rawValue, card2.cardNumber.rawValue, card3.cardNumber.rawValue]
+        let cardColors: Set = [card1.cardColor.rawValue, card2.cardColor.rawValue, card3.cardColor.rawValue]
+        let cardSymbols: Set = [card1.cardSymbol.rawValue, card2.cardSymbol.rawValue, card3.cardSymbol.rawValue]
+        let cardStripings: Set = [card1.cardStriping.rawValue, card2.cardStriping.rawValue, card3.cardStriping.rawValue]
+        
+        if cardNumbers.count == 3 || cardNumbers.count == 1 {
+           areNumbersSet = true
+        } else { areNumbersSet = false}
+        if cardColors.count == 3 || cardColors.count == 1 {
+            areColorsSet = true
+        } else {areColorsSet = false}
+        if cardSymbols.count == 3 || cardSymbols.count == 1 {
+            areSymbolsSet = true
+        } else {areSymbolsSet = false}
+        if cardStripings.count == 3 || cardStripings.count == 1 {
+            areStripingsSet = true
+        } else {areStripingsSet = false}
+       
+        if areSymbolsSet && areNumbersSet && areColorsSet && areStripingsSet {
             return true
-        }
-        else if card3.cardNumber.rawValue != card2.cardNumber.rawValue && card1.cardNumber.rawValue != card2.cardNumber.rawValue && card3.cardNumber.rawValue != card1.cardNumber.rawValue {
-            return true
-        }
-        else { return false }
-    }
-    
-    private func isConditioned2(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
-        if card1.cardColor.rawValue == card2.cardColor.rawValue && card3.cardColor.rawValue == card2.cardColor.rawValue {
-            return true
-        }
-        else if card3.cardColor.rawValue != card2.cardColor.rawValue && card1.cardColor.rawValue != card2.cardColor.rawValue && card3.cardColor.rawValue != card1.cardColor.rawValue {
-            return true
-        }
-        else { return false }    }
-    
-    private func isConditioned3(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
-        if card1.cardSymbol.rawValue == card2.cardSymbol.rawValue && card3.cardSymbol.rawValue == card2.cardSymbol.rawValue {
-            return true
-        }
-        else if card3.cardSymbol.rawValue != card2.cardSymbol.rawValue && card1.cardSymbol.rawValue != card2.cardSymbol.rawValue && card3.cardSymbol.rawValue != card1.cardSymbol.rawValue {
-            return true
-        }
-        else { return false }
-    }
-    
-    private func isConditioned4(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool{
-        if card1.cardStriping.rawValue == card2.cardStriping.rawValue && card3.cardStriping.rawValue == card2.cardStriping.rawValue {
-            return true
-        }
-        else if card3.cardStriping.rawValue != card2.cardStriping.rawValue && card1.cardStriping.rawValue != card2.cardStriping.rawValue && card3.cardStriping.rawValue != card1.cardStriping.rawValue {
-            return true
-        }
-        else { return false }
+        }else {return false}
     }
     
     mutating func shufflePlayingCards(){
