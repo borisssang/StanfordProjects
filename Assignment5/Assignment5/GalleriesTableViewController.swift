@@ -9,13 +9,12 @@
 import UIKit
 
 class GalleriesTableViewController: UITableViewController, GallerySelectionTableViewCellDelegate {
-    func titleDidChange(_ title: String, in cell: UITableViewCell) {
-        
-    }
     
-    var sections =
+    private var lastSeguedToViewController: GalleryViewController?
+    
+    var sections: [[String]] =
     [
-        ["Contemporary", "OldSchool", "Nature"],
+        [],
         []
     ]
 
@@ -26,14 +25,13 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
     private var detailController: GalleryViewController? {
         return splitViewController?.viewControllers.last?.contents as? GalleryViewController
     }
-    
-    //защо е нужно ? 
+ 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedGallery = detailController?.gallery {
-            if let index = sections.index(of: [selectedGallery.title]) {
-                let selectionIndexPath = IndexPath(index: index)
+        if let selectedGalleryTitle = detailController?.gallery?.title {
+            if let index = sections[0].index(of: selectedGalleryTitle) {
+                let selectionIndexPath = IndexPath(row: index, section: 0)
                 tableView.selectRow(
                     at: selectionIndexPath,
                     animated: true,
@@ -67,7 +65,7 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChooseGallery", for: indexPath)
         if let galleryCell = cell as? GallerySelectionTableViewCell{
         galleryCell.delegate = self
-            galleryCell.title = gallery
+        galleryCell.title = gallery
         }
         return cell
     }
@@ -90,22 +88,64 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
         tableView.reloadData()
     }
     
-//    func titleDidChange(_ title: String, in cell: UITableViewCell) {
-//        if let indexPath = tableView.indexPath(for: cell) {
-//            var gallery = sections[indexPath]{
-//                gallery = title
-//                tableView.reloadData()
-//            }
-//        }
-//    }
+   
+    @IBAction func didDoubleTap(_ sender: UITapGestureRecognizer) {
+        if let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) {
+            if let cell = tableView.cellForRow(at: indexPath) as? GallerySelectionTableViewCell {
+                cell.isEditing = true
+            }
+        }
+    }
+
+    
+    func titleDidChange(_ title: String, in cell: UITableViewCell) {
+        if let indexPath1 = tableView.indexPath(for: cell) {
+            let gallery = getGallery(at: indexPath1)
+                sections[indexPath1.section][indexPath1.row] = gallery
+                tableView.reloadData()
+        }
+    }
+    
+    func recoverGallery(deletedGallery: String){
+        if let deletedIndex = sections[1].index(of: deletedGallery) {
+            sections[0].append(sections[1].remove(at: deletedIndex))
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let section = indexPath.section
+        
+        if section == 1 {
+            var actions = [UIContextualAction]()
+            
+            let recoverAction = UIContextualAction(style: .normal, title: "Recover") { (action, view, _) in
+                let deletedGallery = self.getGallery(at: indexPath)
+                self.recoverGallery(deletedGallery: deletedGallery)
+                    self.tableView.reloadData()
+            }
+            
+            actions.append(recoverAction)
+            return UISwipeActionsConfiguration(actions: actions)
+            
+        } else {
+            return nil
+        }
+    }
+    
+    private func getGallery(at indexPath: IndexPath) -> String {
+        return sections[indexPath.section][indexPath.row]
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let selectedCell = sender as? UITableViewCell {
             if let indexPath = tableView.indexPath(for: selectedCell) {
+                let section = indexPath.section
+                guard section == 0 else { return }
                 let selectedGallery = sections[indexPath.section][indexPath.row]
                 if let navigationController = segue.destination as? UINavigationController {
                     if let displayController = navigationController.visibleViewController as? GalleryViewController {
                         displayController.getGallery(withLabel: selectedGallery)
+                        lastSeguedToViewController = displayController
                     }
                 }
             }
@@ -113,9 +153,22 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "selectionSegue", sender: self)
+        let selectedGallery = sections[indexPath.section][indexPath.row]
+        if let cvc = lastSeguedToViewController {
+        cvc.getGallery(withLabel: selectedGallery)
+        } else  if let cvc = detailController {
+            cvc.getGallery(withLabel: selectedGallery)
+        }
+        else {
+            performSegue(withIdentifier: "selectionSegue", sender: indexPath.item )
+        }
     }
 
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        let section = indexPath.section
+        return section == 0
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if splitViewController?.preferredDisplayMode != .primaryOverlay {

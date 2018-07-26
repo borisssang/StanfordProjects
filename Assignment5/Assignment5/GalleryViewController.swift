@@ -21,7 +21,11 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         }
     }
     
-    var galleryStorage = [ImageGallery]()
+    var galleryStorage: [ImageGallery] = {
+        let gallery = [ImageGallery]()
+        
+        return gallery
+    }()
     
     func getGallery(withLabel label: String){
         for chosenGallery in galleryStorage{
@@ -52,15 +56,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
             flowLayout?.minimumInteritemSpacing = 5
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        gallery = ImageGallery(
-            title: "egfaf", images: []
-        )
-        galleryStorage.append(gallery)
-    }
-    
+
     private var flowLayout: UICollectionViewFlowLayout? {
         return galleryCollectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
@@ -226,10 +222,6 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showImage", sender: self)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? ScrollViewController {
             let cell = sender as! GalleryCollectionViewCell
@@ -238,13 +230,16 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        let cell = sender as! UICollectionViewCell
+        
+        if let cell = sender as? GalleryCollectionViewCell {
         if let indexPath = galleryCollectionView?.indexPath(for: cell),
             let selectedImage = getImage(at: indexPath) {
             return selectedImage.imageData != nil
         } else {
             return false
         }
+        }
+        else {return false}
     }
     
 }

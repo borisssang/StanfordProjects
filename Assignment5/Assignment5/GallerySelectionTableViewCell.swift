@@ -13,12 +13,14 @@ protocol GallerySelectionTableViewCellDelegate {
 }
 
 class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
-
+    
+    // MARK: - Properties
+    
+    /// The cell's delegate
     var delegate: GallerySelectionTableViewCellDelegate?
     
     /// The text field used to edit the title's row.
-    
-    @IBOutlet weak var titleTextField: UITextField!{
+    @IBOutlet weak var titleTextField: UITextField! {
         didSet {
             titleTextField.addTarget(self,
                                      action: #selector(titleDidChange(_:)),
@@ -27,6 +29,7 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
             titleTextField.delegate = self
         }
     }
+    
     /// The row's title.
     var title: String {
         set {
@@ -36,7 +39,8 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
             return titleTextField.text ?? ""
         }
     }
-
+    
+    /// - Note: Change this property to enable/disable the internal textField.
     override var isEditing: Bool {
         didSet {
             titleTextField.isEnabled = isEditing

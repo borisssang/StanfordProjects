@@ -36,6 +36,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
             scrollView.minimumZoomScale = 5.0
             scrollView.delegate = self
             scrollView.addSubview(imageView)
+            scrollView.isUserInteractionEnabled = true
         }
     }
     
