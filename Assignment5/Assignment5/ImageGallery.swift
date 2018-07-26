@@ -9,8 +9,13 @@
 import Foundation
 import UIKit
 struct ImageGallery: Codable, Hashable{
+   
+    init (title: String, images: [Image]){
+    self.title = title
+        self.images = images
+    }
     
-    let identifier: String = UUID().uuidString
+    var identifier: String = UUID().uuidString
     
     /// The gallery's title.
     var title: String

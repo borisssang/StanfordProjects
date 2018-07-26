@@ -8,7 +8,11 @@
 
 import UIKit
 
-class GalleryViewControlller: UIViewController, UIDropInteractionDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+class GalleryViewController: UIViewController, UIDropInteractionDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate, GallerySelectionTableViewCellDelegate {
+    
+    func titleDidChange(_ title: String, in cell: UITableViewCell) {
+        
+    }
     
     var gallery: ImageGallery! {
         didSet {
@@ -17,22 +21,91 @@ class GalleryViewControlller: UIViewController, UIDropInteractionDelegate, UICol
         }
     }
     
+    var galleryStorage = [ImageGallery]()
+    
+    func getGallery(withLabel label: String){
+        for chosenGallery in galleryStorage{
+            if label == chosenGallery.title{
+                gallery = chosenGallery
+            } else {
+                gallery = ImageGallery(
+                    title: label, images: []
+                )
+                galleryStorage.append(gallery)
+            }
+        }
+        if galleryStorage.isEmpty{
+            gallery = ImageGallery(
+                title: label, images: []
+            )
+            galleryStorage.append(gallery)
+        }
+    }
+    
     @IBOutlet weak var galleryCollectionView: UICollectionView! {
         didSet{
-            galleryCollectionView.dataSource = self
-            galleryCollectionView.delegate = self
             galleryCollectionView.dragDelegate = self
             galleryCollectionView.dropDelegate = self
+            galleryCollectionView.dataSource = self
+            galleryCollectionView.delegate = self
+            flowLayout?.minimumLineSpacing = 5
+            flowLayout?.minimumInteritemSpacing = 5
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         gallery = ImageGallery(
-            title: "Empty", images: []
+            title: "egfaf", images: []
         )
+        galleryStorage.append(gallery)
     }
-
+    
+    private var flowLayout: UICollectionViewFlowLayout? {
+        return galleryCollectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+    }
+    
+    private var maximumItemWidth: CGFloat? {
+        return galleryCollectionView?.frame.size.width
+    }
+    
+    /// The minimum collection view's item width.
+    private var minimumItemWidth: CGFloat? {
+        guard let collectionView = galleryCollectionView else { return nil }
+        return (collectionView.frame.size.width / 2) - 5
+    }
+    
+    /// The width of each cell in the collection view.
+    private lazy var itemWidth: CGFloat = {
+        return minimumItemWidth ?? 0
+    }()
+    
+    @IBAction func didPinch(_ sender: UIPinchGestureRecognizer) {
+        guard let maximumItemWidth = maximumItemWidth else { return }
+        guard let minimumItemWidth = minimumItemWidth else { return }
+        guard itemWidth <= maximumItemWidth else { return }
+        
+        if sender.state == .began || sender.state == .changed {
+            let scaledWidth = itemWidth * sender.scale
+            
+            if scaledWidth <= maximumItemWidth,
+                scaledWidth >= minimumItemWidth {
+                itemWidth = scaledWidth
+                flowLayout?.invalidateLayout()
+            }
+            sender.scale = 1
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let galleryImage = gallery.images[indexPath.item]
+        let itemHeight = itemWidth / CGFloat(galleryImage.aspectRatio)
+        
+        return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
     private func insertImage(_ image: ImageGallery.Image, at indexPath: IndexPath) {
         gallery!.images.insert(image, at: indexPath.item)
         print("Updated \(gallery!.images.count)")
@@ -58,7 +131,6 @@ class GalleryViewControlller: UIViewController, UIDropInteractionDelegate, UICol
                 imageCell.imageView.image = image
             }
         }
-        
         return cell
     }
     
@@ -95,8 +167,8 @@ class GalleryViewControlller: UIViewController, UIDropInteractionDelegate, UICol
         guard gallery != nil else {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
-            let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
-            return UICollectionViewDropProposal(operation: isSelf ? .move: .copy, intent: .insertAtDestinationIndexPath)
+        let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
+        return UICollectionViewDropProposal(operation: isSelf ? .move: .copy, intent: .insertAtDestinationIndexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
@@ -151,6 +223,28 @@ class GalleryViewControlller: UIViewController, UIDropInteractionDelegate, UICol
                 }
                 
             }
-            }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showImage", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ScrollViewController {
+            let cell = sender as! GalleryCollectionViewCell
+                destination.image = cell.imageView.image
+        }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        let cell = sender as! UICollectionViewCell
+        if let indexPath = galleryCollectionView?.indexPath(for: cell),
+            let selectedImage = getImage(at: indexPath) {
+            return selectedImage.imageData != nil
+        } else {
+            return false
+        }
+    }
+    
+}
