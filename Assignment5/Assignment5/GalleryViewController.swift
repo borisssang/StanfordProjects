@@ -8,11 +8,9 @@
 
 import UIKit
 
-class GalleryViewController: UIViewController, UIDropInteractionDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate, GallerySelectionTableViewCellDelegate {
+class GalleryViewController: UIViewController, UIDropInteractionDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate{
     
-    func titleDidChange(_ title: String, in cell: UITableViewCell) {
-        
-    }
+    //MARK: - MODEL
     
     var gallery: ImageGallery! {
         didSet {
@@ -21,30 +19,38 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         }
     }
     
-    var galleryStorage: [ImageGallery] = {
-        let gallery = [ImageGallery]()
-        
-        return gallery
-    }()
+    var galleryStorage: GalleryStorage?
     
-    func getGallery(withLabel label: String){
-        for chosenGallery in galleryStorage{
-            if label == chosenGallery.title{
-                gallery = chosenGallery
-            } else {
-                gallery = ImageGallery(
-                    title: label, images: []
-                )
-                galleryStorage.append(gallery)
-            }
-        }
-        if galleryStorage.isEmpty{
-            gallery = ImageGallery(
-                title: label, images: []
-            )
-            galleryStorage.append(gallery)
-        }
+//    func getGallery(withLabel label: String){
+//        for chosenGallery in galleryStorage{
+//            if label == chosenGallery.title{
+//                gallery = chosenGallery
+//            } else {
+//                gallery = ImageGallery(
+//                    title: label, images: []
+//                )
+//                galleryStorage.append(gallery)
+//            }
+//        }
+//        if galleryStorage.isEmpty{
+//            gallery = ImageGallery(
+//                title: label, images: []
+//            )
+//            galleryStorage.append(gallery)
+//        }
+//    }
+    
+    private func insertImage(_ image: ImageGallery.Image, at indexPath: IndexPath) {
+        gallery!.images.insert(image, at: indexPath.item)
+        print("Updated \(gallery!.images.count)")
+        galleryStorage?.updateGallery(gallery!)
     }
+    
+    private func getImage(at indexPath: IndexPath) -> ImageGallery.Image? {
+        return gallery?.images[indexPath.item]
+    }
+    
+    //MARK: - COLLECTIONVIEW
     
     @IBOutlet weak var galleryCollectionView: UICollectionView! {
         didSet{
@@ -56,7 +62,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
             flowLayout?.minimumInteritemSpacing = 5
         }
     }
-
+    
     private var flowLayout: UICollectionViewFlowLayout? {
         return galleryCollectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
@@ -65,33 +71,14 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         return galleryCollectionView?.frame.size.width
     }
     
-    /// The minimum collection view's item width.
     private var minimumItemWidth: CGFloat? {
         guard let collectionView = galleryCollectionView else { return nil }
         return (collectionView.frame.size.width / 2) - 5
     }
     
-    /// The width of each cell in the collection view.
     private lazy var itemWidth: CGFloat = {
         return minimumItemWidth ?? 0
     }()
-    
-    @IBAction func didPinch(_ sender: UIPinchGestureRecognizer) {
-        guard let maximumItemWidth = maximumItemWidth else { return }
-        guard let minimumItemWidth = minimumItemWidth else { return }
-        guard itemWidth <= maximumItemWidth else { return }
-        
-        if sender.state == .began || sender.state == .changed {
-            let scaledWidth = itemWidth * sender.scale
-            
-            if scaledWidth <= maximumItemWidth,
-                scaledWidth >= minimumItemWidth {
-                itemWidth = scaledWidth
-                flowLayout?.invalidateLayout()
-            }
-            sender.scale = 1
-        }
-    }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
@@ -100,15 +87,6 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         let itemHeight = itemWidth / CGFloat(galleryImage.aspectRatio)
         
         return CGSize(width: itemWidth, height: itemHeight)
-    }
-    
-    private func insertImage(_ image: ImageGallery.Image, at indexPath: IndexPath) {
-        gallery!.images.insert(image, at: indexPath.item)
-        print("Updated \(gallery!.images.count)")
-    }
-    
-    private func getImage(at indexPath: IndexPath) -> ImageGallery.Image? {
-        return gallery?.images[indexPath.item]
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -130,6 +108,47 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         return cell
     }
     
+    //MARK: - ACTIONS:
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? ScrollViewController {
+            let cell = sender as! GalleryCollectionViewCell
+            destination.image = cell.imageView.image
+        }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        
+        if let cell = sender as? GalleryCollectionViewCell {
+            if let indexPath = galleryCollectionView?.indexPath(for: cell),
+                let selectedImage = getImage(at: indexPath) {
+                return selectedImage.imageData != nil
+            } else {
+                return false
+            }
+        }
+        else {return false}
+    }
+    
+    @IBAction func didPinch(_ sender: UIPinchGestureRecognizer) {
+        guard let maximumItemWidth = maximumItemWidth else { return }
+        guard let minimumItemWidth = minimumItemWidth else { return }
+        guard itemWidth <= maximumItemWidth else { return }
+        
+        if sender.state == .began || sender.state == .changed {
+            let scaledWidth = itemWidth * sender.scale
+            
+            if scaledWidth <= maximumItemWidth,
+                scaledWidth >= minimumItemWidth {
+                itemWidth = scaledWidth
+                flowLayout?.invalidateLayout()
+            }
+            sender.scale = 1
+        }
+    }
+    
+    //MARK: - DRAG DELEGATE
+    
     func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
         session.localContext = collectionView
         return dragItems(at: indexPath)
@@ -149,6 +168,8 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         }
         return []
     }
+    
+    //MARK: - DROP DELEGATE
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         if collectionView.hasActiveDrag {
@@ -221,25 +242,4 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
             }
         }
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? ScrollViewController {
-            let cell = sender as! GalleryCollectionViewCell
-                destination.image = cell.imageView.image
-        }
-    }
-    
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        
-        if let cell = sender as? GalleryCollectionViewCell {
-        if let indexPath = galleryCollectionView?.indexPath(for: cell),
-            let selectedImage = getImage(at: indexPath) {
-            return selectedImage.imageData != nil
-        } else {
-            return false
-        }
-        }
-        else {return false}
-    }
-    
 }

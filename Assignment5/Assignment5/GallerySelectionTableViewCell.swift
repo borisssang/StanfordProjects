@@ -18,7 +18,6 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     /// The cell's delegate
     var delegate: GallerySelectionTableViewCellDelegate?
-    
     /// The text field used to edit the title's row.
     @IBOutlet weak var titleTextField: UITextField! {
         didSet {
@@ -41,10 +40,10 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
     
     /// - Note: Change this property to enable/disable the internal textField.
-    override var isEditing: Bool {
+    override var isEditing: Bool{
         didSet {
-            titleTextField.isEnabled = isEditing
             
+            titleTextField.isEnabled = isEditing
             if isEditing == true {
                 titleTextField.becomeFirstResponder()
             } else {
@@ -62,11 +61,10 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
     // MARK: - Actions
     
     @objc func titleDidChange(_ sender: UITextField) {
-        guard let title = sender.text, title != "" else {
-            return
+        if let newTitle = sender.text{
+        title = newTitle
+        delegate?.titleDidChange(newTitle, in: self)
         }
-        
-        delegate?.titleDidChange(sender.text ?? "", in: self)
     }
     
     // MARK: - Text field delegate

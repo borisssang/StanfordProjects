@@ -18,6 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChooseGallery" rowHeight="30" id="rpD-cn-JUl" customClass="GallerySelectionTableViewCell" customModule="Assignment5" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="320" height="30"/>
@@ -44,14 +45,13 @@
                                 <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                 <connections>
                                     <outlet property="titleTextField" destination="JtW-ki-g1P" id="Snb-ne-taQ"/>
-                                    <outletCollection property="gestureRecognizers" destination="sAa-pK-Yn8" appends="YES" id="9rJ-o9-ZFb"/>
-                                    <segue destination="qYF-IT-uLZ" kind="showDetail" identifier="selectionSegue" id="ZD9-Au-eLt"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="DUQ-WP-BNq" id="fHR-p0-CXB"/>
                             <outlet property="delegate" destination="DUQ-WP-BNq" id="maT-mt-HjW"/>
+                            <outletCollection property="gestureRecognizers" destination="sAa-pK-Yn8" appends="YES" id="v7x-Pt-Eeh"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Galleries" id="Ddn-BI-oUK">
@@ -62,6 +62,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="qYF-IT-uLZ" kind="showDetail" identifier="selectionSegue" id="cYu-YK-rZb"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6d0-JA-D3e" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="sAa-pK-Yn8">
@@ -83,7 +86,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SsR-LB-TFG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1572" y="-745"/>
+            <point key="canvasLocation" x="-1491" y="-875"/>
         </scene>
         <!--Gallery View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -248,10 +251,10 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iBf-HT-wYd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-466" y="-94"/>
+            <point key="canvasLocation" x="-286" y="-94"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ZD9-Au-eLt"/>
+        <segue reference="cYu-YK-rZb"/>
     </inferredMetricsTieBreakers>
 </document>

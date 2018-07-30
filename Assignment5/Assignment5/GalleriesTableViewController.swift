@@ -1,36 +1,20 @@
 //
-//  GalleriesTableViewController.swift
-//  Assignment5
-//
-//  Created by Boris Angelov on 24.07.18.
-//  Copyright © 2018 Melon. All rights reserved.
-//
-
-import UIKit
-
-class GalleriesTableViewController: UITableViewController, GallerySelectionTableViewCellDelegate {
-    
-    private var lastSeguedToViewController: GalleryViewController?
-    
-    var sections: [[String]] =
-    [
-        [],
-        []
-    ]
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-
-    private var detailController: GalleryViewController? {
-        return splitViewController?.viewControllers.last?.contents as? GalleryViewController
-    }
+ //  GalleriesTableViewController.swift
+ //  Assignment5
+ //
+ //  Created by Boris Angelov on 24.07.18.
+ //  Copyright © 2018 Melon. All rights reserved.
+ //
  
+ import UIKit
+ 
+ class GalleriesTableViewController: UITableViewController, GallerySelectionTableViewCellDelegate {
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedGalleryTitle = detailController?.gallery?.title {
-            if let index = sections[0].index(of: selectedGalleryTitle) {
+        if let selectedGallery = detailController?.gallery {
+            if let index = sections[0].index(of: selectedGallery) {
                 let selectionIndexPath = IndexPath(row: index, section: 0)
                 tableView.selectRow(
                     at: selectionIndexPath,
@@ -39,6 +23,47 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
                 )
             }
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if splitViewController?.preferredDisplayMode != .primaryOverlay {
+            splitViewController?.preferredDisplayMode = .primaryOverlay
+        }
+    }
+    
+    //MARK: Model
+    
+    private var lastSeguedToViewController: GalleryViewController?
+
+    var galleriesStorage: GalleryStorage? {
+        didSet {
+            tableView?.reloadData()
+        }
+    }
+    
+    /// The table view's data.
+    private var sections: [[ImageGallery]] {
+        get {
+            if let store = galleriesStorage {
+                return [store.allGalleries[0], store.allGalleries[1]]
+            } else {
+                return []
+            }
+        }
+        set{
+            galleriesStorage?.allGalleries = sections
+        }
+    }
+    
+    //MARK: TABLE
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    private var detailController: GalleryViewController? {
+        return splitViewController?.viewControllers.last?.contents as? GalleryViewController
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,7 +76,7 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
             return 0
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 1 {
             return "Recently Deleted"
@@ -64,8 +89,8 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
         let gallery = sections[indexPath.section][indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChooseGallery", for: indexPath)
         if let galleryCell = cell as? GallerySelectionTableViewCell{
-        galleryCell.delegate = self
-        galleryCell.title = gallery
+            galleryCell.delegate = self
+            galleryCell.title = gallery.title
         }
         return cell
     }
@@ -73,42 +98,13 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.section == 0{
-              sections[1].append(sections[0].remove(at: indexPath.row))
-                 tableView.reloadData()
-            } else if indexPath.section == 1 {
-            sections[1].remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-                 tableView.reloadData()
-            }
-    }
-    }
-    
-    @IBAction func newGallery(_ sender: UIBarButtonItem) {
-        sections[0] += ["Untitled".madeUnique(withRespectTo: sections[0])]
-        tableView.reloadData()
-    }
-    
-   
-    @IBAction func didDoubleTap(_ sender: UITapGestureRecognizer) {
-        if let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) {
-            if let cell = tableView.cellForRow(at: indexPath) as? GallerySelectionTableViewCell {
-                cell.isEditing = true
-            }
-        }
-    }
-
-    
-    func titleDidChange(_ title: String, in cell: UITableViewCell) {
-        if let indexPath1 = tableView.indexPath(for: cell) {
-            let gallery = getGallery(at: indexPath1)
-                sections[indexPath1.section][indexPath1.row] = gallery
+                sections[1].append(sections[0].remove(at: indexPath.row))
                 tableView.reloadData()
-        }
-    }
-    
-    func recoverGallery(deletedGallery: String){
-        if let deletedIndex = sections[1].index(of: deletedGallery) {
-            sections[0].append(sections[1].remove(at: deletedIndex))
+            } else if indexPath.section == 1 {
+                sections[1].remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.reloadData()
+            }
         }
     }
     
@@ -119,9 +115,10 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
             var actions = [UIContextualAction]()
             
             let recoverAction = UIContextualAction(style: .normal, title: "Recover") { (action, view, _) in
-                let deletedGallery = self.getGallery(at: indexPath)
-                self.recoverGallery(deletedGallery: deletedGallery)
-                    self.tableView.reloadData()
+                if let deletedGallery = self.galleriesStorage?.getGallery(at: indexPath) {
+                self.galleriesStorage?.recoverGallery(deletedGallery: deletedGallery)
+                self.tableView.reloadData()
+                    }
             }
             
             actions.append(recoverAction)
@@ -132,8 +129,18 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
         }
     }
     
-    private func getGallery(at indexPath: IndexPath) -> String {
-        return sections[indexPath.section][indexPath.row]
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedGallery = sections[indexPath.section][indexPath.row]
+        if let cvc = lastSeguedToViewController {
+            cvc.gallery = selectedGallery
+            cvc.galleryStorage = galleriesStorage
+        } else  if let cvc = detailController {
+            cvc.gallery = selectedGallery
+            cvc.galleryStorage = galleriesStorage
+        }
+        else {
+            performSegue(withIdentifier: "selectionSegue", sender: indexPath.item )
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -144,7 +151,8 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
                 let selectedGallery = sections[indexPath.section][indexPath.row]
                 if let navigationController = segue.destination as? UINavigationController {
                     if let displayController = navigationController.visibleViewController as? GalleryViewController {
-                        displayController.getGallery(withLabel: selectedGallery)
+                        displayController.gallery = selectedGallery
+                        displayController.galleryStorage = galleriesStorage
                         lastSeguedToViewController = displayController
                     }
                 }
@@ -152,28 +160,42 @@ class GalleriesTableViewController: UITableViewController, GallerySelectionTable
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedGallery = sections[indexPath.section][indexPath.row]
-        if let cvc = lastSeguedToViewController {
-        cvc.getGallery(withLabel: selectedGallery)
-        } else  if let cvc = detailController {
-            cvc.getGallery(withLabel: selectedGallery)
-        }
-        else {
-            performSegue(withIdentifier: "selectionSegue", sender: indexPath.item )
-        }
-    }
-
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let section = indexPath.section
         return section == 0
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        if splitViewController?.preferredDisplayMode != .primaryOverlay {
-            splitViewController?.preferredDisplayMode = .primaryOverlay
+    //MARK: ACTIONS
+    
+    @IBAction func newGallery(_ sender: UIBarButtonItem) {
+        let galleryNames = (sections[0] + sections[1]).map { gallery in
+            return gallery.title
+        }
+        let newGallery = ImageGallery(
+            title: "Untitled".madeUnique(withRespectTo: galleryNames), images: []
+        )
+        sections[0].insert(newGallery, at: 0)
+        tableView.reloadData()
+    }
+
+    
+    @IBAction func didDoubleTap(_ sender: UITapGestureRecognizer) {
+        sender.numberOfTapsRequired = 2
+        if let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) {
+            if let cell = tableView.cellForRow(at: indexPath) as? GallerySelectionTableViewCell {
+                cell.isEditing = true
+            }
         }
     }
     
-}
+    func titleDidChange(_ title: String, in cell: UITableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            if var gallery = galleriesStorage?.getGallery(at: indexPath) {
+                gallery.title = title
+                sections[indexPath.section][indexPath.row] = gallery
+                tableView.reloadData()
+            }
+        }
+    }
+
+ }

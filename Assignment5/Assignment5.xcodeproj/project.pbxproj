@@ -18,6 +18,7 @@
 		05DA592921007C140060BA53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05DA592821007C140060BA53 /* Assets.xcassets */; };
 		05DA592C21007C140060BA53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05DA592A21007C140060BA53 /* LaunchScreen.storyboard */; };
 		05FCB8042108B88B005C9AD9 /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FCB8032108B88B005C9AD9 /* ScrollViewController.swift */; };
+		05FCB806210B62FA005C9AD9 /* GalleryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FCB805210B62FA005C9AD9 /* GalleryStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		05DA592B21007C140060BA53 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		05DA592D21007C140060BA53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05FCB8032108B88B005C9AD9 /* ScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		05FCB805210B62FA005C9AD9 /* GalleryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				057AF1A12107422500587424 /* GallerySelectionTableViewCell.swift */,
 				053F3B502101FBC900301B97 /* GalleryCollectionViewCell.swift */,
 				053F3B4E2101E2AB00301B97 /* ImageGallery.swift */,
+				05FCB805210B62FA005C9AD9 /* GalleryStorage.swift */,
 				053F3B522101FD4000301B97 /* Utilities.swift */,
 				05DA592D21007C140060BA53 /* Info.plist */,
 				05DA593321007D8A0060BA53 /* Supporting Files */,
@@ -168,6 +171,7 @@
 				057AF1A021073BF900587424 /* GalleriesTableViewController.swift in Sources */,
 				05DA592421007C130060BA53 /* GalleryViewController.swift in Sources */,
 				053F3B532101FD4000301B97 /* Utilities.swift in Sources */,
+				05FCB806210B62FA005C9AD9 /* GalleryStorage.swift in Sources */,
 				05DA592221007C130060BA53 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
