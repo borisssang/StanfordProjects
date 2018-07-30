@@ -14,7 +14,7 @@
         super.viewWillAppear(animated)
         
         if let selectedGallery = detailController?.gallery {
-            if let index = sections[0].index(of: selectedGallery) {
+            if let index = galleriesStorage.allGalleries[0].index(of: selectedGallery) {
                 let selectionIndexPath = IndexPath(row: index, section: 0)
                 tableView.selectRow(
                     at: selectionIndexPath,
@@ -33,10 +33,8 @@
     }
     
     //MARK: Model
-    
-    private var lastSeguedToViewController: GalleryViewController?
 
-    var galleriesStorage: GalleryStorage? {
+    var galleriesStorage = GalleryStorage() {
         didSet {
             tableView?.reloadData()
         }
@@ -45,14 +43,11 @@
     /// The table view's data.
     private var sections: [[ImageGallery]] {
         get {
-            if let store = galleriesStorage {
-                return [store.allGalleries[0], store.allGalleries[1]]
-            } else {
-                return []
-            }
+            let store = galleriesStorage
+            return [store.allGalleries[0], store.allGalleries[1]]
         }
         set{
-            galleriesStorage?.allGalleries = sections
+            galleriesStorage.allGalleries = newValue
         }
     }
     
@@ -115,15 +110,13 @@
             var actions = [UIContextualAction]()
             
             let recoverAction = UIContextualAction(style: .normal, title: "Recover") { (action, view, _) in
-                if let deletedGallery = self.galleriesStorage?.getGallery(at: indexPath) {
-                self.galleriesStorage?.recoverGallery(deletedGallery: deletedGallery)
+                if let deletedGallery = self.galleriesStorage.getGallery(at: indexPath) {
+                self.galleriesStorage.recoverGallery(deletedGallery)
                 self.tableView.reloadData()
-                    }
+                }
             }
-            
             actions.append(recoverAction)
             return UISwipeActionsConfiguration(actions: actions)
-            
         } else {
             return nil
         }
@@ -131,32 +124,12 @@
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedGallery = sections[indexPath.section][indexPath.row]
-        if let cvc = lastSeguedToViewController {
-            cvc.gallery = selectedGallery
-            cvc.galleryStorage = galleriesStorage
-        } else  if let cvc = detailController {
+        if let cvc = detailController {
             cvc.gallery = selectedGallery
             cvc.galleryStorage = galleriesStorage
         }
         else {
             performSegue(withIdentifier: "selectionSegue", sender: indexPath.item )
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let selectedCell = sender as? UITableViewCell {
-            if let indexPath = tableView.indexPath(for: selectedCell) {
-                let section = indexPath.section
-                guard section == 0 else { return }
-                let selectedGallery = sections[indexPath.section][indexPath.row]
-                if let navigationController = segue.destination as? UINavigationController {
-                    if let displayController = navigationController.visibleViewController as? GalleryViewController {
-                        displayController.gallery = selectedGallery
-                        displayController.galleryStorage = galleriesStorage
-                        lastSeguedToViewController = displayController
-                    }
-                }
-            }
         }
     }
     
@@ -190,11 +163,11 @@
     
     func titleDidChange(_ title: String, in cell: UITableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
-            if var gallery = galleriesStorage?.getGallery(at: indexPath) {
+            if var gallery = galleriesStorage.getGallery(at: indexPath) {
                 gallery.title = title
                 sections[indexPath.section][indexPath.row] = gallery
                 tableView.reloadData()
-            }
+        }
         }
     }
 
