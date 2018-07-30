@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 struct ImageGallery: Codable, Hashable{
-   
+    
     init (title: String, images: [Image]){
-    self.title = title
+        self.title = title
         self.images = images
     }
     
@@ -53,7 +53,7 @@ struct ImageGallery: Codable, Hashable{
         
         /// The fetched image's data.
         var imageData: Data?
-
+        
         
         init(imagePath: URL?, aspectRatio: Double) {
             self.imagePath = imagePath

@@ -9,10 +9,8 @@
 import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
-//
-//    var aspectRatio = Double()
     
     @IBOutlet weak var imageView: UIImageView!
     
-
-    }
+    
+}

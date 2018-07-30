@@ -1,14 +1,14 @@
 //
- //  GalleriesTableViewController.swift
- //  Assignment5
- //
- //  Created by Boris Angelov on 24.07.18.
- //  Copyright © 2018 Melon. All rights reserved.
- //
- 
- import UIKit
- 
- class GalleriesTableViewController: UITableViewController, GallerySelectionTableViewCellDelegate {
+//  GalleriesTableViewController.swift
+//  Assignment5
+//
+//  Created by Boris Angelov on 24.07.18.
+//  Copyright © 2018 Melon. All rights reserved.
+//
+
+import UIKit
+
+class GalleriesTableViewController: UITableViewController, GallerySelectionTableViewCellDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -33,7 +33,7 @@
     }
     
     //MARK: Model
-
+    
     var galleriesStorage = GalleryStorage() {
         didSet {
             tableView?.reloadData()
@@ -111,8 +111,8 @@
             
             let recoverAction = UIContextualAction(style: .normal, title: "Recover") { (action, view, _) in
                 if let deletedGallery = self.galleriesStorage.getGallery(at: indexPath) {
-                self.galleriesStorage.recoverGallery(deletedGallery)
-                self.tableView.reloadData()
+                    self.galleriesStorage.recoverGallery(deletedGallery)
+                    self.tableView.reloadData()
                 }
             }
             actions.append(recoverAction)
@@ -150,7 +150,7 @@
         sections[0].insert(newGallery, at: 0)
         tableView.reloadData()
     }
-
+    
     
     @IBAction func didDoubleTap(_ sender: UITapGestureRecognizer) {
         sender.numberOfTapsRequired = 2
@@ -167,8 +167,8 @@
                 gallery.title = title
                 sections[indexPath.section][indexPath.row] = gallery
                 tableView.reloadData()
-        }
+            }
         }
     }
-
- }
+    
+}

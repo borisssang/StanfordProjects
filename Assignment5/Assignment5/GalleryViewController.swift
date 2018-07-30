@@ -21,25 +21,6 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
     
     var galleryStorage: GalleryStorage?
     
-//    func getGallery(withLabel label: String){
-//        for chosenGallery in galleryStorage{
-//            if label == chosenGallery.title{
-//                gallery = chosenGallery
-//            } else {
-//                gallery = ImageGallery(
-//                    title: label, images: []
-//                )
-//                galleryStorage.append(gallery)
-//            }
-//        }
-//        if galleryStorage.isEmpty{
-//            gallery = ImageGallery(
-//                title: label, images: []
-//            )
-//            galleryStorage.append(gallery)
-//        }
-//    }
-    
     private func insertImage(_ image: ImageGallery.Image, at indexPath: IndexPath) {
         gallery!.images.insert(image, at: indexPath.item)
         print("Updated \(gallery!.images.count)")

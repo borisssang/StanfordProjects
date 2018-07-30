@@ -62,8 +62,8 @@ class GallerySelectionTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     @objc func titleDidChange(_ sender: UITextField) {
         if let newTitle = sender.text{
-        title = newTitle
-        delegate?.titleDidChange(newTitle, in: self)
+            title = newTitle
+            delegate?.titleDidChange(newTitle, in: self)
         }
     }
     

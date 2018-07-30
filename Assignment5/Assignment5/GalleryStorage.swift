@@ -9,7 +9,7 @@
 import UIKit
 
 class GalleryStorage{
-
+    
     var allGalleries: [[ImageGallery]] =
         [
             [],
@@ -29,7 +29,7 @@ class GalleryStorage{
     func updateGallery(_ gallery: ImageGallery) {
         if let galleryIndex = allGalleries[0].index(of: gallery) {
             allGalleries[0][galleryIndex] = gallery
-           //notification?
+            //notification?
         }
     }
     
