@@ -25,6 +25,10 @@ struct ImageGallery: Codable, Hashable{
         return identifier.hashValue
     }
     
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    }
+    
     static func ==(lhs: ImageGallery, rhs: ImageGallery) -> Bool {
         return lhs.identifier == rhs.identifier
     }
@@ -61,4 +65,11 @@ struct ImageGallery: Codable, Hashable{
         }
     }
     
+    init?(json: Data) {
+        if let decodedSelf = try? JSONDecoder().decode(ImageGallery.self, from: json) {
+            self = decodedSelf
+        } else {
+            return nil
+        }
+    }
 }
