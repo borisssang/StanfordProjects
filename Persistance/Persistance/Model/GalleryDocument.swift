@@ -9,7 +9,7 @@
 import UIKit
 
 class GalleryDocument: UIDocument {
-
+    
     var gallery: ImageGallery?
     
     override func contents(forType typeName: String) throws -> Any {

@@ -20,7 +20,7 @@ class ImageHandler {
         
         return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
     }()
-
+    
     /// Requests an image at the provided URL.
     func request(
         at url: URL,

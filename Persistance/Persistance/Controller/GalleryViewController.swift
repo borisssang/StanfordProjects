@@ -245,7 +245,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
                 _ = item.dragItem.itemProvider.loadObject(ofClass: URL.self) { (provider, error) in
                     if let url = provider?.imageURL {
                         draggedImage.imagePath = url
-                       
+                        
                         self.imageRequestManager?.request(at: url.imageURL, withCompletionHandler: { [weak self] data in
                             DispatchQueue.main.async {
                                 placeholderContext.commitInsertion { indexPath in

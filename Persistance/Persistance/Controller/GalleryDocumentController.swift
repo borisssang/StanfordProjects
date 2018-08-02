@@ -51,9 +51,9 @@ class GalleryDocumentController: UIDocumentBrowserViewController, UIDocumentBrow
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, failedToImportDocumentAt documentURL: URL, error: Error?) {
-       print("Failed to import Document")
+        print("Failed to import Document")
     }
-
+    
     func presentDocument(at documentURL: URL) {
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let navigationViewController = storyBoard.instantiateViewController(withIdentifier: "GalleryViewerNavigationController")
