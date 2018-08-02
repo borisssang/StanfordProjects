@@ -17,6 +17,7 @@ class GalleryDocumentController: UIDocumentBrowserViewController, UIDocumentBrow
         delegate = self
         allowsPickingMultipleItems = false
         allowsDocumentCreation = false
+        browserUserInterfaceStyle = .light
         
         let fileManager = FileManager.default
         
@@ -25,7 +26,7 @@ class GalleryDocumentController: UIDocumentBrowserViewController, UIDocumentBrow
             in: .userDomainMask,
             appropriateFor: nil,
             create: true
-            ).appendingPathComponent("untitled.imagegallery")
+            ).appendingPathComponent("untitled.json")
         
         if let templateURL = template {
             allowsDocumentCreation = fileManager.createFile(atPath: templateURL.path, contents: Data())
