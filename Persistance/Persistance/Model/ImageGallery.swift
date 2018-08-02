@@ -17,7 +17,6 @@ struct ImageGallery: Codable, Hashable{
     
     var identifier: String = UUID().uuidString
     
-    /// The gallery's title.
     var title: String
     
     // MARK: - Hashable
@@ -34,6 +33,14 @@ struct ImageGallery: Codable, Hashable{
     }
     
     var images = [Image]()
+    
+    init?(json: Data) {
+        if let decodedSelf = try? JSONDecoder().decode(ImageGallery.self, from: json) {
+            self = decodedSelf
+        } else {
+            return nil
+        }
+    }
     
     struct Image: Hashable, Codable {
         
@@ -62,14 +69,6 @@ struct ImageGallery: Codable, Hashable{
         init(imagePath: URL?, aspectRatio: Double) {
             self.imagePath = imagePath
             self.aspectRatio = aspectRatio
-        }
-    }
-    
-    init?(json: Data) {
-        if let decodedSelf = try? JSONDecoder().decode(ImageGallery.self, from: json) {
-            self = decodedSelf
-        } else {
-            return nil
         }
     }
 }

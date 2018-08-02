@@ -47,6 +47,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
             galleryCollectionView.dropDelegate = self
             galleryCollectionView.dataSource = self
             galleryCollectionView.delegate = self
+            galleryCollectionView.dragInteractionEnabled = true
             flowLayout?.minimumLineSpacing = 5
             flowLayout?.minimumInteritemSpacing = 5
         }
@@ -103,7 +104,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
                     }
                 }) {(transportError, response) in
                     DispatchQueue.main.async {
-                   print("Unable to fetch Image")
+                        print("Unable to fetch Image")
                     }
                 }
             }
@@ -126,7 +127,7 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
         galleryDocument?.gallery = gallery
         galleryDocument?.updateChangeCount(.done)
         dismiss(animated: true){
-        self.galleryDocument?.close()
+            self.galleryDocument?.close()
         }
     }
     
@@ -244,24 +245,20 @@ class GalleryViewController: UIViewController, UIDropInteractionDelegate, UIColl
                 _ = item.dragItem.itemProvider.loadObject(ofClass: URL.self) { (provider, error) in
                     if let url = provider?.imageURL {
                         draggedImage.imagePath = url
-                        
-                        // Downloads the image from the fetched url.
-                        URLSession(configuration: .default).dataTask(with: url) { (data, response, error) in
+                       
+                        self.imageRequestManager?.request(at: url.imageURL, withCompletionHandler: { [weak self] data in
                             DispatchQueue.main.async {
-                                if let data = data, let _ = UIImage(data: data) {
-                                    placeholderContext.commitInsertion { indexPath in
-                                        draggedImage.imageData = data
-                                        self.insertImage(draggedImage, at: indexPath)
-                                    }
-                                } else {
-                                    // There was an error. Remove the placeholder.
+                                placeholderContext.commitInsertion { indexPath in
+                                    self?.cachedImages[draggedImage] = UIImage(data: data)
+                                    self?.insertImage(draggedImage, at: indexPath)
+                                }
+                            }})  {(transportError, response) in
+                                DispatchQueue.main.async {
                                     placeholderContext.deletePlaceholder()
                                 }
-                            }
-                            }.resume()
+                        }
                     }
                 }
-                
             }
         }
     }

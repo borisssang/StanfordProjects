@@ -32,8 +32,8 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!{
         didSet{
-            scrollView.maximumZoomScale = 0.1
-            scrollView.minimumZoomScale = 5.0
+            scrollView.maximumZoomScale = 10
+            scrollView.minimumZoomScale = 0.1
             scrollView.delegate = self
             scrollView.addSubview(imageView)
             scrollView.isUserInteractionEnabled = true
