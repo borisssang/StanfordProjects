@@ -10,13 +10,30 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class LocationViewController: UIViewController, CLLocationManagerDelegate {
+protocol LocationDelegate {
+ func getLocation() -> CLLocation
+    var locationChanged: Bool? {get set}
+}
+
+class LocationViewController: UIViewController, CLLocationManagerDelegate, LocationDelegate {
     
-    //Map
+    override func viewDidLoad()
+    {
+        super.viewDidLoad()
+        
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
+        cell?.delegate = self
+    }
+    
+    //MARK: Map
     @IBOutlet weak var map: MKMapView!
-    
+    var cell: LocationCell?
     let manager = CLLocationManager()
     var userLocation = CLLocation()
+
     
     //keeps track of current location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
@@ -32,21 +49,23 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate {
         self.map.showsUserLocation = true
     }
     
-
-    override func viewDidLoad()
-    {
-        super.viewDidLoad()
-        
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
+    //MARK: Location Protocol
+    var locationDidChange: Bool = false
+    var locationChanged: Bool?{
+        get{
+            return locationDidChange
+        } set{
+            locationDidChange = (newValue != nil)
+        }
     }
     
+    func getLocation() -> CLLocation {
+        return userLocation
+    }
     
     @IBAction func sendLocation(_ sender: UIBarButtonItem) {
-        
-        
+       locationChanged = true
+        _ = navigationController?.popViewController(animated: true)
     }
     
     override func didReceiveMemoryWarning() {
