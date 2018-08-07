@@ -38,7 +38,7 @@
                     <navigationItem key="navigationItem" id="2pA-gG-h4H">
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="lqY-lh-6H5">
                             <connections>
-                                <segue destination="3Mr-Ii-69L" kind="presentation" id="qQc-cf-1kd"/>
+                                <action selector="goBack:" destination="26U-9I-EsT" id="RW0-U8-haM"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Потвърди локация" id="kVh-Jx-Kod">
@@ -53,13 +53,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="70u-Jx-Nlj" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2622" y="-610"/>
+            <point key="canvasLocation" x="3028" y="157"/>
         </scene>
         <!--Form Table Controller-->
         <scene sceneID="Ggh-KI-wQw">
             <objects>
                 <tableViewController id="h0R-iS-Lsw" customClass="FormTableController" customModule="Фандъкова" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WBE-Yf-0jy">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="plain" separatorStyle="singleLineEtched" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WBE-Yf-0jy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -89,9 +89,11 @@
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6un-s8-BvZ">
                                                     <rect key="frame" x="116" y="40" width="142" height="67"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Добавете снимка"/>
+                                                    <state key="normal" title="Добавете снимка">
+                                                        <color key="titleColor" red="0.34119261839999998" green="0.75569083120000002" blue="0.41782883939999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
                                                     <connections>
-                                                        <segue destination="bZx-Rk-CjE" kind="show" id="E71-L2-MDt"/>
+                                                        <action selector="showCamera:" destination="h0R-iS-Lsw" eventType="touchUpInside" id="om9-Cx-anM"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -172,9 +174,14 @@
                             <outlet property="delegate" destination="h0R-iS-Lsw" id="LVK-Fi-QiA"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="09g-dw-uD5"/>
+                    <navigationItem key="navigationItem" id="09g-dw-uD5">
+                        <barButtonItem key="rightBarButtonItem" title="Изпрати форма" style="plain" id="6VN-wi-n3T">
+                            <color key="tintColor" red="0.34119261839999998" green="0.75569083120000002" blue="0.41782883939999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addressTextField" destination="Dib-Gs-7uP" id="a6S-6v-mH8"/>
+                        <outlet property="cameraImage" destination="W6u-Rs-KAR" id="6nR-u0-0pD"/>
                         <outlet property="categoryPicker" destination="jLc-fe-PJg" id="QkM-cY-LD3"/>
                     </connections>
                 </tableViewController>
@@ -183,25 +190,9 @@
             </objects>
             <point key="canvasLocation" x="1748" y="206.44677661169416"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="TZe-sE-xBH">
-            <objects>
-                <viewController id="bZx-Rk-CjE" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="lvE-1A-vWz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="0iD-eo-jCU"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Uhz-2O-jV1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2974" y="670"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="iFK-cD-emA">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="76N-dM-PxV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3Mr-Ii-69L" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="NMc-1M-Gra">
@@ -213,6 +204,7 @@
                         <segue destination="h0R-iS-Lsw" kind="relationship" relationship="rootViewController" id="AqH-Zs-FoG"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="76N-dM-PxV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="477.60000000000002" y="187.55622188905548"/>
         </scene>

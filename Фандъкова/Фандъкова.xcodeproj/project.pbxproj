@@ -19,6 +19,7 @@
 		05F9EBB321183AC700D91410 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB221183AC700D91410 /* CategoryCell.swift */; };
 		05F9EBB621183AEA00D91410 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB521183AEA00D91410 /* DescriptionCell.swift */; };
 		05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB821183B8200D91410 /* FormTableController.swift */; };
+		05F9EBBB2119DBD700D91410 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBBA2119DBD700D91410 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		05F9EBB221183AC700D91410 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		05F9EBB521183AEA00D91410 /* DescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		05F9EBB821183B8200D91410 /* FormTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableController.swift; sourceTree = "<group>"; };
+		05F9EBBA2119DBD700D91410 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				05583E9A21143DFC00A9B27A /* LocationViewController.swift */,
+				05F9EBBA2119DBD700D91410 /* CameraController.swift */,
 				05F9EBB821183B8200D91410 /* FormTableController.swift */,
 			);
 			path = Controller;
@@ -186,6 +189,7 @@
 				05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */,
 				05F9EBB121183A3A00D91410 /* LocationCell.swift in Sources */,
 				05583E9C21143DFD00A9B27A /* LocationViewController.swift in Sources */,
+				05F9EBBB2119DBD700D91410 /* CameraController.swift in Sources */,
 				05F9EBB321183AC700D91410 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,7 +267,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -317,7 +321,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

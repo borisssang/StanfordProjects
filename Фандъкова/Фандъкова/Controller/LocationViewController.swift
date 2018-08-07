@@ -17,6 +17,11 @@ protocol LocationDelegate {
 
 class LocationViewController: UIViewController, CLLocationManagerDelegate, LocationDelegate {
     
+    
+    @IBAction func goBack(_ sender: UIBarButtonItem) {
+        _ = navigationController?.popViewController(animated: true)
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()

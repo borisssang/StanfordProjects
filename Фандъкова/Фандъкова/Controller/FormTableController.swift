@@ -23,7 +23,11 @@ class FormTableController: UITableViewController{
     //MARK: Outlets and Properties
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var categoryPicker: UIPickerView!
+    @IBOutlet weak var cameraImage: UIImageView!
     
+    @IBAction func showCamera(_ sender: UIButton) {
+        setImage()
+    }
     let categories = ["Tyrion", "LASAGNA", "LOVE", "ZEN"]
     var selectedCategory: String?
     var address: String?
@@ -32,7 +36,16 @@ class FormTableController: UITableViewController{
         get{
             return (delegate?.getLocation())!
         } }
+    
+    func setImage(){
+        CameraHandler.shared.showActionSheet(vc: self)
+        CameraHandler.shared.imagePickedBlock = { (image) in
+            self.cameraImage.image = image
+        }
+    }
+    
 }
+
 
 
 
