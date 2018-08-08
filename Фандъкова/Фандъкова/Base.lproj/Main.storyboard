@@ -48,7 +48,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="map" destination="A0q-YO-Jq4" id="vgU-av-C0D"/>
+                        <outlet property="mapView" destination="A0q-YO-Jq4" id="vgU-av-C0D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="70u-Jx-Nlj" sceneMemberID="firstResponder"/>
@@ -116,7 +116,7 @@
                                                     <rect key="frame" x="16" y="33" width="257" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <attributedString key="attributedText"/>
-                                                    <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="street-address"/>
                                                     <connections>
                                                         <action selector="address:" destination="mih-x5-UKD" eventType="editingDidEnd" id="lvS-cW-6db"/>
                                                     </connections>

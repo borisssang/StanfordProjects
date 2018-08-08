@@ -11,11 +11,11 @@ import MapKit
 import CoreLocation
 
 protocol LocationDelegate {
- func getLocation() -> CLLocation
+    func getLocation() -> CLLocation
     var locationChanged: Bool? {get set}
 }
 
-class LocationViewController: UIViewController, CLLocationManagerDelegate, LocationDelegate {
+class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapViewDelegate, LocationDelegate {
     
     
     @IBAction func goBack(_ sender: UIBarButtonItem) {
@@ -25,7 +25,7 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate, Locat
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+        mapView.delegate = self
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
@@ -34,24 +34,55 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate, Locat
     }
     
     //MARK: Map
-    @IBOutlet weak var map: MKMapView!
+    @IBOutlet weak var mapView: MKMapView!
     var cell: LocationCell?
     let manager = CLLocationManager()
     var userLocation = CLLocation()
-
+    var anotationSet = false
     
-    //keeps track of current location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
-        let location = locations[0]
+        mapView.mapType = MKMapType.standard
+        if !anotationSet{
+            let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+            
+            let span = MKCoordinateSpanMake(0.01, 0.01)
+            let region = MKCoordinateRegion(center: locValue, span: span)
+            mapView.setRegion(region, animated: true)
+            anotationSet = true
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            return nil
+        }
         
-        let span:MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
-        let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-        let region:MKCoordinateRegion = MKCoordinateRegionMake(myLocation, span)
-        map.setRegion(region, animated: true)
-        userLocation = location
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.isDraggable = true
+        }
+        else {
+            pinView?.annotation = annotation
+        }
         
-        self.map.showsUserLocation = true
+        return pinView
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        // Remove all annotations
+        self.mapView.removeAnnotations(mapView.annotations)
+        
+        // Add new annotation
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = mapView.centerCoordinate
+        annotation.title = "Rico"
+        annotation.subtitle = "illegal"
+        self.mapView.addAnnotation(annotation)
+        //SETTING THE USER LOCATION EVERY TIME THE REGION UPDATES
+        userLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
     }
     
     //MARK: Location Protocol
@@ -69,14 +100,8 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate, Locat
     }
     
     @IBAction func sendLocation(_ sender: UIBarButtonItem) {
-       locationChanged = true
+        locationChanged = true
         _ = navigationController?.popViewController(animated: true)
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-
-
 }
 
