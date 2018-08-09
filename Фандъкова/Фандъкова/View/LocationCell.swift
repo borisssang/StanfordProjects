@@ -8,34 +8,35 @@
 
 import UIKit
 
-class LocationCell: UITableViewCell{
+protocol AddressDelegate {
+    func addressUpdated(text: String)
+}
 
+class LocationCell: UITableViewCell, UITextFieldDelegate{
+    //create an image for the button
+    @IBOutlet weak var newButton: UIButton?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        manageButtonAppearance()
     }
-
-     var delegate: LocationDelegate?
     
-    @IBOutlet weak var oldButton: UIButton?{
-        willSet{
-            manageButtonAppearance()
-        }
-    }
-    @IBOutlet weak var newButton: UIButton?{
-        willSet{
-            manageButtonAppearance()
+    //MARK: Textfield
+    var addressDelegate: AddressDelegate?
+    
+    @IBOutlet weak var addressTextField: UITextField!{
+        didSet{
+            self.addressTextField.delegate = self
         }
     }
     
-    func manageButtonAppearance(){
-        if let _ = delegate?.locationChanged{
-            self.oldButton?.isHidden = true
-            self.newButton?.isHidden = false
-            }
-             else {
-            self.oldButton?.isHidden = false
-            self.newButton?.isHidden = true
-            }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let address = self.addressTextField.text{
+            addressDelegate?.addressUpdated(text: address)
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

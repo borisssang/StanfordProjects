@@ -9,33 +9,43 @@
 import UIKit
 import CoreLocation
 
-class FormTableController: UITableViewController{
+class FormTableController: UITableViewController, DescriptionDelegate, AddressDelegate, LocationDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
         categoryPicker.delegate = self
-        addressTextField.delegate = self
+        descriptionCell.delegate = self
+        locationCell.addressDelegate = self
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
     
-    //MARK: Outlets and Properties
-    @IBOutlet weak var addressTextField: UITextField!
-    @IBOutlet weak var categoryPicker: UIPickerView!
-    @IBOutlet weak var cameraImage: UIImageView!
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
+    //MARK: MODEL
+    var userImage: UIImage?{
+        get {
+            if let image = cameraImage.image{
+                return image
+            }
+            return UIImage()
+        }
+    }
+    var userAddress: String?
+    var userLocation: CLLocation?
+    let categories = ["Улици", "Замърсяване", "Съоръжения", "Сгради и Строежи", "Други"]
+    var selectedCategory: String?
+    var userDescription: String?
+    
+    //MARK: Outlets and Properties
+    @IBOutlet weak var cameraImage: UIImageView!
+    @IBOutlet weak var categoryPicker: UIPickerView!
     @IBAction func showCamera(_ sender: UIButton) {
         setImage()
     }
-    let categories = ["Улици", "Замърсяване", "Съоръжения", "Сгради и Строежи", "Други"]
-    var selectedCategory: String?
-    var address: String?
-    var delegate: LocationDelegate?
-    var userLocation: CLLocation{
-        get{
-            return (delegate?.getLocation())!
-        } }
     
     func setImage(){
         CameraHandler.shared.showActionSheet(vc: self)
@@ -45,6 +55,33 @@ class FormTableController: UITableViewController{
         }
     }
     
+    @IBAction func showMap(_ sender: UIButton) {
+        
+        //prepare for segue
+        //show map
+        //set location's controller delegate to self
+        //then we can modify the cell  
+    }
+    
+    //delegation updates
+    @IBOutlet weak var descriptionCell: DescriptionCell!
+    @IBOutlet weak var locationCell: LocationCell!
+
+    func descriptionUpdated(text: String) {
+        userDescription = text
+    }
+    
+    func addressUpdated(text: String) {
+        userAddress = text
+    }
+    func setLocation(location: CLLocation){
+        userLocation = location
+    }
+    
+    func locationChanged(){
+        //TODO: set the image
+       // locationCell.newButton?.currentBackgroundImage = UIImage()
+    }
 }
 
 //PickerView Extension /methods/
@@ -64,17 +101,6 @@ extension FormTableController: UIPickerViewDataSource, UIPickerViewDelegate{
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         selectedCategory = categories[row]
-    }
-}
-
-extension FormTableController: UITextFieldDelegate{
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

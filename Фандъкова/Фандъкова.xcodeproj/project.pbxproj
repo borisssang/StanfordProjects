@@ -14,9 +14,7 @@
 		05583E9B21143DFD00A9B27A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 05583E9921143DFC00A9B27A /* Info.plist */; };
 		05583E9C21143DFD00A9B27A /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05583E9A21143DFC00A9B27A /* LocationViewController.swift */; };
 		05583E9E21143EA800A9B27A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 05583E9D21143EA800A9B27A /* Default-568h@2x.png */; };
-		05F9EBAF21183A2800D91410 /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBAE21183A2800D91410 /* CameraCell.swift */; };
 		05F9EBB121183A3A00D91410 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB021183A3A00D91410 /* LocationCell.swift */; };
-		05F9EBB321183AC700D91410 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB221183AC700D91410 /* CategoryCell.swift */; };
 		05F9EBB621183AEA00D91410 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB521183AEA00D91410 /* DescriptionCell.swift */; };
 		05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB821183B8200D91410 /* FormTableController.swift */; };
 		05F9EBBB2119DBD700D91410 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBBA2119DBD700D91410 /* CameraController.swift */; };
@@ -31,9 +29,7 @@
 		05583E9921143DFC00A9B27A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../../Desktop/userLocation/userLocationProject/userLocation/Info.plist; sourceTree = "<group>"; };
 		05583E9A21143DFC00A9B27A /* LocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		05583E9D21143EA800A9B27A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		05F9EBAE21183A2800D91410 /* CameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCell.swift; sourceTree = "<group>"; };
 		05F9EBB021183A3A00D91410 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
-		05F9EBB221183AC700D91410 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		05F9EBB521183AEA00D91410 /* DescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		05F9EBB821183B8200D91410 /* FormTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableController.swift; sourceTree = "<group>"; };
 		05F9EBBA2119DBD700D91410 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
@@ -92,9 +88,7 @@
 		05F9EBAD211839E600D91410 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				05F9EBAE21183A2800D91410 /* CameraCell.swift */,
 				05F9EBB021183A3A00D91410 /* LocationCell.swift */,
-				05F9EBB221183AC700D91410 /* CategoryCell.swift */,
 				05F9EBB521183AEA00D91410 /* DescriptionCell.swift */,
 			);
 			path = View;
@@ -103,9 +97,9 @@
 		05F9EBB721183B4B00D91410 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				05F9EBB821183B8200D91410 /* FormTableController.swift */,
 				05583E9A21143DFC00A9B27A /* LocationViewController.swift */,
 				05F9EBBA2119DBD700D91410 /* CameraController.swift */,
-				05F9EBB821183B8200D91410 /* FormTableController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -183,14 +177,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05F9EBAF21183A2800D91410 /* CameraCell.swift in Sources */,
 				05583E8721143D8F00A9B27A /* AppDelegate.swift in Sources */,
 				05F9EBB621183AEA00D91410 /* DescriptionCell.swift in Sources */,
 				05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */,
 				05F9EBB121183A3A00D91410 /* LocationCell.swift in Sources */,
 				05583E9C21143DFD00A9B27A /* LocationViewController.swift in Sources */,
 				05F9EBBB2119DBD700D91410 /* CameraController.swift in Sources */,
-				05F9EBB321183AC700D91410 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

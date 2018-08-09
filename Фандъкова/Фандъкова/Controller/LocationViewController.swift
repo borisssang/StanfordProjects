@@ -10,12 +10,12 @@ import UIKit
 import MapKit
 import CoreLocation
 
-protocol LocationDelegate {
-    func getLocation() -> CLLocation
-    var locationChanged: Bool? {get set}
+ protocol LocationDelegate {
+    func setLocation(location: CLLocation)
+    func locationChanged()
 }
 
-class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapViewDelegate, LocationDelegate {
+class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapViewDelegate{
     
     
     @IBAction func goBack(_ sender: UIBarButtonItem) {
@@ -30,12 +30,11 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
-        cell?.delegate = self
     }
     
     //MARK: Map
     @IBOutlet weak var mapView: MKMapView!
-    var cell: LocationCell?
+  //  var cell: LocationCell?
     let manager = CLLocationManager()
     var userLocation = CLLocation()
     var anotationSet = false
@@ -86,22 +85,12 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
     }
     
     //MARK: Location Protocol
-    var locationDidChange: Bool = false
-    var locationChanged: Bool?{
-        get{
-            return locationDidChange
-        } set{
-            locationDidChange = (newValue != nil)
-        }
-    }
-    
-    func getLocation() -> CLLocation {
-        return userLocation
-    }
+    var delegate: LocationDelegate?
     
     @IBAction func sendLocation(_ sender: UIBarButtonItem) {
-        locationChanged = true
-        _ = navigationController?.popViewController(animated: true)
+        delegate?.setLocation(location: userLocation)
+        delegate?.locationChanged()
+        _ = navigationController?.popViewController(animated: true) as? FormTableController
     }
 }
 
