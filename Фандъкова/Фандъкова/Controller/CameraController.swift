@@ -30,7 +30,6 @@ class CameraHandler: NSObject{
     
     func photoLibrary()
     {
-        
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
             let myPickerController = UIImagePickerController()
             myPickerController.delegate = self;

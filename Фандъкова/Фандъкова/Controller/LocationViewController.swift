@@ -10,17 +10,14 @@ import UIKit
 import MapKit
 import CoreLocation
 
- protocol LocationDelegate {
-    func setLocation(location: CLLocation)
+protocol LocationDelegate {
+    func setLocation(location: CLLocation, address: String)
     func locationChanged()
 }
 
 class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapViewDelegate{
     
-    
-    @IBAction func goBack(_ sender: UIBarButtonItem) {
-        _ = navigationController?.popViewController(animated: true)
-    }
+    @IBOutlet weak var addressField: UITextField!
     
     override func viewDidLoad()
     {
@@ -30,11 +27,16 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     //MARK: Map
     @IBOutlet weak var mapView: MKMapView!
-  //  var cell: LocationCell?
     let manager = CLLocationManager()
     var userLocation = CLLocation()
     var anotationSet = false
@@ -70,7 +72,7 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
         return pinView
     }
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool = true) {
         // Remove all annotations
         self.mapView.removeAnnotations(mapView.annotations)
         
@@ -82,15 +84,38 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
         self.mapView.addAnnotation(annotation)
         //SETTING THE USER LOCATION EVERY TIME THE REGION UPDATES
         userLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
+        
+        //asynchroniously getting the
+        CLGeocoder().reverseGeocodeLocation(userLocation) { (placemark, error) in
+            if error != nil
+            {
+                print ("THERE WAS AN ERROR")
+            }
+            else
+            {
+                if let place = placemark?[0]
+                {
+                    if let checker = place.subThoroughfare
+                    {
+                        //should I dispatch to main?
+                        self.addressField.text = "\(place.subThoroughfare!) \n \(place.thoroughfare!) \n \(place.country!)"
+                    }
+                }
+            }
+        }
     }
     
     //MARK: Location Protocol
     var delegate: LocationDelegate?
     
     @IBAction func sendLocation(_ sender: UIBarButtonItem) {
-        delegate?.setLocation(location: userLocation)
+        delegate?.setLocation(location: userLocation, address: addressField.text!)
         delegate?.locationChanged()
         _ = navigationController?.popViewController(animated: true) as? FormTableController
+    }
+    
+    @IBAction func goBack(_ sender: UIBarButtonItem) {
+        _ = navigationController?.popViewController(animated: true)
     }
 }
 

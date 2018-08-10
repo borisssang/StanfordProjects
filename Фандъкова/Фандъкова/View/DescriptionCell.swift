@@ -13,7 +13,7 @@ protocol DescriptionDelegate {
 }
 
 class DescriptionCell: UITableViewCell, UITextViewDelegate {
-
+    
     var delegate: DescriptionDelegate?
     
     @IBOutlet weak var textView: UITextView!{
@@ -32,7 +32,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
         }
     }
     func textViewDidChange(_ textView: UITextView) {
-         delegate?.descriptionUpdated(text: textView.text)
+        delegate?.descriptionUpdated(text: textView.text)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
