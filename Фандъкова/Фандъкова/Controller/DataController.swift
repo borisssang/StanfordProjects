@@ -17,7 +17,6 @@ class DataController: UIViewController {
             categoryLabel.text = category
             descriptionLabel.text = userDescription
         }
-       
     }
 
     var userAddress: String?

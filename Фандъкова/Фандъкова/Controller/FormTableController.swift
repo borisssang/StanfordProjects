@@ -16,10 +16,19 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         //delegates used for getting the data from the cells
         categoryPicker.delegate = self
         descriptionCell.delegate = self
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Futura", size: 20)!]
         
         //gesture to disable the keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if imageSet == true {
+            self.performCameraAnimation()
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -41,12 +50,26 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         }
     }
     var userLocation: CLLocation?
-    let categories = ["Улици", "Замърсяване", "Съоръжения", "Сгради и Строежи", "Други"]
+    let myAttribute = [NSAttributedStringKey.font: UIFont(name: "Futura", size: 18.0)!]
+    let stringCategories = ["Streets", "Pollution", "Facilities", "Construction", "Other"]
+    var categories: [NSAttributedString]{
+        get{
+            var newCategories = [NSAttributedString]()
+            for i in 0..<stringCategories.count{
+            newCategories.append(NSAttributedString(string: stringCategories[i], attributes: myAttribute))
+            }
+            return newCategories
+        }
+    }
     var selectedCategory: String?
     var userDescription: String?
     
     //MARK: Outlets and Properties
-    @IBOutlet weak var cameraImage: UIImageView!
+    @IBOutlet weak var cameraImage: UIImageView!{
+        didSet{
+            self.cameraImage.alpha = 0
+        }
+    }
     @IBOutlet weak var categoryPicker: UIPickerView!
     @IBAction func showCamera(_ sender: UIButton) {
         setImage()
@@ -57,8 +80,29 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         CameraHandler.shared.imagePickedBlock = { (image) in
             let size = CGSize(width: 375, height: 155)
             self.cameraImage.image = image.resizeImage(newSize: size)
+            self.imageSet = true
         }
+        
     }
+    
+    //delegation updates
+    @IBOutlet weak var descriptionCell: DescriptionCell!
+    @IBOutlet weak var locationCell: LocationCell!
+    
+    func descriptionUpdated(text: String) {
+        userDescription = text
+    }
+    
+    func setLocation(location: CLLocation, address: String){
+        userLocation = location
+        userAddress = address
+    }
+    
+    func locationChanged(){
+        locationCell.performButtonAnimation()
+    }
+    
+    //MARK: Actions
     
     @IBAction func showMap(_ sender: UIButton) {
         performSegue(withIdentifier: "showMap", sender: self)
@@ -79,7 +123,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "showData"{
-            guard userAddress != nil && userImage != nil &&  userLocation != nil && userDescription != nil else {return false}
+            guard userAddress != nil && userImage != nil && userLocation != nil && userDescription != nil else {return false}
             return true
         }
         return true
@@ -89,22 +133,21 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         performSegue(withIdentifier: "showData", sender: self)
     }
     
+    //MARK: Animations
+    var animationHappened = false
+    var imageSet = false
+    @IBOutlet weak var cameraButtonConstraint: NSLayoutConstraint!
     
-    //delegation updates
-    @IBOutlet weak var descriptionCell: DescriptionCell!
-    @IBOutlet weak var locationCell: LocationCell!
-    
-    func descriptionUpdated(text: String) {
-        userDescription = text
-    }
-    
-    func setLocation(location: CLLocation, address: String){
-        userLocation = location
-        userAddress = address
-    }
-    
-    func locationChanged(){
-        locationCell.newButton?.setBackgroundImage(UIImage(named: "location2"), for: .normal)
+    func performCameraAnimation(){
+        guard  animationHappened == false else {return}
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {
+            self.cameraButtonConstraint.constant += self.view.bounds.width / 3
+                self.view.layoutIfNeeded()
+            }) { (_) in
+                UIView.animate(withDuration: 0.6, delay: 0, options: .allowAnimatedContent, animations: {
+                    self.cameraImage.alpha = 1
+                })}
+        animationHappened = true
     }
 }
 
@@ -119,15 +162,16 @@ extension FormTableController: UIPickerViewDataSource, UIPickerViewDelegate{
         return categories.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return categories[row]
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedCategory = categories[row].string
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCategory = categories[row]
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+         return categories[row]
     }
 }
 
+//resizing images
 extension UIImage {
     func resizeImage(newSize: CGSize) -> UIImage {
         // Guard newSize is different
@@ -154,3 +198,4 @@ extension UIImage {
         return resized
     }
 }
+

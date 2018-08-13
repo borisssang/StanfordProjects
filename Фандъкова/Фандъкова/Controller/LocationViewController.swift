@@ -27,6 +27,8 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Futura", size: 20)!]
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
@@ -95,7 +97,7 @@ class LocationViewController: UIViewController, CLLocationManagerDelegate,MKMapV
             {
                 if let place = placemark?[0]
                 {
-                    if let checker = place.subThoroughfare
+                    if place.subThoroughfare != nil
                     {
                         //should I dispatch to main?
                         self.addressField.text = "\(place.subThoroughfare!) \n \(place.thoroughfare!) \n \(place.country!)"

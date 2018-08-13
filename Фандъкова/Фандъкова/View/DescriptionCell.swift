@@ -20,7 +20,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
         didSet{
             textView.delegate = self
             textView?.sizeThatFits(CGSize(width: (textView?.frame.size.width)!, height: (textView?.frame.size.height)!))
-            textView.text = "Въведете описание на проблема"
+            textView.text = "Please, describe the issue..."
             textView.textColor = UIColor.lightGray
         }
     }
@@ -37,7 +37,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Моля опишете проблема"
+            textView.text = "Please, describe the issue..."
             textView.textColor = UIColor.lightGray
         }
         delegate?.descriptionUpdated(text: textView.text)
