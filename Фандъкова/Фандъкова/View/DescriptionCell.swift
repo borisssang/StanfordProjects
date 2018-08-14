@@ -21,7 +21,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
             textView.delegate = self
             textView?.sizeThatFits(CGSize(width: (textView?.frame.size.width)!, height: (textView?.frame.size.height)!))
             textView.text = "Please, describe the issue..."
-            textView.textColor = UIColor.lightGray
+            textView.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0.7435787671)
             setUpToolBar()
             self.textView.inputAccessoryView = toolbar
         }
@@ -30,7 +30,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
     var toolbar:UIToolbar = UIToolbar()
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray {
+        if textView.textColor == #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0.7435787671){
             textView.text = nil
             textView.textColor = UIColor.black
         }
@@ -54,6 +54,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
         
         let doneBtn: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneButtonAction))
         toolbar.setItems([flexSpace, doneBtn], animated: false)
+        toolbar.barTintColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0.7435787671)
         self.toolbar = toolbar
     }
     

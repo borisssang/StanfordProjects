@@ -15,6 +15,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         super.viewDidLoad()
         //delegates used for getting the data from the cells
         categoryPicker.delegate = self
+        categoryPicker.dataSource = self
         descriptionCell.delegate = self
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: UIFont(name: "Futura", size: 20)!]
         
@@ -22,6 +23,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+       self.view.backgroundColor = UIColor(patternImage: UIImage(named: "wallpaper")!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,6 +38,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     }
     
     //MARK: MODEL
+    var formData: FormData?
     var userImage: UIImage?{
         get {
             if let image = cameraImage.image{
@@ -46,21 +49,13 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     }
     var userAddress: String?{
         didSet{
+            guard userAddress != nil else {return}
             locationCell.addressLabel?.text = self.userAddress!
         }
     }
     var userLocation: CLLocation?
-    let myAttribute = [NSAttributedStringKey.font: UIFont(name: "Futura", size: 18.0)!]
-    let stringCategories = ["Streets", "Pollution", "Facilities", "Construction", "Other"]
-    var categories: [NSAttributedString]{
-        get{
-            var newCategories = [NSAttributedString]()
-            for i in 0..<stringCategories.count{
-            newCategories.append(NSAttributedString(string: stringCategories[i], attributes: myAttribute))
-            }
-            return newCategories
-        }
-    }
+    let categories = ["Streets", "Pollution", "Facilities", "Construction", "Other"]
+
     var selectedCategory: String?
     var userDescription: String?
     
@@ -82,7 +77,6 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
             self.cameraImage.image = image.resizeImage(newSize: size)
             self.imageSet = true
         }
-        
     }
     
     //delegation updates
@@ -114,10 +108,11 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
             destinationVC.delegate = self
             }
         } else if let destinationVC = segue.destination as? DataController {
-            destinationVC.userAddress = userAddress!
-            destinationVC.category = selectedCategory!
-            destinationVC.userDescription = userDescription!
-            destinationVC.userLocation = userLocation
+           // guard statements...
+            if let template = formData {
+             template.setForm(image: userImage!, addres: userAddress!, location: userLocation!, category: selectedCategory!, description: userDescription!)
+            destinationVC.forms.append(template)
+            }
         }
     }
     
@@ -135,9 +130,13 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     
     //resets the form
     @IBAction func resetForm(_ sender: Any) {
-        
-        
-    }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "FormTableController")
+        var viewcontrollers = self.navigationController?.viewControllers
+        viewcontrollers?.removeLast()
+        viewcontrollers?.append(vc)
+        self.navigationController?.setViewControllers(viewcontrollers!, animated: false)
+        }
     
     //MARK: Animations
     var animationHappened = false
@@ -169,11 +168,13 @@ extension FormTableController: UIPickerViewDataSource, UIPickerViewDelegate{
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedCategory = categories[row].string
+        selectedCategory = categories[row]
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-         return categories[row]
+        let category = categories[row]
+        let myTitle = NSAttributedString(string: category, attributes: [NSAttributedStringKey.font: UIFont(name: "Futura", size: 15.0)!])
+        return myTitle
     }
 }
 
