@@ -22,8 +22,12 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
             textView?.sizeThatFits(CGSize(width: (textView?.frame.size.width)!, height: (textView?.frame.size.height)!))
             textView.text = "Please, describe the issue..."
             textView.textColor = UIColor.lightGray
+            setUpToolBar()
+            self.textView.inputAccessoryView = toolbar
         }
     }
+    
+    var toolbar:UIToolbar = UIToolbar()
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
@@ -42,5 +46,18 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
         }
         delegate?.descriptionUpdated(text: textView.text)
     }
+
+    func setUpToolBar(){
+        let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: contentView.frame.size.width, height: 30))
+        //create left side empty space so that done button set on right side
+        let flexSpace = UIBarButtonItem(barButtonSystemItem:    .flexibleSpace, target: nil, action: nil)
+        
+        let doneBtn: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.doneButtonAction))
+        toolbar.setItems([flexSpace, doneBtn], animated: false)
+        self.toolbar = toolbar
+    }
     
+    @objc func doneButtonAction() {
+    self.contentView.endEditing(true)
+}
 }

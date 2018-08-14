@@ -133,6 +133,12 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         performSegue(withIdentifier: "showData", sender: self)
     }
     
+    //resets the form
+    @IBAction func resetForm(_ sender: Any) {
+        
+        
+    }
+    
     //MARK: Animations
     var animationHappened = false
     var imageSet = false
