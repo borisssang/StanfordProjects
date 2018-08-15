@@ -17,6 +17,7 @@
 		05583E9E21143EA800A9B27A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 05583E9D21143EA800A9B27A /* Default-568h@2x.png */; };
 		05A31B2C2122B8DD0043B22E /* FormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A31B2B2122B8DD0043B22E /* FormData.swift */; };
 		05A31B2F2122FF520043B22E /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A31B2E2122FF520043B22E /* LoginController.swift */; };
+		05DE52162124144400BC7F85 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DE52152124144400BC7F85 /* UserEntity.swift */; };
 		05F9EBB121183A3A00D91410 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB021183A3A00D91410 /* LocationCell.swift */; };
 		05F9EBB621183AEA00D91410 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB521183AEA00D91410 /* DescriptionCell.swift */; };
 		05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9EBB821183B8200D91410 /* FormTableController.swift */; };
@@ -35,6 +36,7 @@
 		05583E9D21143EA800A9B27A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		05A31B2B2122B8DD0043B22E /* FormData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormData.swift; sourceTree = "<group>"; };
 		05A31B2E2122FF520043B22E /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		05DE52152124144400BC7F85 /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
 		05F9EBB021183A3A00D91410 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		05F9EBB521183AEA00D91410 /* DescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		05F9EBB821183B8200D91410 /* FormTableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableController.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 		05A31B2D2122B8E80043B22E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				05DE52152124144400BC7F85 /* UserEntity.swift */,
 				05A31B2B2122B8DD0043B22E /* FormData.swift */,
 			);
 			path = Model;
@@ -197,6 +200,7 @@
 				0526CA7D211DDF4E00860B16 /* DataController.swift in Sources */,
 				05583E8721143D8F00A9B27A /* AppDelegate.swift in Sources */,
 				05F9EBB621183AEA00D91410 /* DescriptionCell.swift in Sources */,
+				05DE52162124144400BC7F85 /* UserEntity.swift in Sources */,
 				05F9EBB921183B8200D91410 /* FormTableController.swift in Sources */,
 				05A31B2F2122FF520043B22E /* LoginController.swift in Sources */,
 				05F9EBB121183A3A00D91410 /* LocationCell.swift in Sources */,

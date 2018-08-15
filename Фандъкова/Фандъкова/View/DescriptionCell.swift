@@ -46,7 +46,7 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
         }
         delegate?.descriptionUpdated(text: textView.text)
     }
-
+    
     func setUpToolBar(){
         let toolbar:UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0,  width: contentView.frame.size.width, height: 30))
         //create left side empty space so that done button set on right side
@@ -59,6 +59,6 @@ class DescriptionCell: UITableViewCell, UITextViewDelegate {
     }
     
     @objc func doneButtonAction() {
-    self.contentView.endEditing(true)
-}
+        self.contentView.endEditing(true)
+    }
 }

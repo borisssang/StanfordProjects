@@ -23,7 +23,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
-       self.view.backgroundColor = UIColor(patternImage: UIImage(named: "wallpaper")!)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "wallpaper")!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -38,8 +38,8 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     }
     
     //MARK: MODEL
-    var formData: FormData?
-    var userImage: UIImage?{
+    var user: UserEntity?
+    var formImage: UIImage?{
         get {
             if let image = cameraImage.image{
                 return image
@@ -47,49 +47,38 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
             return UIImage()
         }
     }
-    var userAddress: String?{
+    var formAddress: String?{
         didSet{
-            guard userAddress != nil else {return}
-            locationCell.addressLabel?.text = self.userAddress!
+            guard formAddress != nil else {return}
+            locationCell.addressLabel?.text = self.formAddress!
         }
     }
-    var userLocation: CLLocation?
+    var formLocation: CLLocation?
     let categories = ["Streets", "Pollution", "Facilities", "Construction", "Other"]
-
-    var selectedCategory: String?
-    var userDescription: String?
     
-    //MARK: Outlets and Properties
-    @IBOutlet weak var cameraImage: UIImageView!{
+    var selectedCategory: String?
+    var formDescription: String?
+    
+    @IBOutlet weak var cameraImage: ScaledHeightImageView!{
         didSet{
             self.cameraImage.alpha = 0
         }
     }
-    @IBOutlet weak var categoryPicker: UIPickerView!
-    @IBAction func showCamera(_ sender: UIButton) {
-        setImage()
-    }
     
-    func setImage(){
-        CameraHandler.shared.showActionSheet(vc: self)
-        CameraHandler.shared.imagePickedBlock = { (image) in
-            let size = CGSize(width: 375, height: 155)
-            self.cameraImage.image = image.resizeImage(newSize: size)
-            self.imageSet = true
-        }
-    }
+    @IBOutlet weak var cameraInstructionLabel: UILabel!
+    @IBOutlet weak var categoryPicker: UIPickerView!
     
     //delegation updates
     @IBOutlet weak var descriptionCell: DescriptionCell!
     @IBOutlet weak var locationCell: LocationCell!
     
     func descriptionUpdated(text: String) {
-        userDescription = text
+        formDescription = text
     }
     
     func setLocation(location: CLLocation, address: String){
-        userLocation = location
-        userAddress = address
+        formLocation = location
+        formAddress = address
     }
     
     func locationChanged(){
@@ -98,6 +87,20 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     
     //MARK: Actions
     
+    @IBAction func showCamera(_ sender: UIButton) {
+        setImage()
+    }
+    
+    func setImage(){
+        CameraHandler.shared.showActionSheet(vc: self)
+        CameraHandler.shared.imagePickedBlock = { (image) in
+            self.cameraImage.image = image
+            self.imageSet = true
+            self.cameraImage.setNeedsDisplay()
+            self.cameraInstructionLabel.alpha = 0
+        }
+    }
+    
     @IBAction func showMap(_ sender: UIButton) {
         performSegue(withIdentifier: "showMap", sender: self)
     }
@@ -105,27 +108,32 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationVC = segue.destination as? LocationViewController{
             if segue.identifier == "showMap" {
-            destinationVC.delegate = self
+                destinationVC.delegate = self
             }
         } else if let destinationVC = segue.destination as? DataController {
-           // guard statements...
-            if let template = formData {
-             template.setForm(image: userImage!, addres: userAddress!, location: userLocation!, category: selectedCategory!, description: userDescription!)
+            guard user != nil && formAddress != nil && formImage != nil && formLocation != nil && formDescription != nil else { showAlert()
+                return}
+            let template = FormData(user: user!, image: formImage!, address: formAddress!, location: formLocation!, category: selectedCategory!, description: formDescription!)
             destinationVC.forms.append(template)
-            }
         }
     }
     
-    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == "showData"{
-            guard userAddress != nil && userImage != nil && userLocation != nil && userDescription != nil else {return false}
-            return true
-        }
-        return true
-}
-    
     @IBAction func showData(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "showData", sender: self)
+    }
+    
+    func showAlert(){
+        let alert = UIAlertController(title: "Oops", message: "Make sure you have added a photo, address and description", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+            case .cancel:
+                print("adsa")
+            case .destructive:
+                print("ADS")
+            }}))
+        self.present(alert, animated: true, completion: nil)
     }
     
     //resets the form
@@ -136,7 +144,7 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         viewcontrollers?.removeLast()
         viewcontrollers?.append(vc)
         self.navigationController?.setViewControllers(viewcontrollers!, animated: false)
-        }
+    }
     
     //MARK: Animations
     var animationHappened = false
@@ -147,11 +155,11 @@ class FormTableController: UITableViewController, DescriptionDelegate, LocationD
         guard  animationHappened == false else {return}
         UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseIn, animations: {
             self.cameraButtonConstraint.constant += self.view.bounds.width / 3
-                self.view.layoutIfNeeded()
-            }) { (_) in
-                UIView.animate(withDuration: 0.6, delay: 0, options: .allowAnimatedContent, animations: {
-                    self.cameraImage.alpha = 1
-                })}
+            self.view.layoutIfNeeded()
+        }) { (_) in
+            UIView.animate(withDuration: 0.6, delay: 0, options: .allowAnimatedContent, animations: {
+                self.cameraImage.alpha = 1
+            })}
         animationHappened = true
     }
 }
@@ -178,31 +186,51 @@ extension FormTableController: UIPickerViewDataSource, UIPickerViewDelegate{
     }
 }
 
-//resizing images
-extension UIImage {
-    func resizeImage(newSize: CGSize) -> UIImage {
-        // Guard newSize is different
-        guard self.size != newSize else { return self }
-        
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
-        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return newImage
-    }
+class ScaledHeightImageView: UIImageView {
     
-    func resizedImageWithinRect(rectSize: CGSize) -> UIImage {
-        let widthFactor = size.width / rectSize.width
-        let heightFactor = size.height / rectSize.height
+    override var intrinsicContentSize: CGSize {
         
-        var resizeFactor = widthFactor
-        if size.height > size.width {
-            resizeFactor = heightFactor
+        if let myImage = self.image {
+            let myImageWidth = myImage.size.width
+            let myImageHeight = myImage.size.height
+            let myViewWidth = self.frame.size.width
+            
+            let ratio = myViewWidth/myImageWidth
+            let scaledHeight = myImageHeight * ratio
+            
+            return CGSize(width: myViewWidth, height: scaledHeight)
         }
         
-        let newSize = CGSize(width: size.width/resizeFactor, height: size.height/resizeFactor)
-        let resized = resizeImage(newSize: newSize)
-        return resized
+        return CGSize(width: -1.0, height: -1.0)
     }
 }
+
+//resizing images
+//extension UIImage {
+//    func resizeImage(newSize: CGSize) -> UIImage {
+//        // Guard newSize is different
+//        guard self.size != newSize else { return self }
+//
+//        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+//        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+//        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+//        UIGraphicsEndImageContext()
+//        return newImage
+//    }
+//
+//    func resizedImageWithinRect(rectSize: CGSize) -> UIImage {
+//        let widthFactor = size.width / rectSize.width
+//        let heightFactor = size.height / rectSize.height
+//
+//        var resizeFactor = widthFactor
+//        if size.height > size.width {
+//            resizeFactor = heightFactor
+//        }
+//
+//        let newSize = CGSize(width: size.width/resizeFactor, height: size.height/resizeFactor)
+//        let resized = resizeImage(newSize: newSize)
+//        return resized
+//    }
+//}
+
 

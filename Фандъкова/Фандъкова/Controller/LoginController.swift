@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginController: UIViewController, UITextFieldDelegate {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         firstNameTextField.delegate = self
@@ -26,15 +26,15 @@ class LoginController: UIViewController, UITextFieldDelegate {
     var dataForm: FormData?
     
     //Outlets
-       @IBOutlet var firstNameTextField: UITextField!
-       @IBOutlet var lastNameTextField: UITextField!
-       @IBOutlet var emailTextField: UITextField!
-       @IBOutlet var phoneTextField: UITextField!
+    @IBOutlet var firstNameTextField: UITextField!
+    @IBOutlet var lastNameTextField: UITextField!
+    @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var phoneTextField: UITextField!
     @IBOutlet weak var loginOutlet: UIButton!
     @IBOutlet weak var registerOutlet: UIButton!
     
+    //LOGIN NEEDS IMPLEMENTATION
     @IBAction func LoginButton(_ sender: Any) {
-
     }
     
     @IBAction func RegisterButton(_ sender: Any) {
@@ -45,11 +45,30 @@ class LoginController: UIViewController, UITextFieldDelegate {
         if let identifier = segue.identifier, identifier == "showForm" {
             if let navVC = segue.destination as? UINavigationController{
                 if let vc = navVC.topViewController as? FormTableController {
-                      let newTemplate = FormData(first: firstNameTextField.text!, last: lastNameTextField.text!, email: emailTextField.text!, phone: phoneTextField.text!)
-                    vc.formData = newTemplate
+                    if phoneTextField.text != "" && firstNameTextField.text != "" && lastNameTextField.text != "" && emailTextField.text != "" {
+                        let user = UserEntity(first: firstNameTextField.text!, last: lastNameTextField.text!, email: emailTextField.text!, phone: Int(phoneTextField.text!)!)
+                        vc.user = user
+                    }
+                    else{
+                        showAlert()
+                    }
                 }
             }
         }
+    }
+    func showAlert(){
+        let alert = UIAlertController(title: "Oops", message: "Make sure you have added a photo, address and description", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+            case .cancel:
+                print("adsa")
+            case .destructive:
+                print("ADS")
+            }}))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     //MARK: TEXTshit
@@ -63,6 +82,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }
     
     func setUpTextFieldsAndButtons(){
+        
         firstNameTextField.layer.borderWidth = 1
         firstNameTextField.layer.borderColor = UIColor.white.cgColor
         firstNameTextField.layer.cornerRadius = 20
@@ -88,7 +108,5 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         registerOutlet.layer.cornerRadius = 20
         registerOutlet.clipsToBounds = true
-        
     }
-    
 }
