@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Set Game Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="SetGameController" customModule="setGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0M-Fx-xGd">
+                                <rect key="frame" x="16" y="616.5" width="64" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oI9-jh-kzQ">
+                                <rect key="frame" x="125" y="607" width="125" height="30"/>
+                                <state key="normal" title="New Game"/>
+                                <connections>
+                                    <action selector="restartGame" destination="BYZ-38-t0r" eventType="touchUpInside" id="Yae-RD-kF6"/>
+                                </connections>
+                            </button>
+                            <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="G9A-tr-FJF" customClass="ViewContainer" customModule="setGame" customModuleProvider="target">
+                                <rect key="frame" x="20" y="40" width="335" height="556.5"/>
+                                <color key="backgroundColor" red="0.79607843137254897" green="0.29803921568627451" blue="0.15294117647058825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="T0X-iM-t4g" appends="YES" id="WTs-tE-g4x"/>
+                                </connections>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fcn-fp-6Ll">
+                                <rect key="frame" x="283" y="607" width="76" height="30"/>
+                                <state key="normal" title="Deal"/>
+                                <connections>
+                                    <action selector="dealCards" destination="BYZ-38-t0r" eventType="touchUpInside" id="gNE-kl-vk1"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.79607843137254897" green="0.29803921568627451" blue="0.15294117647058825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="m0M-Fx-xGd" firstAttribute="top" secondItem="G9A-tr-FJF" secondAttribute="bottom" constant="20" id="0nE-fo-r5X"/>
+                            <constraint firstItem="oI9-jh-kzQ" firstAttribute="leading" secondItem="m0M-Fx-xGd" secondAttribute="trailing" constant="45" id="IIw-el-4wx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="oI9-jh-kzQ" secondAttribute="bottom" constant="30" id="KfL-ya-6k4"/>
+                            <constraint firstItem="G9A-tr-FJF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="LKo-m1-o2x"/>
+                            <constraint firstItem="G9A-tr-FJF" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="OK7-Xg-Ecd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="G9A-tr-FJF" secondAttribute="trailing" constant="20" id="Oel-du-mpb"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Fcn-fp-6Ll" secondAttribute="bottom" constant="30" id="aou-xi-BbK"/>
+                            <constraint firstItem="m0M-Fx-xGd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="dON-3Y-WQK"/>
+                            <constraint firstItem="Fcn-fp-6Ll" firstAttribute="leading" secondItem="oI9-jh-kzQ" secondAttribute="trailing" constant="33" id="eMc-zk-YPi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="m0M-Fx-xGd" secondAttribute="bottom" constant="30" id="qwe-VS-fXr"/>
+                            <constraint firstItem="oI9-jh-kzQ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="t4h-p7-lGD"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Fcn-fp-6Ll" secondAttribute="trailing" constant="16" id="yDw-NR-bks"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="G9A-tr-FJF" id="G9Y-e5-z15"/>
+                        <outlet property="scoreLabel" destination="m0M-Fx-xGd" id="cbQ-eW-xgH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <rotationGestureRecognizer id="T0X-iM-t4g">
+                    <connections>
+                        <action selector="userDidRotate:" destination="BYZ-38-t0r" id="rcb-MX-hWc"/>
+                    </connections>
+                </rotationGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-722.39999999999998" y="17.541229385307346"/>
+        </scene>
+    </scenes>
+</document>
